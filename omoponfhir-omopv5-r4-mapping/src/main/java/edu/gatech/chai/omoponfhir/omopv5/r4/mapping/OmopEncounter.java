@@ -22,12 +22,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import org.hl7.fhir.r4.model.Coding;
-import org.hl7.fhir.r4.model.Encounter;
-import org.hl7.fhir.r4.model.IdType;
-import org.hl7.fhir.r4.model.Patient;
-import org.hl7.fhir.r4.model.Period;
-import org.hl7.fhir.r4.model.Reference;
+import org.hl7.fhir.r4.model.*;
 import org.hl7.fhir.r4.model.Encounter.DiagnosisComponent;
 import org.hl7.fhir.r4.model.Encounter.EncounterParticipantComponent;
 import org.hl7.fhir.r4.model.Encounter.EncounterStatus;
@@ -222,7 +217,49 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 			diagnosisComponent.setCondition(conditionReference);
 			encounter.addDiagnosis(diagnosisComponent);
 		}
-		
+
+
+		// campo visit_concept_id (parece mais relacionado ao service type que o visit_type_concept_id)
+		String visitConceptString = visitOccurrence.getVisitConcept().getConceptName().toLowerCase();
+		CodeableConcept myCodeableConcept = new CodeableConcept();
+		myCodeableConcept.setText( visitConceptString );
+		encounter.setServiceType( myCodeableConcept );
+
+		logger.debug( "Opa cheguei aqui" );
+
+		// cria uma hospitalização caso precise
+		if ( visitOccurrence.getVisitConcept().getId() == 9201 		// inpatient visit
+			|| visitOccurrence.getVisitConcept().getId() == 32037  // intensive care
+		) {
+
+			if ( ! encounter.hasHospitalization() ) {
+				encounter.setHospitalization(new Encounter.EncounterHospitalizationComponent());
+			}
+
+			// campo admitting_source_concept
+			String admittingSourceConceptString = visitOccurrence.getAdmittingSourceConcept().getConceptName().toLowerCase();
+			String admittingSourceValue = visitOccurrence.getAdmittingSourceConcept().getConceptCode();
+
+			CodeableConcept admittingSourceCodeableConcept = new CodeableConcept();
+
+			admittingSourceCodeableConcept.setText(admittingSourceConceptString);
+			admittingSourceCodeableConcept.setId( admittingSourceValue );
+
+			encounter.getHospitalization().setAdmitSource(admittingSourceCodeableConcept);
+
+			// campo dischargedTo
+			String dischargeToSourceValue = visitOccurrence.getDischargeToSourceValue();
+			String dischargeToConceptString = visitOccurrence.getDischargeToConcept().getConceptName().toLowerCase();
+
+			CodeableConcept dischargeToCodeableConcept = new CodeableConcept();
+			dischargeToCodeableConcept.setText(dischargeToConceptString);
+			dischargeToCodeableConcept.setId(dischargeToSourceValue);
+
+			encounter.getHospitalization().setDischargeDisposition(dischargeToCodeableConcept);
+		}
+
+
+
 		return encounter;
 	}
 

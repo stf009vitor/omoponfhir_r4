@@ -123,4 +123,15 @@
 			</plugin>
 		</plugins>
 	</build>
+	<profiles>
+		<profile>
+			<id>nexus</id>
+			<repositories>
+				<repository>
+				<id>edge-nexus</id>
+				<url>http://172.29.4.168:8081/repository/maven-public/</url>
+				</repository>
+			</repositories>
+    	</profile>
+  	</profiles>
 </project>

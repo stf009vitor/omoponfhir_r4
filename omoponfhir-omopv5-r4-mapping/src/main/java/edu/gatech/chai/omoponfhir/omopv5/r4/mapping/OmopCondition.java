@@ -105,6 +105,26 @@ public class OmopCondition extends BaseOmopResource<Condition, ConditionOccurren
 		addAsserterToCondition(conditionOccurrence, condition);
 		addContextToCondition(conditionOccurrence, condition);
 
+
+		// clinicalStatus => condition_occurrence.condition_status_source_value
+		// lidar com valores nulos para este campo
+
+		Concept conditionSourceConcept = conditionOccurrence.getConditionSourceConcept();
+		if ( conditionSourceConcept != null ) {
+			String conditionStatusConceptName = conditionSourceConcept.getConceptName();
+			String conditionStatusConceptCode = conditionSourceConcept.getConceptCode();
+
+			CodeableConcept conditionStatusCodeableConcept = new CodeableConcept();
+			conditionStatusCodeableConcept.setText(conditionStatusConceptName);
+			conditionStatusCodeableConcept.setId(conditionStatusConceptCode);
+			condition.setClinicalStatus(conditionStatusCodeableConcept);
+		} else {
+			CodeableConcept conditionStatusCodeableConcept = new CodeableConcept();
+			conditionStatusCodeableConcept.setText( "" );
+			conditionStatusCodeableConcept.setId( "" );
+			condition.setClinicalStatus(conditionStatusCodeableConcept);
+		}
+
 		// TODO: Need to map the following
 		// ??Condition.abatement.abatementString, but we are using abatementDateTime for
 		// the end date and Abatement[x] has a 0..1 cardinality.

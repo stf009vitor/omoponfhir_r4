@@ -454,6 +454,20 @@ public class OmopObservation extends BaseOmopResource<Observation, FObservationV
 			}
 		}
 
+		// observation.value_as_string
+		Double value = fObservationView.getValueAsNumber();
+		if ( value != null ){
+			Quantity quantity = new Quantity();
+			quantity.setValue(value);
+			observation.setValue(quantity);
+
+			// unit_concept_id
+			if (fObservationView.getUnitConcept() != null) {
+				String unitString = fObservationView.getUnitConcept().getConceptName();
+				quantity.setUnit(unitString);
+			}
+		}
+
 		return observation;
 	}
 
