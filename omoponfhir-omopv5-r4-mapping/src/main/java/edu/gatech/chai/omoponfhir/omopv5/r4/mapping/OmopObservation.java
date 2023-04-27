@@ -203,6 +203,9 @@ public class OmopObservation extends BaseOmopResource<Observation, FObservationV
 			CodeableConcept componentCode = new CodeableConcept();
 			componentCode.addCoding(coding);
 			comp.setCode(componentCode);
+			
+			//Add observation_source_concept_id as category
+			logger.info( "ALOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO" );
 
 			if (fObservationView.getValueAsNumber() != null) {
 				Quantity quantity = new Quantity(fObservationView.getValueAsNumber().doubleValue());
