@@ -454,11 +454,6 @@ public class OmopObservation extends BaseOmopResource<Observation, FObservationV
 				observation.addNote(tempAnnotation);
 			}
 		}
-
-		String s_value = fObservationView.getValueAsString();
-		logger.debug("ALOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO String");
-		logger.debug(s_value);
-
 		// observation.value_as_string
 		Double value = fObservationView.getValueAsNumber();
 		if ( value != null ){
@@ -472,7 +467,15 @@ public class OmopObservation extends BaseOmopResource<Observation, FObservationV
 				quantity.setUnit(unitString);
 			}
 		}
-		logger.debug("ALOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO RETURN OBSERVATION");
+		
+		//FIX VALUE AS STRING
+		String s_value = fObservationView.getValueAsString();
+		if (s_value != null){
+			observation.setValue(s_value);	
+			logger.debug("ALOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO String");
+			logger.debug(s_value);
+		}
+		
 		return observation;
 	}
 
@@ -1131,6 +1134,7 @@ public class OmopObservation extends BaseOmopResource<Observation, FObservationV
 		return retVal;
 	}
 
+	//CONSTRUCT OBS
 	public edu.gatech.chai.omopv5.model.entity.Observation constructOmopObservation(Long omopId,
 			Observation fhirResource) {
 		edu.gatech.chai.omopv5.model.entity.Observation observation = null;
