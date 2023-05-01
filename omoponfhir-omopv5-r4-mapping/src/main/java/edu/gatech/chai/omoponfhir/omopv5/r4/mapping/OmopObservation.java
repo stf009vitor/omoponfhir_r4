@@ -87,7 +87,6 @@ public class OmopObservation extends BaseOmopResource<Observation, FObservationV
 
 	final static Logger logger = LoggerFactory.getLogger(OmopObservation.class);
 	private static OmopObservation omopObservation = new OmopObservation();
-	logger.debug("ALOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO OBSERVATION INSTANCIADA");
 
 	public static final long SYSTOLIC_CONCEPT_ID = 3004249L;
 	public static final long DIASTOLIC_CONCEPT_ID = 3012888L;
