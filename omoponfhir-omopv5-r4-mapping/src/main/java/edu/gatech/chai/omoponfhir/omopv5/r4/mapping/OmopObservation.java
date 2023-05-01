@@ -85,8 +85,9 @@ import edu.gatech.chai.omopv5.model.entity.VisitOccurrence;
 
 public class OmopObservation extends BaseOmopResource<Observation, FObservationView, FObservationViewService> {
 
-	static final Logger logger = LoggerFactory.getLogger(OmopObservation.class);
+	final static Logger logger = LoggerFactory.getLogger(OmopObservation.class);
 	private static OmopObservation omopObservation = new OmopObservation();
+	logger.debug("ALOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO OBSERVATION INSTANCIADA");
 
 	public static final long SYSTOLIC_CONCEPT_ID = 3004249L;
 	public static final long DIASTOLIC_CONCEPT_ID = 3012888L;
@@ -139,11 +140,6 @@ public class OmopObservation extends BaseOmopResource<Observation, FObservationV
 		Observation observation = new Observation();
 		observation.setId(new IdType(fhirId));
 		
-		logger.debug("ALOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO1");
-		logger.info("ALOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO2");
-		logger.error("ALOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO3");
-		logger.critical("jsadofiajsdoXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-
 		String omopVocabulary = fObservationView.getObservationConcept().getVocabularyId();
 		String systemUriString = fhirOmopVocabularyMap.getFhirSystemNameFromOmopVocabulary(omopVocabulary);
 		if ("None".equals(systemUriString)) {
@@ -460,6 +456,10 @@ public class OmopObservation extends BaseOmopResource<Observation, FObservationV
 			}
 		}
 
+		String s_value = fObservationView.getValueAsString();
+		logger.debug("ALOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO String");
+		logger.debug(s_value);
+
 		// observation.value_as_string
 		Double value = fObservationView.getValueAsNumber();
 		if ( value != null ){
@@ -473,7 +473,7 @@ public class OmopObservation extends BaseOmopResource<Observation, FObservationV
 				quantity.setUnit(unitString);
 			}
 		}
-
+		logger.debug("ALOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO RETURN OBSERVATION");
 		return observation;
 	}
 
