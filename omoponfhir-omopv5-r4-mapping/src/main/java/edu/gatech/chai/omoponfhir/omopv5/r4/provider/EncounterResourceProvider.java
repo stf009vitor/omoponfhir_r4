@@ -22,6 +22,7 @@ import java.util.Set;
 import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Patient;
+import org.hl7.fhir.r4.model.Observation;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.springframework.web.context.ContextLoaderListener;
@@ -300,6 +301,10 @@ public class EncounterResourceProvider implements IResourceProvider {
 			if (theIncludes.contains(new Include("Encounter:subject"))) {
 				includes.add("Encounter:subject");
 			}
+			
+			if (theIncludes.contains(new Include("Encounter:observation"))) {
+				includes.add("Encounter:observation");
+			 }
 
 			/* TODO: colocar uma linha observation aqui */
 			// if (theIncludes.contains(new Include("Encounter:observation"))) {

@@ -87,13 +87,14 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 	}
 
 	@Override
-	public Encounter constructFHIR(Long fhirId, VisitOccurrence visitOccurrence) {
+	public Encounter constructFHIR(Long x, VisitOccurrence visitOccurrence) {
 		Encounter encounter = new Encounter();
 		encounter.setId(new IdType(fhirId));
 
 		// recupera observation do Omop relativo a esse visit_ocurrence (fhir: encounter)
 		logger.debug( "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" );
 		logger.debug( visitOccurrence.getObservation().getObservationSourceConcept().getConceptName() );
+		logger.debug( "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" );
 
 
 		if (visitOccurrence.getVisitConcept() != null) {
