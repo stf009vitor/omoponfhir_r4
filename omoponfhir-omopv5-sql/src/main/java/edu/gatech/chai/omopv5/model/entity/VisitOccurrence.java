@@ -55,6 +55,11 @@ public class VisitOccurrence extends BaseEntity {
 	@JoinColumn(name="visit_type_concept_id", referencedColumnName="concept_id", nullable=false)
 	private Concept visitTypeConcept;
 
+	/** alteracao **/
+	@JoinColumn(name="visit_occurrence_id", referencedColumnName="visit_occurrence_id", nullable=false)
+	private Observation observation;
+	/** alteracao **/
+
 	@JoinColumn(name="provider_id")
 	private Provider provider;
 	
@@ -81,6 +86,15 @@ public class VisitOccurrence extends BaseEntity {
 	
 	@JoinColumn(name="preceding_visit_occurrence_id", referencedColumnName="visit_occurrence_id")
 	private VisitOccurrence precedingVisitOccurrence;
+
+
+	public Observation getObservation() {
+		return observation;
+	}
+
+	public void setObservation(Observation observation) {
+		this.observation = observation;
+	}
 
 	public VisitOccurrence() {
 	}

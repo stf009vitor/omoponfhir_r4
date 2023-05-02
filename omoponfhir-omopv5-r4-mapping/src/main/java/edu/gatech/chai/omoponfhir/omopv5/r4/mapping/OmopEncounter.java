@@ -91,6 +91,11 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 		Encounter encounter = new Encounter();
 		encounter.setId(new IdType(fhirId));
 
+		// recupera observation do Omop relativo a esse visit_ocurrence (fhir: encounter)
+		logger.debug( "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" );
+		logger.debug( visitOccurrence.getObservation().getObservationSourceConcept().getConceptName() );
+
+
 		if (visitOccurrence.getVisitConcept() != null) {
 			String visitString = visitOccurrence.getVisitConcept().getConceptName().toLowerCase();
 			Coding coding = new Coding();

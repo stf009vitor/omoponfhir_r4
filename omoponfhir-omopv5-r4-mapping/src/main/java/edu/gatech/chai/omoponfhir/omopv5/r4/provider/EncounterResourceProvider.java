@@ -301,6 +301,13 @@ public class EncounterResourceProvider implements IResourceProvider {
 				includes.add("Encounter:subject");
 			}
 
+			/* TODO: colocar uma linha observation aqui */
+			// if (theIncludes.contains(new Include("Encounter:observation"))) {
+			// includes.add("Encounter:observation");
+			// }
+			/* ---------------------------------------- */
+
+
 			if (paramList.size() == 0) {
 				myMapper.searchWithoutParams(fromIndex, toIndex, retv, includes, null);
 			} else {
