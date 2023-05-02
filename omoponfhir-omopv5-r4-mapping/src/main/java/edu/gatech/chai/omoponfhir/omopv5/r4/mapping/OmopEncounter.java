@@ -87,7 +87,7 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 	}
 
 	@Override
-	public Encounter constructFHIR(Long x, VisitOccurrence visitOccurrence) {
+	public Encounter constructFHIR(Long fhirId, VisitOccurrence visitOccurrence) {
 		Encounter encounter = new Encounter();
 		encounter.setId(new IdType(fhirId));
 
