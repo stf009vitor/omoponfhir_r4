@@ -471,7 +471,7 @@ public class OmopObservation extends BaseOmopResource<Observation, FObservationV
 		//FIX VALUE AS STRING
 		String s_value = fObservationView.getValueAsString();
 		if (s_value != null){
-			observation.setValue(new StringType(valueString));
+			observation.setValue(new StringType(s_value));
 			logger.debug("ALOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO String FIX");
 			logger.debug(s_value);
 		}
