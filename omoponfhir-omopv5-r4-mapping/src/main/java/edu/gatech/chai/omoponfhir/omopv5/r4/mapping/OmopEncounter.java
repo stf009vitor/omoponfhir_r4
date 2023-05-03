@@ -91,6 +91,9 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 		Encounter encounter = new Encounter();
 		encounter.setId(new IdType(fhirId));
 
+		logger.debug( "BUSCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANDO ENCOUNTEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEER" );
+		logger.debug( encounter.getValueAsString() );
+
 		// recupera observation do Omop relativo a esse visit_ocurrence (fhir: encounter)
 		//logger.debug( "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" );
 		//edu.gatech.chai.omopv5.model.entity.Observation observation = visitOccurrence.getObservation();
