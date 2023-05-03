@@ -158,7 +158,7 @@ public interface VisitOccurrenceService extends IService<VisitOccurrence> {
 				
 				//NEW
 			} else if (columnInfo.equalsIgnoreCase(alias + "_value_as_string") || columnInfo.equalsIgnoreCase(alias + "value_as_string") || columnInfo.equalsIgnoreCase("value_as_string")) {
-				visitOccurrence.setValueAsString(rs.getString(columnInfo));		
+				visitOccurrence.setValueAsString(rowResult.get(columnInfo).getStringValue());		
 				
 			} else if (columnInfo.equalsIgnoreCase("provider_provider_id")) {
 				Provider provider = ProviderService._construct(rowResult, null, "provider", columns);
