@@ -74,8 +74,6 @@ public class VisitOccurrence extends BaseEntity {
 	@JoinColumn(name="visit_source_concept_id", referencedColumnName="concept_id")
 	private Concept visitSourceConcept;
 	
-	@JoinColumn(name="visit_source_concept_id", referencedColumnName="concept_id")
-	private Concept visitSourceConcept;
 	
 	@JoinColumn(name="admitting_source_concept_id", referencedColumnName="concept_id")
 	private Concept admittingSourceConcept;	
