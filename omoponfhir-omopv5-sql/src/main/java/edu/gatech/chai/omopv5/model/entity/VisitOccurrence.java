@@ -217,15 +217,6 @@ public class VisitOccurrence extends BaseEntity {
 		this.admittingSourceValue = admittingSourceValue;
 	}
 	
-	public String getValueAsString() {
-		return value_as_string;
-	}
-	
-	public void setAdmittingSourceValue(String value_as_string) {
-		this.value_as_string = value_as_string;
-	}	
-	
-	
 	public Concept getDischargeToConcept() {
 		return dischargeToConcept;
 	}
