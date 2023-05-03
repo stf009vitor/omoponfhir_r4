@@ -92,9 +92,8 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 		encounter.setId(new IdType(fhirId));
 
 		logger.debug( "BUSCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANDO ENCOUNTEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEER" );
-		edu.gatech.chai.omopv5.model.entity.Observation obs = visitOccurrence.getObservation();
 		
-		if (obs == null){
+		if (visitOccurrence.getObservation() == null){
 			logger.debug( "NAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAO" );
 		}
 		else{

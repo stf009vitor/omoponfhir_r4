@@ -74,6 +74,9 @@ public class VisitOccurrence extends BaseEntity {
 	@JoinColumn(name="visit_source_concept_id", referencedColumnName="concept_id")
 	private Concept visitSourceConcept;
 	
+	@JoinColumn(name="visit_source_concept_id", referencedColumnName="concept_id")
+	private Concept visitSourceConcept;
+	
 	@JoinColumn(name="admitting_source_concept_id", referencedColumnName="concept_id")
 	private Concept admittingSourceConcept;	
 	
@@ -362,7 +365,7 @@ public class VisitOccurrence extends BaseEntity {
 	}
 
 	public static String _getSqlTableStatement(List<String> parameterList, List<String> valueList) {
-		return "select * from visit_occurrence";
+		return "select * from person";
 	}
 
 }
