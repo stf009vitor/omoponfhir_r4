@@ -371,7 +371,7 @@ public class VisitOccurrence extends BaseEntity {
 	}
 
 	public static String _getSqlTableStatement(List<String> parameterList, List<String> valueList) {
-		return "select * from visit_occurrence"
+		return "select * from visit_occurrence";
 	}
 
 }
