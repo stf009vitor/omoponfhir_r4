@@ -160,7 +160,8 @@ public interface VisitOccurrenceService extends IService<VisitOccurrence> {
 			} else if (columnInfo.equalsIgnoreCase(alias + "_value_as_string") || columnInfo.equalsIgnoreCase(alias + "value_as_string") || columnInfo.equalsIgnoreCase("value_as_string")) {
 				visitOccurrence.setValueAsString(rs.getString(columnInfo));		
 				
-			}	Provider provider = ProviderService._construct(rowResult, null, "provider", columns);
+			} else if (columnInfo.equalsIgnoreCase("provider_provider_id")) {
+				Provider provider = ProviderService._construct(rowResult, null, "provider", columns);
 				visitOccurrence.setProvider(provider);
 			} else if (columnInfo.equalsIgnoreCase("careSite_provider_id")) {
 				CareSite careSite = CareSiteService._construct(rowResult, null, "careSite", columns);
