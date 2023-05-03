@@ -57,7 +57,8 @@ public class VisitOccurrence extends BaseEntity {
 	private Concept visitTypeConcept;
 
 	/** alteracao **/
-	@JoinColumn(name="visit_occurrence_id", referencedColumnName="visit_occurrence_id", nullable=false)
+	//@JoinColumn(name="person_id", table="f_person:fPerson,person:person", nullable=false)
+	@JoinColumn(name="visit_occurrence_id", table="observation:observation", nullable=false)
 	private Observation observation;
 	/** alteracao **/
 
