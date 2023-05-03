@@ -374,28 +374,7 @@ public class VisitOccurrence extends BaseEntity {
 	}
 
 	public static String _getSqlTableStatement(List<String> parameterList, List<String> valueList) {
-		return "select "+ 
-				"visit.visit_occurrence_id,"+
-				"visit.person_id,"+
-				"visit.visit_concept_id,"+
-				"visit.visit_start_date,"+
-				"visit.visit_start_datetime,"+
-				"visit.visit_end_date,"+
-				"visit.visit_end_datetime,"+
-				"visit.visit_type_concept_id,"+
-				"visit.provider_id,"+
-				"visit.care_site_id,"+
-				"visit.visit_source_value,"+
-				"visit.visit_source_concept_id,"+
-				"visit.admitting_source_concept_id,"+
-				"visit.admitting_source_value,"+
-				"visit.discharge_to_concept_id,"+
-				"visit.discharge_to_source_value,"+
-				"visit.preceding_visit_occurrence_id,"+
-				"obs.observation_source_concept_id,"+
-				"obs.value_as_string "+
-				"from visit_occurrence visit left join observation obs on "+
-				"obs.observation_source_concept_id = 2000000005";
+		return "select * from visit_occurrence";
 	}
 
 }
