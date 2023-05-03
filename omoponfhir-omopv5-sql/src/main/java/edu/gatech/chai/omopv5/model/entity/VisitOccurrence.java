@@ -78,8 +78,8 @@ public class VisitOccurrence extends BaseEntity {
 	private Concept admittingSourceConcept;
 	
 	//NEW COLLUMN
-	@Column(name="value_as_string")
-	private String value_as_string;	
+	//@Column(name="value_as_string")
+	//private String value_as_string;	
 	
 	@Column(name="admitting_source_value")
 	private String admittingSourceValue;
@@ -220,14 +220,6 @@ public class VisitOccurrence extends BaseEntity {
 	public void setAdmittingSourceValue(String admittingSourceValue) {
 		this.admittingSourceValue = admittingSourceValue;
 	}
-	
-	public String getValueAsString() {
-		return value_as_string;
-	}
-	
-	public void setValueAsString(String value_as_string) {
-		this.value_as_string = value_as_string;
-	}	
 	
 	public Concept getDischargeToConcept() {
 		return dischargeToConcept;
