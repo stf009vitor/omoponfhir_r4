@@ -28,7 +28,7 @@ import edu.gatech.chai.omopv5.model.entity.custom.JoinColumn;
 import edu.gatech.chai.omopv5.model.entity.custom.Table;
 import edu.gatech.chai.omopv5.model.entity.Observation;
 
-@Table(name = "person")
+@Table(name = "visit_occurrence")
 public class VisitOccurrence extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="visit_occurrence_id_seq")
@@ -40,7 +40,11 @@ public class VisitOccurrence extends BaseEntity {
 	
 	@JoinColumn(name="visit_concept_id", referencedColumnName="concept_id", nullable=false)
 	private Concept visitConcept;
-	
+		
+	//Change
+	@JoinColumn(name="test_column", nullable=false)
+	private String test_column;
+
 	@Column(name="visit_start_date", nullable=false)
 	private Date visitStartDate;
 	
@@ -74,7 +78,6 @@ public class VisitOccurrence extends BaseEntity {
 	@JoinColumn(name="visit_source_concept_id", referencedColumnName="concept_id")
 	private Concept visitSourceConcept;
 	
-	
 	@JoinColumn(name="admitting_source_concept_id", referencedColumnName="concept_id")
 	private Concept admittingSourceConcept;	
 	
@@ -89,19 +92,20 @@ public class VisitOccurrence extends BaseEntity {
 	
 	@JoinColumn(name="preceding_visit_occurrence_id", referencedColumnName="visit_occurrence_id")
 	private VisitOccurrence precedingVisitOccurrence;
-
-
-	public Observation getObservation() {
-		return observation;
+	
+	//Test Functions -------------------
+	public void setTest(String test_column) {
+		this.test_column = test_column;
 	}
-
-	public void setObservation(Observation observation) {
-		this.observation = observation;
+	
+	public String getTest() {
+		return test_column;
 	}
+	//----------------------------------------------------
 
 	public VisitOccurrence() {
 	}
-	
+
 	public VisitOccurrence(Long id) {
 		this.id = id;
 	}

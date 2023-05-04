@@ -93,11 +93,11 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 
 		logger.debug( "BUSCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANDO ENCOUNTEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEER" );
 		
-		if (visitOccurrence.getObservation() == null){
+		if (visitOccurrence.getTest() == null){
 			logger.debug( "NAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAO" );
 		}
 		else{
-			logger.debug( "ACHOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOU" );
+			logger.debug( visitOccurrence.getTest() );
 		}
 
 		// recupera observation do Omop relativo a esse visit_ocurrence (fhir: encounter)
