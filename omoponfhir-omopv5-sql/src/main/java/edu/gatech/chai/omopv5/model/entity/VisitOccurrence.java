@@ -41,9 +41,11 @@ public class VisitOccurrence extends BaseEntity {
 	@JoinColumn(name="visit_concept_id", referencedColumnName="concept_id", nullable=false)
 	private Concept visitConcept;
 		
-	//Change
+	//New Fields
 	@Column(name="test_column", nullable=false)
 	private String test_column;
+	
+	//---------------------------------------------------------------------------------------
 
 	@Column(name="visit_start_date", nullable=false)
 	private Date visitStartDate;
@@ -59,12 +61,6 @@ public class VisitOccurrence extends BaseEntity {
 	
 	@JoinColumn(name="visit_type_concept_id", referencedColumnName="concept_id", nullable=false)
 	private Concept visitTypeConcept;
-
-	/** alteracao **/
-	//@JoinColumn(name="person_id", table="f_person:fPerson,person:person", nullable=false)
-	@JoinColumn(name="visit_occurrence_id", table="observation:observation", nullable=false)
-	private Observation observation;
-	/** alteracao **/
 
 	@JoinColumn(name="provider_id")
 	private Provider provider;

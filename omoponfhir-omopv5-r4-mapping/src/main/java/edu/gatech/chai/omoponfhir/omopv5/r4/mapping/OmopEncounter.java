@@ -151,6 +151,9 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 				coding.setDisplay(V3ActCode.VR.getDisplay());
 			} else {
 				coding = null;
+				coding.setSystem("EVOLVE LOCAL CODE");
+				coding.setCode(0);
+				coding.setDisplay(visitString.toLowerCase();
 			}
 
 			if (coding != null)
