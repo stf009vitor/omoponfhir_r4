@@ -152,7 +152,7 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 			} else {
 				coding = null;
 				coding.setSystem("EVOLVE LOCAL CODE");
-				coding.setCode(0);
+				coding.setCode("0");
 				coding.setDisplay(visitString.toLowerCase());
 			}
 
