@@ -62,7 +62,7 @@ public interface VisitOccurrenceService extends IService<VisitOccurrence> {
 				
 				//NEW
 				} else if (columnInfo.equalsIgnoreCase(alias + "_test_column")) {
-					visitOccurrence.setTest(rs.getString(columnInfo))
+					visitOccurrence.setTest(rs.getString(columnInfo));
 					
 				} else if (columnInfo.equalsIgnoreCase(alias + "_visit_start_datetime")) {
 					visitOccurrence.setVisitStartDateTime(rs.getDate(columnInfo));
@@ -73,10 +73,6 @@ public interface VisitOccurrenceService extends IService<VisitOccurrence> {
 				} else if (columnInfo.equalsIgnoreCase("visitTypeConcept_concept_id")) {
 					Concept visitTypeConcept = ConceptService._construct(rs, null, "visitTypeConcept");
 					visitOccurrence.setVisitTypeConcept(visitTypeConcept);
-					
-				//} else if (columnInfo.equalsIgnoreCase(alias + "_value_as_string") || columnInfo.equalsIgnoreCase(alias + "value_as_string") || columnInfo.equalsIgnoreCase("value_as_string")) {
-					//visitOccurrence.setValueAsString(rs.getString(columnInfo));					
-					
 				} else if (columnInfo.equalsIgnoreCase("provider_provider_id")) {
 					Provider provider = ProviderService._construct(rs, null, "provider");
 					visitOccurrence.setProvider(provider);
@@ -160,12 +156,6 @@ public interface VisitOccurrenceService extends IService<VisitOccurrence> {
 				Concept visitTypeConcept = ConceptService._construct(rowResult, null, "visitTypeConcept", columns);
 				visitOccurrence.setVisitTypeConcept(visitTypeConcept);
 			} else if (columnInfo.equalsIgnoreCase("provider_provider_id")) {
-				
-				//NEW
-			//} else if (columnInfo.equalsIgnoreCase(alias + "_value_as_string") || columnInfo.equalsIgnoreCase(alias + "value_as_string") || columnInfo.equalsIgnoreCase("value_as_string")) {
-				//visitOccurrence.setValueAsString(rowResult.get(columnInfo).getStringValue());		
-				
-			} else if (columnInfo.equalsIgnoreCase("provider_provider_id")) {
 				Provider provider = ProviderService._construct(rowResult, null, "provider", columns);
 				visitOccurrence.setProvider(provider);
 			} else if (columnInfo.equalsIgnoreCase("careSite_provider_id")) {
@@ -174,7 +164,7 @@ public interface VisitOccurrenceService extends IService<VisitOccurrence> {
 				
 				//NEW
 			} else if (columnInfo.equalsIgnoreCase(alias + "_test_column")) {
-				visitOccurrence.setTest(rowResult.get(columnInfo).getStringValue()
+				visitOccurrence.setTest(rowResult.get(columnInfo).getStringValue());
 				
 			} else if (columnInfo.equalsIgnoreCase(alias + "_visit_source_value")) {
 				visitOccurrence.setVisitSourceValue(rowResult.get(columnInfo).getStringValue());
