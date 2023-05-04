@@ -42,9 +42,6 @@ public class VisitOccurrence extends BaseEntity {
 	private Concept visitConcept;
 		
 	//Change
-	@Column(name="potato", nullable=false)
-	private String potato;
-	
 	@Column(name="test_column", nullable=false)
 	private String test_column;
 
