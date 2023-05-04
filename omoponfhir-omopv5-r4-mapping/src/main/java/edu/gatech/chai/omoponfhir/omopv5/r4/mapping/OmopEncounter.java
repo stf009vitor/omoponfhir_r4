@@ -91,6 +91,7 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 		Encounter encounter = new Encounter();
 		encounter.setId(new IdType(fhirId));
 
+
 		logger.debug( "BUSCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANDO ENCOUNTEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEER" );
 		
 		if (visitOccurrence.getTest() == null){
@@ -150,7 +151,7 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 				coding.setCode(V3ActCode.VR.toCode());
 				coding.setDisplay(V3ActCode.VR.getDisplay());
 			} else {
-				coding = null;
+				//coding = null;
 				coding.setSystem("EVOLVE LOCAL CODE");
 				coding.setCode("0");
 				coding.setDisplay(visitString.toLowerCase());
