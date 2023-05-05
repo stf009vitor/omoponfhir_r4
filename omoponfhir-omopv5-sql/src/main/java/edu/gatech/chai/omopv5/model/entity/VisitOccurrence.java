@@ -28,7 +28,7 @@ import edu.gatech.chai.omopv5.model.entity.custom.JoinColumn;
 import edu.gatech.chai.omopv5.model.entity.custom.Table;
 import edu.gatech.chai.omopv5.model.entity.Observation;
 
-@Table(name = "fhir_visit_occurrence ")
+@Table(name = "fhir_visit_occurrence")
 public class VisitOccurrence extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="visit_occurrence_id_seq")
