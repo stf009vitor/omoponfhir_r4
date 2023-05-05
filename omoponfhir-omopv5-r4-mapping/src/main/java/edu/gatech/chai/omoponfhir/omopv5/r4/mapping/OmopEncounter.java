@@ -128,18 +128,18 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 			} else {
 				
 				// Set a code with local hospital values in case one was not found
-				String class_text = visitOccurrence.get_encounter_class_text()
-				String class_code = visitOccurrence.get_encounter_class_code()
-				String class_system = visitOccurrence.get_encounter_class_system()
+				String class_text = visitOccurrence.get_encounter_class_text();
+				String class_code = visitOccurrence.get_encounter_class_code();
+				String class_system = visitOccurrence.get_encounter_class_system();
 				
 				if (class_text == null || class_text.length() == 0){
-					class_text = "no text informed"
+					class_text = "no text informed";
 				}
 				if (class_code == null || class_text.length() == 0){
-					class_code = "0"
+					class_code = "0";
 				}
 				if (class_system == null || class_text.length() == 0){
-					class_system = "local hospital code"
+					class_system = "local hospital code";
 				}
 				
 				coding.setSystem(class_text);
