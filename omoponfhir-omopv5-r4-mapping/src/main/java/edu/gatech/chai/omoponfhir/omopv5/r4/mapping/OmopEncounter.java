@@ -91,32 +91,7 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 		Encounter encounter = new Encounter();
 		encounter.setId(new IdType(fhirId));
 
-
-		logger.debug( "BUSCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANDO ENCOUNTEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEER" );
-		
-		if (visitOccurrence.getTest() == null){
-			logger.debug( "NAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAO AAAAA" );
-		}
-		else{
-			logger.debug( "AQUIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII" );
-			logger.debug( visitOccurrence.getTest() );
-		}
-
-		// recupera observation do Omop relativo a esse visit_ocurrence (fhir: encounter)
-		//logger.debug( "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" );
-		//edu.gatech.chai.omopv5.model.entity.Observation observation = visitOccurrence.getObservation();
-		//logger.debug( "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA111" );
-		//logger.debug( observation.getObservationSourceConcept().getConceptName() );
-		//if (observation == null) {
-			//logger.debug( "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA OBS NULL" );
-		//}
-		
-		//edu.gatech.chai.omopv5.model.entity.Concept concept = observation.getObservationConcept();
-		//logger.debug( "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA222" );
-		//if (concept != null) {
-		//	logger.debug( "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA NOT NULL" );
-		//}
-
+		// Visit Occurrence Class
 		if (visitOccurrence.getVisitConcept() != null) {
 			String visitString = visitOccurrence.getVisitConcept().getConceptName().toLowerCase();
 			Coding coding = new Coding();
@@ -151,10 +126,25 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 				coding.setCode(V3ActCode.VR.toCode());
 				coding.setDisplay(V3ActCode.VR.getDisplay());
 			} else {
-				//coding = null;
-				coding.setSystem("EVOLVE LOCAL CODE");
-				coding.setCode("0");
-				coding.setDisplay(visitString.toLowerCase());
+				
+				// Set a code with local hospital values in case one was not found
+				String class_text = visitOccurrence.get_encounter_class_text()
+				String class_code = visitOccurrence.get_encounter_class_code()
+				String class_system = visitOccurrence.get_encounter_class_system()
+				
+				if (class_text == null || class_text.length() == 0){
+					class_text = "no text informed"
+				}
+				if (class_code == null || class_text.length() == 0){
+					class_code = "0"
+				}
+				if (class_system == null || class_text.length() == 0){
+					class_system = "local hospital code"
+				}
+				
+				coding.setSystem(class_text);
+				coding.setCode(class_code);
+				coding.setDisplay(class_system);
 			}
 
 			if (coding != null)
@@ -254,7 +244,7 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 		myCodeableConcept.setText( visitConceptString );
 		encounter.setServiceType( myCodeableConcept );
 
-		logger.debug( "Opa cheguei aqui" );
+		//logger.debug( "Opa cheguei aqui" );
 
 		// cria uma hospitalização caso precise
 		if ( visitOccurrence.getVisitConcept().getId() == 9201 		// inpatient visit

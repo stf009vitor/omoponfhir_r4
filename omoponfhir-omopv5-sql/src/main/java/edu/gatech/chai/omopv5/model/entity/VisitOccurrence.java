@@ -28,7 +28,7 @@ import edu.gatech.chai.omopv5.model.entity.custom.JoinColumn;
 import edu.gatech.chai.omopv5.model.entity.custom.Table;
 import edu.gatech.chai.omopv5.model.entity.Observation;
 
-@Table(name = "visit_occurrence")
+@Table(name = "fhir_visit_occurrence ")
 public class VisitOccurrence extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="visit_occurrence_id_seq")
@@ -40,11 +40,15 @@ public class VisitOccurrence extends BaseEntity {
 	
 	@JoinColumn(name="visit_concept_id", referencedColumnName="concept_id", nullable=false)
 	private Concept visitConcept;
-		
-	//New Fields
-	@Column(name="test_column", nullable=false)
-	private String test_column;
-	
+	//New Collumns --------------------------------------------------------------------------
+	@Column(name="encounter_class_text", nullable=false)
+	private String encounter_class_text;
+
+	@Column(name="encounter_class_code", nullable=false)
+	private String encounter_class_code;
+
+	@Column(name="encounter_class_system", nullable=false)
+	private String encounter_class_system;	
 	//---------------------------------------------------------------------------------------
 
 	@Column(name="visit_start_date", nullable=false)
@@ -89,15 +93,31 @@ public class VisitOccurrence extends BaseEntity {
 	@JoinColumn(name="preceding_visit_occurrence_id", referencedColumnName="visit_occurrence_id")
 	private VisitOccurrence precedingVisitOccurrence;
 	
-	//Test Functions -------------------
-	public void setTest(String test_column) {
-		this.test_column = test_column;
+//New Get/Set Functions -----------------------------------------------------------------
+	//Class Text
+	public void set_encounter_class_text(String encounter_class_text) {
+		this.encounter_class_text = encounter_class_text;
+	}
+	public String get_encounter_class_text() {
+		return encounter_class_text;
 	}
 	
-	public String getTest() {
-		return test_column;
+	//Class Code	
+	public void set_encounter_class_code(String encounter_class_code) {
+		this.encounter_class_code = encounter_class_code;
 	}
-	//----------------------------------------------------
+	public String get_encounter_class_code() {
+		return encounter_class_code;
+	}
+	
+	//Class System
+	public void set_encounter_class_system(String encounter_class_system) {
+		this.encounter_class_system = encounter_class_system;
+	}
+	public String get_encounter_class_system() {
+		return encounter_class_system;
+	}
+//---------------------------------------------------------------------------------------
 
 	public VisitOccurrence() {
 	}

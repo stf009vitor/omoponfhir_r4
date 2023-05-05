@@ -60,10 +60,14 @@ public interface VisitOccurrenceService extends IService<VisitOccurrence> {
 				} else if (columnInfo.equalsIgnoreCase(alias + "_visit_start_date")) {
 					visitOccurrence.setVisitStartDate(rs.getDate(columnInfo));
 				
-				//NEW
-				} else if (columnInfo.equalsIgnoreCase(alias + "_test_column")) {
+//------------NEW--------------------------------------------------------------------------------------------------------------------------
+				} else if (columnInfo.equalsIgnoreCase(alias + "_encounter_class_text")) {
 					visitOccurrence.setTest(rs.getString(columnInfo));
-					
+				} else if (columnInfo.equalsIgnoreCase(alias + "_encounter_class_code")) {
+					visitOccurrence.setTest(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_encounter_class_system")) {
+					visitOccurrence.setTest(rs.getString(columnInfo));
+//-----------------------------------------------------------------------------------------------------------------------------------------					
 				} else if (columnInfo.equalsIgnoreCase(alias + "_visit_start_datetime")) {
 					visitOccurrence.setVisitStartDateTime(rs.getDate(columnInfo));
 				} else if (columnInfo.equalsIgnoreCase(alias + "_visit_end_date")) {
@@ -161,11 +165,14 @@ public interface VisitOccurrenceService extends IService<VisitOccurrence> {
 			} else if (columnInfo.equalsIgnoreCase("careSite_provider_id")) {
 				CareSite careSite = CareSiteService._construct(rowResult, null, "careSite", columns);
 				visitOccurrence.setCareSite(careSite);
-				
-				//NEW
-			} else if (columnInfo.equalsIgnoreCase(alias + "_test_column")) {
+//------------NEW--------------------------------------------------------------------------------------------------------------------------
+			} else if (columnInfo.equalsIgnoreCase(alias + "_encounter_class_text")) {
 				visitOccurrence.setTest(rowResult.get(columnInfo).getStringValue());
-				
+			} else if (columnInfo.equalsIgnoreCase(alias + "_encounter_class_code")) {
+				visitOccurrence.setTest(rowResult.get(columnInfo).getStringValue());
+			} else if (columnInfo.equalsIgnoreCase(alias + "_encounter_class_system")) {
+				visitOccurrence.setTest(rowResult.get(columnInfo).getStringValue());
+//-----------------------------------------------------------------------------------------------------------------------------------------				
 			} else if (columnInfo.equalsIgnoreCase(alias + "_visit_source_value")) {
 				visitOccurrence.setVisitSourceValue(rowResult.get(columnInfo).getStringValue());
 			} else if (columnInfo.equalsIgnoreCase("visitSourceConcept_concept_id")) {
