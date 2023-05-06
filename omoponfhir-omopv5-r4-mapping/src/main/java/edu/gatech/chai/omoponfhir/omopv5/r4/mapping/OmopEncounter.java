@@ -92,7 +92,7 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 		encounter.setId(new IdType(fhirId));
 
 		//Reason for Visit
-		Coding coding = new Coding();
+		Coding reason_coding = new Coding();
 		CodeableConcept ReasonVisit_CodeableConcept = new CodeableConcept();
 		CodeableConcept ReasonVisit_CodeableConcept = new CodeableConcept();
 		CodeList<CodeableConcept> codeList = new ArrayList<>();
@@ -110,11 +110,11 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 				reason_visit_system = "local hospital code";
 			}
 			
-			coding.setSystem(reason_visit_text);
-			coding.setCode(reason_visit_code);
-			coding.setDisplay(reason_visit_system);
+			reason_coding.setSystem(reason_visit_text);
+			reason_coding.setCode(reason_visit_code);
+			reason_coding.setDisplay(reason_visit_system);
 
-			ReasonVisit_CodeableConcept.setCoding(coding);
+			ReasonVisit_CodeableConcept.setCoding(reason_coding);
 			codeList.add(ReasonVisit_CodeableConcept);
 			encounter.setReasonCode(codeList);
 		}
@@ -133,11 +133,11 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 		//Service Type
 		String encounterServiceType = visitOccurrence.get_encounter_type();
 		if (encounterServiceType != null && encounterServiceType.length() != 0){
-			Coding coding = new Coding();
+			Coding service_coding = new Coding();
 			CodeableConcept ServiceType_CodeableConcept = new CodeableConcept();
 
-			coding.setDisplay(encounterServiceType);
-			ServiceType_CodeableConcept.setCoding(coding);
+			service_coding.setDisplay(encounterServiceType);
+			ServiceType_CodeableConcept.setCoding(service_coding);
 			encounter.setServiceType(ServiceType_CodeableConcept);
 		}
 
