@@ -290,7 +290,7 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 			encounter.addDiagnosis(diagnosisComponent);
 		}
 		
-		int x = 1 //REMOVE THIS DEBUG LINE
+		int x = 1; //REMOVE THIS DEBUG LINE
 
 		// cria uma hospitalização caso precise
 		if ( visitOccurrence.getVisitConcept().getId() == 9201 		// inpatient visit
