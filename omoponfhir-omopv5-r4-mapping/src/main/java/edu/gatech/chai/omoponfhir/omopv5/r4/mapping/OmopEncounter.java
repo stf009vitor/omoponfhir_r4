@@ -94,6 +94,8 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 		//Reason for Visit
 		Coding coding = new Coding();
 		CodeableConcept ReasonVisit_CodeableConcept = new CodeableConcept();
+		CodeableConcept ReasonVisit_CodeableConcept = new CodeableConcept();
+		CodeList<CodeableConcept> codeList = new ArrayList<>();
 		
 		String reason_visit_text = visitOccurrence.get_encounter_reason_visit_text();
 		String reason_visit_code = visitOccurrence.get_encounter_reason_visit_code();
@@ -111,17 +113,21 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 			coding.setSystem(reason_visit_text);
 			coding.setCode(reason_visit_code);
 			coding.setDisplay(reason_visit_system);
-			
+
 			ReasonVisit_CodeableConcept.setCoding(coding);
-			encounter.setReasonCode(ReasonVisit_CodeableConcept);
+			codeList.add(ReasonVisit_CodeableConcept);
+			encounter.setReasonCode(codeList);
 		}
 		
 		//Type of Encounter
 		String encounterType = visitOccurrence.get_encounter_type();
 		if (encounterType != null && encounterType.length() != 0){
 			CodeableConcept encounterType_CodeableConcept = new CodeableConcept();
+			CodeList<CodeableConcept> codeList = new ArrayList<>();
+			
 			encounterType_CodeableConcept.setText(encounterType);
-			encounter.setType(encounterType_CodeableConcept);
+			CodeList.add(encounterType_CodeableConcept)
+			encounter.setType(CodeList);
 		}
 
 		//Service Type
