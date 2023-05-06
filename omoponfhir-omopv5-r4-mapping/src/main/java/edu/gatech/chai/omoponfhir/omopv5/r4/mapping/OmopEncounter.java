@@ -94,7 +94,6 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 		//Reason for Visit
 		Coding reason_coding = new Coding();
 		CodeableConcept ReasonVisit_CodeableConcept = new CodeableConcept();
-		CodeableConcept ReasonVisit_CodeableConcept = new CodeableConcept();
 		CodeList<CodeableConcept> codeList = new ArrayList<>();
 		
 		String reason_visit_text = visitOccurrence.get_encounter_reason_visit_text();
