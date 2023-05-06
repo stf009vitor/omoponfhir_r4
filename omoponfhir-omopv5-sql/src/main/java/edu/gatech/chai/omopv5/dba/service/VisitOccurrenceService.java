@@ -67,6 +67,16 @@ public interface VisitOccurrenceService extends IService<VisitOccurrence> {
 					visitOccurrence.set_encounter_class_code(rs.getString(columnInfo));
 				} else if (columnInfo.equalsIgnoreCase(alias + "_encounter_class_system")) {
 					visitOccurrence.set_encounter_class_system(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_encounter_reason_visit_text")) {
+					visitOccurrence.set_encounter_reason_visit_text(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_encounter_reason_visit_code")) {
+					visitOccurrence.set_encounter_reason_visit_code(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_encounter_reason_visit_system")) {
+					visitOccurrence.set_encounter_reason_visit_system(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_encounter_type")) {
+					visitOccurrence.set_encounter_type(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_encounter_service_type")) {
+					visitOccurrence.set_encounter_service_type(rs.getString(columnInfo));
 //-----------------------------------------------------------------------------------------------------------------------------------------					
 				} else if (columnInfo.equalsIgnoreCase(alias + "_visit_start_datetime")) {
 					visitOccurrence.setVisitStartDateTime(rs.getDate(columnInfo));
@@ -172,6 +182,16 @@ public interface VisitOccurrenceService extends IService<VisitOccurrence> {
 				visitOccurrence.set_encounter_class_code(rowResult.get(columnInfo).getStringValue());
 			} else if (columnInfo.equalsIgnoreCase(alias + "_encounter_class_system")) {
 				visitOccurrence.set_encounter_class_system(rowResult.get(columnInfo).getStringValue());
+			} else if (columnInfo.equalsIgnoreCase(alias + "_encounter_reason_visit_text")) {
+				visitOccurrence.set_encounter_reason_visit_text(rowResult.get(columnInfo).getStringValue());
+			} else if (columnInfo.equalsIgnoreCase(alias + "_encounter_reason_visit_code")) {
+				visitOccurrence.set_encounter_reason_visit_code(rowResult.get(columnInfo).getStringValue());
+			} else if (columnInfo.equalsIgnoreCase(alias + "_encounter_reason_visit_system")) {
+				visitOccurrence.set_encounter_reason_visit_system(rowResult.get(columnInfo).getStringValue());
+			} else if (columnInfo.equalsIgnoreCase(alias + "_encounter_type")) {
+				visitOccurrence.set_encounter_type(rowResult.get(columnInfo).getStringValue());
+			} else if (columnInfo.equalsIgnoreCase(alias + "_encounter_service_type")) {
+				visitOccurrence.set_encounter_service_type(rowResult.get(columnInfo).getStringValue());
 //-----------------------------------------------------------------------------------------------------------------------------------------				
 			} else if (columnInfo.equalsIgnoreCase(alias + "_visit_source_value")) {
 				visitOccurrence.setVisitSourceValue(rowResult.get(columnInfo).getStringValue());

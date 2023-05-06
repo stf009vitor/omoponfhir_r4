@@ -49,6 +49,21 @@ public class VisitOccurrence extends BaseEntity {
 
 	@Column(name="encounter_class_system", nullable=false)
 	private String encounter_class_system;	
+	
+	@Column(name="encounter_reason_visit_text", nullable=false)
+	private String encounter_reason_visit_text;
+
+	@Column(name="encounter_reason_visit_code", nullable=false)
+	private String encounter_reason_visit_code;
+
+	@Column(name="encounter_reason_visit_system", nullable=false)
+	private String encounter_reason_visit_system;
+
+	@Column(name="encounter_service_type", nullable=false)
+	private String encounter_service_type;	
+
+	@Column(name="encounter_type", nullable=false)
+	private String encounter_type;	
 	//---------------------------------------------------------------------------------------
 
 	@Column(name="visit_start_date", nullable=false)
@@ -101,7 +116,6 @@ public class VisitOccurrence extends BaseEntity {
 	public String get_encounter_class_text() {
 		return encounter_class_text;
 	}
-	
 	//Class Code	
 	public void set_encounter_class_code(String encounter_class_code) {
 		this.encounter_class_code = encounter_class_code;
@@ -109,7 +123,6 @@ public class VisitOccurrence extends BaseEntity {
 	public String get_encounter_class_code() {
 		return encounter_class_code;
 	}
-	
 	//Class System
 	public void set_encounter_class_system(String encounter_class_system) {
 		this.encounter_class_system = encounter_class_system;
@@ -117,6 +130,46 @@ public class VisitOccurrence extends BaseEntity {
 	public String get_encounter_class_system() {
 		return encounter_class_system;
 	}
+	
+	//Reason for Visit Text
+	public void set_encounter_reason_visit_text(String encounter_reason_visit_text) {
+		this.encounter_reason_visit_text = encounter_reason_visit_text;
+	}
+	public String get_encounter_reason_visit_text() {
+		return encounter_reason_visit_text;
+	}
+	//Reason for Visit Code	
+	public void set_encounter_reason_visit_code(String encounter_reason_visit_code) {
+		this.encounter_reason_visit_code = encounter_reason_visit_code;
+	}
+	public String get_encounter_reason_visit_code() {
+		return encounter_reason_visit_code;
+	}
+	//Reason for Visit System
+	public void set_encounter_reason_visit_system(String encounter_reason_visit_system) {
+		this.encounter_reason_visit_system = encounter_reason_visit_system;
+	}
+	public String get_encounter_reason_visit_system() {
+		return encounter_reason_visit_system;
+	}
+	
+	//Encounter Type
+	public void set_encounter_type(String encounter_type) {
+		this.encounter_type = encounter_type;
+	}
+	public String get_encounter_type() {
+		return encounter_type;
+	}
+	
+	//Encounter Service Type
+	public void set_encounter_service_type(String encounter_service_type) {
+		this.encounter_service_type = encounter_service_type;
+	}
+	public String get_encounter_service_type() {
+		return encounter_service_type;
+	}
+	
+	
 //---------------------------------------------------------------------------------------
 
 	public VisitOccurrence() {
