@@ -91,6 +91,41 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 		Encounter encounter = new Encounter();
 		encounter.setId(new IdType(fhirId));
 
+		//Reason for Visit
+		Coding coding = new Coding();
+		String reason_visit_text = visitOccurrence.get_encounter_reason_visit_text();
+		String reason_visit_code = visitOccurrence.get_encounter_reason_visit_code();
+		String reason_visit_system = visitOccurrence.get_encounter_reason_visit_system();
+		
+		if (reason_visit_text != null && reason_visit_text.length() != 0){
+			reason_visit_text = "no text informed";
+			if (reason_visit_code == null || reason_visit_text.length() == 0){
+				reason_visit_code = "0";
+			}
+			if (reason_visit_system == null || reason_visit_text.length() == 0){
+				reason_visit_system = "local hospital code";
+			}
+			
+			coding.setSystem(reason_visit_text);
+			coding.setCode(reason_visit_code);
+			coding.setDisplay(reason_visit_system);
+			encounter.setReasonCode(coding);
+		}
+		
+		//Type of Encounter
+		String encounterType = visitOccurrence.get_encounter_type()
+		if (encounterType != null && encounterType.length() != 0){
+			encounter.setType(encounterType);
+		}
+
+		//Service Type
+		String encounterServiceType = visitOccurrence.get_encounter_type()
+		if (encounterServiceType != null && encounterServiceType.length() != 0){
+			Coding coding = new Coding();
+			coding.setDisplay(encounterType);
+			encounter.setType(coding);
+		}
+
 		// Visit Occurrence Class
 		if (visitOccurrence.getVisitConcept() != null) {
 			String visitString = visitOccurrence.getVisitConcept().getConceptName().toLowerCase();
@@ -237,15 +272,6 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 			encounter.addDiagnosis(diagnosisComponent);
 		}
 
-
-		// campo visit_concept_id (parece mais relacionado ao service type que o visit_type_concept_id)
-		String visitConceptString = visitOccurrence.getVisitConcept().getConceptName().toLowerCase();
-		CodeableConcept myCodeableConcept = new CodeableConcept();
-		myCodeableConcept.setText( visitConceptString );
-		encounter.setServiceType( myCodeableConcept );
-
-		//logger.debug( "Opa cheguei aqui" );
-
 		// cria uma hospitalização caso precise
 		if ( visitOccurrence.getVisitConcept().getId() == 9201 		// inpatient visit
 			|| visitOccurrence.getVisitConcept().getId() == 32037  // intensive care
@@ -255,26 +281,29 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 				encounter.setHospitalization(new Encounter.EncounterHospitalizationComponent());
 			}
 
-			// campo admitting_source_concept
-			String admittingSourceConceptString = visitOccurrence.getAdmittingSourceConcept().getConceptName().toLowerCase();
-			String admittingSourceValue = visitOccurrence.getAdmittingSourceConcept().getConceptCode();
+		//DEBUG DE HOSPITALIZAÇÃO, REMOVER ESSA LINHA
+		encounter.setHospitalization(new Encounter.EncounterHospitalizationComponent());
 
-			CodeableConcept admittingSourceCodeableConcept = new CodeableConcept();
+		// campo admitting_source_concept
+		String admittingSourceConceptString = visitOccurrence.getAdmittingSourceConcept().getConceptName().toLowerCase();
+		String admittingSourceValue = visitOccurrence.getAdmittingSourceConcept().getConceptCode();
 
-			admittingSourceCodeableConcept.setText(admittingSourceConceptString);
-			admittingSourceCodeableConcept.setId( admittingSourceValue );
+		CodeableConcept admittingSourceCodeableConcept = new CodeableConcept();
 
-			encounter.getHospitalization().setAdmitSource(admittingSourceCodeableConcept);
+		admittingSourceCodeableConcept.setText(admittingSourceConceptString);
+		admittingSourceCodeableConcept.setId( admittingSourceValue );
 
-			// campo dischargedTo
-			String dischargeToSourceValue = visitOccurrence.getDischargeToSourceValue();
-			String dischargeToConceptString = visitOccurrence.getDischargeToConcept().getConceptName().toLowerCase();
+		encounter.getHospitalization().setAdmitSource(admittingSourceCodeableConcept);
 
-			CodeableConcept dischargeToCodeableConcept = new CodeableConcept();
-			dischargeToCodeableConcept.setText(dischargeToConceptString);
-			dischargeToCodeableConcept.setId(dischargeToSourceValue);
+		// campo dischargedTo
+		String dischargeToSourceValue = visitOccurrence.getDischargeToSourceValue();
+		String dischargeToConceptString = visitOccurrence.getDischargeToConcept().getConceptName().toLowerCase();
 
-			encounter.getHospitalization().setDischargeDisposition(dischargeToCodeableConcept);
+		CodeableConcept dischargeToCodeableConcept = new CodeableConcept();
+		dischargeToCodeableConcept.setText(dischargeToConceptString);
+		dischargeToCodeableConcept.setId(dischargeToSourceValue);
+
+		encounter.getHospitalization().setDischargeDisposition(dischargeToCodeableConcept);
 		}
 
 
