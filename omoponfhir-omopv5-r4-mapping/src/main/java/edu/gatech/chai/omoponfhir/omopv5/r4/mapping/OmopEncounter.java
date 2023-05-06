@@ -139,7 +139,7 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 			CodeableConcept ServiceType_CodeableConcept = new CodeableConcept();
 
 			service_coding.setDisplay(encounterServiceType);
-			service_codingList.add(service_coding)
+			service_codingList.add(service_coding);
 			ServiceType_CodeableConcept.setCoding(service_codingList);
 			encounter.setServiceType(ServiceType_CodeableConcept);
 		}
