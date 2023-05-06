@@ -102,7 +102,6 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 		String reason_visit_system = visitOccurrence.get_encounter_reason_visit_system();
 		
 		if (reason_visit_text != null && reason_visit_text.length() != 0){
-			reason_visit_text = "no text informed";
 			if (reason_visit_code == null || reason_visit_text.length() == 0){
 				reason_visit_code = "0";
 			}
@@ -110,9 +109,9 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 				reason_visit_system = "local hospital code";
 			}
 			
-			reason_coding.setSystem(reason_visit_text);
+			reason_coding.setSystem(reason_visit_system);
 			reason_coding.setCode(reason_visit_code);
-			reason_coding.setDisplay(reason_visit_system);
+			reason_coding.setDisplay(reason_visit_text); 
 
 			reason_codingList.add(reason_coding);
 			ReasonVisit_CodeableConcept.setCoding(reason_codingList);
@@ -132,7 +131,7 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 		}
 
 		//Service Type
-		String encounterServiceType = visitOccurrence.get_encounter_type();
+		String encounterServiceType = visitOccurrence.get_encounter_service_type();
 		if (encounterServiceType != null && encounterServiceType.length() != 0){
 			Coding service_coding = new Coding();
 			List<Coding> service_codingList = new ArrayList<>();
@@ -290,18 +289,18 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 			diagnosisComponent.setCondition(conditionReference);
 			encounter.addDiagnosis(diagnosisComponent);
 		}
+		
+		int x = 1 //REMOVE THIS DEBUG LINE
 
 		// cria uma hospitalização caso precise
 		if ( visitOccurrence.getVisitConcept().getId() == 9201 		// inpatient visit
 			|| visitOccurrence.getVisitConcept().getId() == 32037  // intensive care
+			|| x == 1 //REMOVE THIS DEBUG LINE
 		) {
 
 			if ( ! encounter.hasHospitalization() ) {
 				encounter.setHospitalization(new Encounter.EncounterHospitalizationComponent());
 			}
-
-			//DEBUG DE HOSPITALIZAÇÃO, REMOVER ESSA LINHA
-			encounter.setHospitalization(new Encounter.EncounterHospitalizationComponent());
 
 			// campo admitting_source_concept
 			String admittingSourceConceptString = visitOccurrence.getAdmittingSourceConcept().getConceptName().toLowerCase();
