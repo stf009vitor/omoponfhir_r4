@@ -307,9 +307,13 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 			String admittingSourceValue = visitOccurrence.getAdmittingSourceConcept().getConceptCode();
 
 			CodeableConcept admittingSourceCodeableConcept = new CodeableConcept();
+			
+			String admittingSourceValue_text = visitOccurrence.getAdmittingSourceValue();
+			if (admittingSourceValue_text == null || admittingSourceValue_text.length() == 0){
+					admittingSourceCodeableConcept.setText(admittingSourceValue_text);
+				}
 
-			admittingSourceCodeableConcept.setText(admittingSourceConceptString);
-			admittingSourceCodeableConcept.setId( admittingSourceValue );
+			//admittingSourceCodeableConcept.setId( admittingSourceValue );
 
 			encounter.getHospitalization().setAdmitSource(admittingSourceCodeableConcept);
 
@@ -318,8 +322,9 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 			String dischargeToConceptString = visitOccurrence.getDischargeToConcept().getConceptName().toLowerCase();
 
 			CodeableConcept dischargeToCodeableConcept = new CodeableConcept();
-			dischargeToCodeableConcept.setText(dischargeToConceptString);
-			dischargeToCodeableConcept.setId(dischargeToSourceValue);
+			dischargeToCodeableConcept.setText(dischargeToSourceValue);
+			//dischargeToCodeableConcept.setText(dischargeToConceptString);
+			//dischargeToCodeableConcept.setId(dischargeToSourceValue);
 
 			encounter.getHospitalization().setDischargeDisposition(dischargeToCodeableConcept);
 		}
