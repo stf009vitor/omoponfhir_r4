@@ -126,7 +126,7 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 			CodeList<CodeableConcept> codeList = new ArrayList<>();
 			
 			encounterType_CodeableConcept.setText(encounterType);
-			CodeList.add(encounterType_CodeableConcept)
+			CodeList.add(encounterType_CodeableConcept);
 			encounter.setType(CodeList);
 		}
 
