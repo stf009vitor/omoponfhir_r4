@@ -113,13 +113,13 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 		}
 		
 		//Type of Encounter
-		String encounterType = visitOccurrence.get_encounter_type()
+		String encounterType = visitOccurrence.get_encounter_type();
 		if (encounterType != null && encounterType.length() != 0){
 			encounter.setType(encounterType);
 		}
 
 		//Service Type
-		String encounterServiceType = visitOccurrence.get_encounter_type()
+		String encounterServiceType = visitOccurrence.get_encounter_type();
 		if (encounterServiceType != null && encounterServiceType.length() != 0){
 			Coding coding = new Coding();
 			coding.setDisplay(encounterType);
