@@ -27,7 +27,7 @@ import edu.gatech.chai.omopv5.model.entity.custom.Id;
 import edu.gatech.chai.omopv5.model.entity.custom.JoinColumn;
 import edu.gatech.chai.omopv5.model.entity.custom.Table;
 
-@Table(name = "condition_occurrence")
+@Table(name = "fhir_condition_occurrence")
 public class ConditionOccurrence extends BaseEntity {
 
 	@Id
