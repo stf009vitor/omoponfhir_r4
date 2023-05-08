@@ -48,6 +48,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.text.SimpleDateFormat;
 
 public class OmopCondition extends BaseOmopResource<Condition, ConditionOccurrence, ConditionOccurrenceService> {
 
@@ -126,6 +127,22 @@ public class OmopCondition extends BaseOmopResource<Condition, ConditionOccurren
 		}
 		
 //------------NEW--------------------------------------------------------------------------------------------------------------------------
+		if (conditionOccurrence.get_condition_severity() != null){
+			CodeableConcept conditionSeverityCodeableConcept = new CodeableConcept();
+			conditionSeverityCodeableConcept.setText(conditionOccurrence.get_condition_severity());
+			condition.setSeverity(conditionSeverityCodeableConcept);
+		}
+		
+		if(conditionOccurrence.get_condition_recorded_datetime() != null){
+			Date recoredDatetimeDate = new SimpleDateFormat("dd/MM/yyyy HH.mm.ss").parse(conditionOccurrence.get_condition_recorded_datetime());
+			if (recoredDatetimeDate != null){
+				condition.setRecordedDate(recoredDatetimeDate);
+			}
+		}
+
+		//get_condition_class_text()
+		//get_condition_class_code()
+		//get_condition_class_system()	
 //-----------------------------------------------------------------------------------------------------------------------------------------	
 
 		// TODO: Need to map the following

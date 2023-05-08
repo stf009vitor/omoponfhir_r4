@@ -42,6 +42,20 @@ public class ConditionOccurrence extends BaseEntity {
 	private Concept conditionConcept;
 	
 //------------NEW--------------------------------------------------------------------------------------------------------------------------
+	@Column(name="condition_class_text", nullable=false)
+	private String condition_class_text;
+	
+	@Column(name="condition_class_code", nullable=false)
+	private String condition_class_code;	
+	
+	@Column(name="condition_class_system", nullable=false)
+	private String condition_class_system;	
+	
+	@Column(name="condition_recorded_datetime", nullable=false)
+	private String condition_recorded_datetime;	
+	
+	@Column(name="condition_severity", nullable=false)
+	private String condition_severity;	
 //-----------------------------------------------------------------------------------------------------------------------------------------	
 	
 	@Column(name="condition_start_date", nullable=false)
@@ -91,6 +105,41 @@ public class ConditionOccurrence extends BaseEntity {
 	}
 
 //------------NEW--------------------------------------------------------------------------------------------------------------------------
+	//Condition Class
+	public void set_condition_class_text(String condition_class_text) {
+		this.condition_class_text = condition_class_text;
+	}
+	public String get_condition_class_text() {
+		return condition_class_text;
+	}
+	public void set_condition_class_code(String condition_class_code) {
+		this.condition_class_code = condition_class_code;
+	}
+	public String get_condition_class_code() {
+		return condition_class_code;
+	}
+	public void set_condition_class_system(String condition_class_system) {
+		this.condition_class_system = condition_class_system;
+	}
+	public String get_condition_class_system() {
+		return condition_class_system;
+	}
+
+	//Condition Recorded Time
+	public void set_condition_recorded_datetime(String condition_recorded_datetime) {
+		this.condition_recorded_datetime = condition_recorded_datetime;
+	}
+	public String get_condition_recorded_datetime() {
+		return condition_recorded_datetime;
+	}
+	
+	//Condition Severity
+	public void set_condition_severity(String condition_severity) {
+		this.condition_severity = condition_severity;
+	}
+	public String get_condition_severity() {
+		return condition_severity;
+	}
 //-----------------------------------------------------------------------------------------------------------------------------------------	
 
 	public FPerson getFPerson() {

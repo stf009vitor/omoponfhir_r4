@@ -63,6 +63,16 @@ public interface ConditionOccurrenceService extends IService<ConditionOccurrence
 					conditionOccurrence.setConditionEndDate(rs.getDate(columnInfo));
 				} else if (columnInfo.equalsIgnoreCase("conditionTypeConcept_concept_id")) {
 //------------NEW--------------------------------------------------------------------------------------------------------------------------
+				} else if (columnInfo.equalsIgnoreCase(alias + "_condition_class_text")) {
+					visitOccurrence.set_condition_class_text(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_condition_class_code")) {
+					visitOccurrence.set_condition_class_code(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_condition_class_system")) {
+					visitOccurrence.set_condition_class_system(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_condition_recorded_datetime")) {
+					visitOccurrence.set_condition_recorded_datetime(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_condition_severity")) {
+					visitOccurrence.set_condition_severity(rs.getString(columnInfo));
 //-----------------------------------------------------------------------------------------------------------------------------------------	
 					Concept conditionTypeConcept = ConceptService._construct(rs, null, "conditionTypeConcept");
 					conditionOccurrence.setConditionTypeConcept(conditionTypeConcept);
@@ -127,6 +137,16 @@ public interface ConditionOccurrenceService extends IService<ConditionOccurrence
 				conditionOccurrence.setStopReason(rowResult.get(columnInfo).getStringValue());
 
 //------------NEW--------------------------------------------------------------------------------------------------------------------------
+			} else if (columnInfo.equalsIgnoreCase(alias + "_condition_class_text")) {
+				visitOccurrence.set_condition_class_text(rowResult.get(columnInfo).getStringValue());
+			} else if (columnInfo.equalsIgnoreCase(alias + "_condition_class_code")) {
+				visitOccurrence.set_condition_class_code(rowResult.get(columnInfo).getStringValue());
+			} else if (columnInfo.equalsIgnoreCase(alias + "_condition_class_system")) {
+				visitOccurrence.set_condition_class_system(rowResult.get(columnInfo).getStringValue());
+			} else if (columnInfo.equalsIgnoreCase(alias + "_condition_recorded_datetime")) {
+				visitOccurrence.set_condition_recorded_datetime(rowResult.get(columnInfo).getStringValue());
+			} else if (columnInfo.equalsIgnoreCase(alias + "_condition_severity")) {
+				visitOccurrence.set_condition_severity(rowResult.get(columnInfo).getStringValue());
 //-----------------------------------------------------------------------------------------------------------------------------------------	
 				
 			} else if (columnInfo.equalsIgnoreCase("provider_provider_id")) {
