@@ -27,7 +27,7 @@ import edu.gatech.chai.omopv5.model.entity.custom.Id;
 import edu.gatech.chai.omopv5.model.entity.custom.JoinColumn;
 import edu.gatech.chai.omopv5.model.entity.custom.Table;
 
-@Table(name = "procedure_occurrence")
+@Table(name = "fhir_procedure_occurrence")
 public class ProcedureOccurrence extends BaseEntity {
 
 	@Id
