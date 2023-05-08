@@ -140,14 +140,6 @@ public class ConditionOccurrence extends BaseEntity {
 		return condition_severity;
 	}
 	
-	//Condition Status
-	public void set_condition_status_source_value(String condition_status_source_value) {
-		this.condition_status_source_value = condition_status_source_value;
-	}
-	public String get_condition_status_source_value() {
-		return condition_status_source_value;
-	}
-	
 //-----------------------------------------------------------------------------------------------------------------------------------------	
 
 	public FPerson getFPerson() {

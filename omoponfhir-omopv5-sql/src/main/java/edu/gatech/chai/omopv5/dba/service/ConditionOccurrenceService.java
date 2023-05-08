@@ -73,6 +73,8 @@ public interface ConditionOccurrenceService extends IService<ConditionOccurrence
 					conditionOccurrence.set_condition_recorded_datetime(rs.getString(columnInfo));
 				} else if (columnInfo.equalsIgnoreCase(alias + "_condition_severity")) {
 					conditionOccurrence.set_condition_severity(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_condition_status_source_value")) {
+					conditionOccurrence.set_condition_severity(rs.getString(columnInfo));
 //-----------------------------------------------------------------------------------------------------------------------------------------	
 					Concept conditionTypeConcept = ConceptService._construct(rs, null, "conditionTypeConcept");
 					conditionOccurrence.setConditionTypeConcept(conditionTypeConcept);
@@ -146,6 +148,8 @@ public interface ConditionOccurrenceService extends IService<ConditionOccurrence
 			} else if (columnInfo.equalsIgnoreCase(alias + "_condition_recorded_datetime")) {
 				conditionOccurrence.set_condition_recorded_datetime(rowResult.get(columnInfo).getStringValue());
 			} else if (columnInfo.equalsIgnoreCase(alias + "_condition_severity")) {
+				conditionOccurrence.set_condition_severity(rowResult.get(columnInfo).getStringValue());
+			} else if (columnInfo.equalsIgnoreCase(alias + "_condition_status_source_value")) {
 				conditionOccurrence.set_condition_severity(rowResult.get(columnInfo).getStringValue());
 //-----------------------------------------------------------------------------------------------------------------------------------------	
 				
