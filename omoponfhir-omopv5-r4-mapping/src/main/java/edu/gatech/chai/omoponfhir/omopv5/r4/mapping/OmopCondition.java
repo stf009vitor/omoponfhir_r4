@@ -435,6 +435,7 @@ public class OmopCondition extends BaseOmopResource<Condition, ConditionOccurren
 		}else{
 			Coding class_coding = new Coding();
 			CodeableConcept Class_CodeableConcept = new CodeableConcept();
+			List<Coding> class_codingList = new ArrayList<>();
 			
 			String condition_class_text = conditionOccurrence.get_condition_class_text();
 			String condition_class_code = conditionOccurrence.get_condition_class_code();
@@ -452,7 +453,8 @@ public class OmopCondition extends BaseOmopResource<Condition, ConditionOccurren
 				class_coding.setCode(condition_class_code);
 				class_coding.setDisplay(condition_class_text); 
 
-				Class_CodeableConcept.setCoding(class_coding);
+				class_codingList.add(class_coding);
+				Class_CodeableConcept.setCoding(class_codingList);
 				condition.setCode(Class_CodeableConcept);
 			}
 		}
