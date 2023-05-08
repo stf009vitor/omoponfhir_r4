@@ -425,11 +425,35 @@ public class OmopCondition extends BaseOmopResource<Condition, ConditionOccurren
 	private void addCodeToCondition(ConditionOccurrence conditionOccurrence, Condition condition) {
 		// Condition.code SNOMED-CT
 		Concept conceptId = conditionOccurrence.getConditionConcept();
-		if (conceptId != null) {
+
+		//If the concept name is "H" no concept_id was provided (Else part), so we get the concept information from the code/text/system fields in the observation table
+		if (conceptId != null && conceptId.getConceptName() != null && conceptId.getConceptName() != "H") {
 			CodeableConcept conditionCodeableConcept = retrieveCodeableConcept(conceptId);
 			if (conditionCodeableConcept != null) {
 				condition.setCode(conditionCodeableConcept);
 			}
+		}else{
+			Coding class_coding = new Coding();
+			CodeableConcept Class_CodeableConcept = new CodeableConcept();
+			
+			String condition_class_text = conditionOccurrence.get_encounter_condition_class_text();
+			String condition_class_code = conditionOccurrence.get_encounter_condition_class_code();
+			String condition_class_system = conditionOccurrence.get_encounter_condition_class_system();
+			
+			if (condition_class_text != null && condition_class_text.length() != 0){
+				if (condition_class_code == null || condition_class_text.length() == 0){
+					condition_class_code = "0";
+				}
+				if (condition_class_system == null || condition_class_text.length() == 0){
+					condition_class_system = "local hospital code";
+				}
+				
+				class_coding.setSystem(condition_class_system);
+				class_coding.setCode(condition_class_code);
+				class_coding.setDisplay(condition_class_text); 
+
+				Class_CodeableConcept.setCoding(class_coding);
+				condition.setCode(Class_CodeableConcept);
 		}
 	}
 
