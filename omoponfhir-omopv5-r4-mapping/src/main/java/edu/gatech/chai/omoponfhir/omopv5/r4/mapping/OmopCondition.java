@@ -120,9 +120,9 @@ public class OmopCondition extends BaseOmopResource<Condition, ConditionOccurren
 			conditionStatusCodeableConcept.setId(conditionStatusConceptCode);
 			condition.setClinicalStatus(conditionStatusCodeableConcept);
 		} else {
-			if(conditionOccurrence.getConditionStatusSourceValue() != null){
+			if(conditionOccurrence.get_condition_status_source_value() != null){
 				CodeableConcept conditionStatusCodeableConcept = new CodeableConcept();
-				conditionStatusCodeableConcept.setText(conditionOccurrence.getConditionStatusSourceValue());
+				conditionStatusCodeableConcept.setText(conditionOccurrence.get_condition_status_source_value());
 				condition.setClinicalStatus(conditionStatusCodeableConcept); 
 			}
 		}
