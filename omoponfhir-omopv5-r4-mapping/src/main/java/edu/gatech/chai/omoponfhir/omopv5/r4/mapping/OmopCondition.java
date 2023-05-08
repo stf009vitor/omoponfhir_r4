@@ -140,7 +140,7 @@ public class OmopCondition extends BaseOmopResource<Condition, ConditionOccurren
 		if(conditionOccurrence.get_condition_recorded_datetime() != null){
 			
 			try {
-				Date recoredDatetimeDate = new SimpleDateFormat("dd/MM/yyyy HH.mm.ss").parse(conditionOccurrence.get_condition_recorded_datetime());
+				Date recoredDatetimeDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(conditionOccurrence.get_condition_recorded_datetime());
 				if (recoredDatetimeDate != null){
 					condition.setRecordedDate(recoredDatetimeDate);
 				}
@@ -427,7 +427,7 @@ public class OmopCondition extends BaseOmopResource<Condition, ConditionOccurren
 		Concept conceptId = conditionOccurrence.getConditionConcept();
 
 		//If the concept name is "H" no concept_id was provided (Else part), so we get the concept information from the code/text/system fields in the observation table
-		if (conceptId != null && conceptId.getConceptName() != null && conceptId.getConceptName() != "H") {
+		if (conceptId != null && conceptId.getConceptName() != null && conceptId.getConceptName() != "Henry") {
 			CodeableConcept conditionCodeableConcept = retrieveCodeableConcept(conceptId);
 			if (conditionCodeableConcept != null) {
 				condition.setCode(conditionCodeableConcept);
