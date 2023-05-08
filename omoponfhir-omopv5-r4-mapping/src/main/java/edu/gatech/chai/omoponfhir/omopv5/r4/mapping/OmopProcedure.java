@@ -167,17 +167,13 @@ public class OmopProcedure extends BaseOmopResource<Procedure, ProcedureOccurren
 		// Procedure code concept mapping
 		Concept procedureConcept = entity.getProcedureConcept();
 		CodeableConcept procedureCodeableConcept = null;
-		
-		if ( procedureCodeableConcept != null && procedureCodeableConcept.getConceptName() != null && !procedureCodeableConcept.getConceptName().equals("Henry")) {
-		
+			
+		if ( procedureConcept != null && procedureConcept.getConceptName() != null && !procedureConcept.getConceptName().equals("Henry")) {
 			try {
 				procedureCodeableConcept = CodeableConceptUtil.getCodeableConceptFromOmopConcept(procedureConcept);
+				procedure.setCode(procedureCodeableConcept);
 			} catch (FHIRException e) {
 				e.printStackTrace();
-			}
-
-			if (procedureCodeableConcept != null) {
-				procedure.setCode(procedureCodeableConcept);
 			}
 		}
 		else{
@@ -214,13 +210,14 @@ public class OmopProcedure extends BaseOmopResource<Procedure, ProcedureOccurren
 			Coding reason_coding = new Coding();
 			CodeableConcept reason_CodeableConcept = new CodeableConcept();
 			List<Coding> reason_codingList = new ArrayList<>();
+			List<CodeableConcept> reason_CodeableConceptList = new ArrayList<>();
 			
-			coding.setDisplay(entity.get_procedure_reason());
+			reason_coding.setDisplay(entity.get_procedure_reason());
 			reason_codingList.add(reason_coding);
 			reason_CodeableConcept.setCoding(reason_codingList);
-			reason_codingList.add(reason_CodeableConcept);
+			reason_CodeableConceptList.add(reason_CodeableConcept);
 			
-			procedure.setReasonCode(reason_codingList);
+			procedure.setReasonCode(reason_CodeableConceptList);
 		}
 
 		// Procedure category mapping 
