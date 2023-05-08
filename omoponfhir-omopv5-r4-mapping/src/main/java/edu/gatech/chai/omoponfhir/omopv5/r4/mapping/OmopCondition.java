@@ -427,7 +427,7 @@ public class OmopCondition extends BaseOmopResource<Condition, ConditionOccurren
 		// Condition.code SNOMED-CT
 		Concept conceptId = conditionOccurrence.getConditionConcept();
 		logger.debug("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-		logger.debug(conceptId.getConceptName()));
+		logger.debug(conceptId.getConceptName());
 
 		//If the concept name is "H" no concept_id was provided (Else part), so we get the concept information from the code/text/system fields in the observation table
 		if (conceptId != null && conceptId.getConceptName() != null && conceptId.getConceptName() != "Henry") {
