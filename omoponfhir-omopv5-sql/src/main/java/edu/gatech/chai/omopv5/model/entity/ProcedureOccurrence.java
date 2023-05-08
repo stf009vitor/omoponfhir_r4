@@ -44,6 +44,20 @@ public class ProcedureOccurrence extends BaseEntity {
 	@Column(name="procedure_date", nullable=false)
 	private Date procedureDate;
 	
+//------------NEW--------------------------------------------------------------------------------------------------------------------------
+	@Column(name="procedure_text", nullable=false)
+	private String procedure_text;	
+
+	@Column(name="procedure_code", nullable=false)
+	private String procedure_code;	
+	
+	@Column(name="procedure_system", nullable=false)
+	private String procedure_system;
+	
+	@Column(name="procedure_reason", nullable=false)
+	private String procedure_reason;
+//-----------------------------------------------------------------------------------------------------------------------------------------
+
 	@Column(name="procedure_datetime")
 	private Date procedureDateTime;
 	
@@ -87,6 +101,36 @@ public class ProcedureOccurrence extends BaseEntity {
 	public void setId(Long id) {
 		this.id = id;
 	}
+
+//------------NEW--------------------------------------------------------------------------------------------------------------------------
+	//Procedure Info
+	public void set_procedure_text(String procedure_text) {
+		this.procedure_text = procedure_text;
+	}
+	public String get_procedure_text() {
+		return procedure_text;
+	}
+	public void set_procedure_code(String procedure_code) {
+		this.procedure_code = procedure_code;
+	}
+	public String get_procedure_code() {
+		return procedure_code;
+	}
+	public void set_procedure_system(String procedure_system) {
+		this.procedure_system = procedure_system;
+	}
+	public String get_procedure_system() {
+		return procedure_system;
+	}
+	
+	//Procedure Reason
+	public void set_procedure_reason(String procedure_reason) {
+		this.procedure_reason = procedure_reason;
+	}
+	public String get_procedure_reason() {
+		return procedure_reason;
+	}
+//-----------------------------------------------------------------------------------------------------------------------------------------
 
 	public FPerson getFPerson() {
 		return fPerson;

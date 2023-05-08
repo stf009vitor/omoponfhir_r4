@@ -167,14 +167,60 @@ public class OmopProcedure extends BaseOmopResource<Procedure, ProcedureOccurren
 		// Procedure code concept mapping
 		Concept procedureConcept = entity.getProcedureConcept();
 		CodeableConcept procedureCodeableConcept = null;
-		try {
-			procedureCodeableConcept = CodeableConceptUtil.getCodeableConceptFromOmopConcept(procedureConcept);
-		} catch (FHIRException e) {
-			e.printStackTrace();
-		}
+		
+		if ( procedureCodeableConcept != null && procedureCodeableConcept.getConceptName() != null && !procedureCodeableConcept.getConceptName().equals("Henry")) {
+		
+			try {
+				procedureCodeableConcept = CodeableConceptUtil.getCodeableConceptFromOmopConcept(procedureConcept);
+			} catch (FHIRException e) {
+				e.printStackTrace();
+			}
 
-		if (procedureCodeableConcept != null) {
-			procedure.setCode(procedureCodeableConcept);
+			if (procedureCodeableConcept != null) {
+				procedure.setCode(procedureCodeableConcept);
+			}
+		}
+		else{
+			Coding coding = new Coding();
+			CodeableConcept CodeableConcept = new CodeableConcept();
+			List<Coding> codingList = new ArrayList<>();
+			
+			String procedure_text = entity.get_procedure_text();
+			String procedure_code = entity.get_procedure_code();
+			String procedure_system = entity.get_procedure_system();
+			
+			if (procedure_text != null && procedure_text.length() != 0){
+				if (procedure_code == null || procedure_code.length() == 0){
+					procedure_code = "0";
+				}
+				if (procedure_system == null || procedure_system.length() == 0){
+					procedure_system = "local hospital code";
+				}
+				
+				coding.setSystem(procedure_text);
+				coding.setCode(procedure_code);
+				coding.setDisplay(procedure_system); 
+
+				codingList.add(coding);
+				CodeableConcept.setCoding(codingList);
+				procedure.setCode(CodeableConcept);
+			}
+		}
+	
+//------------NEW--------------------------------------------------------------------------------------------------------------------------	
+		//Reason for Procedure
+		if(entity.get_procedure_reason() != null){
+			
+			Coding reason_coding = new Coding();
+			CodeableConcept reason_CodeableConcept = new CodeableConcept();
+			List<Coding> reason_codingList = new ArrayList<>();
+			
+			coding.setDisplay(entity.get_procedure_reason());
+			reason_codingList.add(reason_coding);
+			reason_CodeableConcept.setCoding(reason_codingList);
+			reason_codingList.add(reason_CodeableConcept);
+			
+			procedure.setReasonCode(reason_codingList);
 		}
 
 		// Procedure category mapping 

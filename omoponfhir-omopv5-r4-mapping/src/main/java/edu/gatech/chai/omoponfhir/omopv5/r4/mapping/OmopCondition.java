@@ -441,10 +441,10 @@ public class OmopCondition extends BaseOmopResource<Condition, ConditionOccurren
 			String condition_class_system = conditionOccurrence.get_condition_class_system();
 			
 			if (condition_class_text != null && condition_class_text.length() != 0){
-				if (condition_class_code == null || condition_class_text.length() == 0){
+				if (condition_class_code == null || condition_class_code.length() == 0){
 					condition_class_code = "0";
 				}
-				if (condition_class_system == null || condition_class_text.length() == 0){
+				if (condition_class_system == null || condition_class_system.length() == 0){
 					condition_class_system = "local hospital code";
 				}
 				
