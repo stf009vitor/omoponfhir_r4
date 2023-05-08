@@ -71,13 +71,13 @@ public interface ProcedureOccurrenceService extends IService<ProcedureOccurrence
 					procedureOccurrence.setQuantity(rs.getLong(columnInfo));
 //------------NEW--------------------------------------------------------------------------------------------------------------------------
 				} else if (columnInfo.equalsIgnoreCase(alias + "_procedure_text")) {
-					visitOccurrence.set_procedure_text(rs.getString(columnInfo));
+					procedureOccurrence.set_procedure_text(rs.getString(columnInfo));
 				} else if (columnInfo.equalsIgnoreCase(alias + "_procedure_code")) {
-					visitOccurrence.set_procedure_code(rs.getString(columnInfo));
+					procedureOccurrence.set_procedure_code(rs.getString(columnInfo));
 				} else if (columnInfo.equalsIgnoreCase(alias + "_procedure_system")) {
-					visitOccurrence.set_procedure_system(rs.getString(columnInfo));
+					procedureOccurrence.set_procedure_system(rs.getString(columnInfo));
 				} else if (columnInfo.equalsIgnoreCase(alias + "_procedure_reason")) {
-					visitOccurrence.set_procedure_reason(rs.getString(columnInfo));
+					procedureOccurrence.set_procedure_reason(rs.getString(columnInfo));
 //----------------------------------------------------------------------------------------------------------------------------------------
 				} else if (columnInfo.equalsIgnoreCase("provider_provider_id")) {
 					Provider provider = ProviderService._construct(rs, null, "provider");
@@ -144,13 +144,13 @@ public interface ProcedureOccurrenceService extends IService<ProcedureOccurrence
 				procedureOccurrence.setQuantity(rowResult.get(columnInfo).getLongValue());
 //------------NEW--------------------------------------------------------------------------------------------------------------------------
 			} else if (columnInfo.equalsIgnoreCase(alias + "_procedure_text")) {
-				visitOccurrence.set_procedure_text(rowResult.get(columnInfo).getStringValue());
+				procedureOccurrence.set_procedure_text(rowResult.get(columnInfo).getStringValue());
 			} else if (columnInfo.equalsIgnoreCase(alias + "_procedure_code")) {
-				visitOccurrence.set_procedure_code(rowResult.get(columnInfo).getStringValue());
+				procedureOccurrence.set_procedure_code(rowResult.get(columnInfo).getStringValue());
 			} else if (columnInfo.equalsIgnoreCase(alias + "_procedure_system")) {
-				visitOccurrence.set_procedure_system(rowResult.get(columnInfo).getStringValue());
+				procedureOccurrence.set_procedure_system(rowResult.get(columnInfo).getStringValue());
 			} else if (columnInfo.equalsIgnoreCase(alias + "_procedure_reason")) {
-				visitOccurrence.set_procedure_reason(rowResult.get(columnInfo).getStringValue());
+				procedureOccurrence.set_procedure_reason(rowResult.get(columnInfo).getStringValue());
 //-----------------------------------------------------------------------------------------------------------------------------------------
 			} else if (columnInfo.equalsIgnoreCase("provider_provider_id")) {
 				Provider provider = ProviderService._construct(rowResult, null, "provider", columns);
