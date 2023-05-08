@@ -436,9 +436,9 @@ public class OmopCondition extends BaseOmopResource<Condition, ConditionOccurren
 			Coding class_coding = new Coding();
 			CodeableConcept Class_CodeableConcept = new CodeableConcept();
 			
-			String condition_class_text = conditionOccurrence.get_encounter_condition_class_text();
-			String condition_class_code = conditionOccurrence.get_encounter_condition_class_code();
-			String condition_class_system = conditionOccurrence.get_encounter_condition_class_system();
+			String condition_class_text = conditionOccurrence.get_condition_class_text();
+			String condition_class_code = conditionOccurrence.get_condition_class_code();
+			String condition_class_system = conditionOccurrence.get_condition_class_system();
 			
 			if (condition_class_text != null && condition_class_text.length() != 0){
 				if (condition_class_code == null || condition_class_text.length() == 0){
