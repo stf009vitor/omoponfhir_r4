@@ -41,6 +41,9 @@ public class ConditionOccurrence extends BaseEntity {
 	@JoinColumn(name="condition_concept_id", referencedColumnName="concept_id", table="concept", nullable=false)
 	private Concept conditionConcept;
 	
+//------------NEW--------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------	
+	
 	@Column(name="condition_start_date", nullable=false)
 	private Date conditionStartDate;
 	
@@ -77,6 +80,8 @@ public class ConditionOccurrence extends BaseEntity {
 	@JoinColumn(name="condition_status_concept_id", referencedColumnName="concept_id", table="concept")
 	private Concept conditionStatusConcept;
 
+
+
 	public Long getId() {
 		return id;
 	}
@@ -84,6 +89,9 @@ public class ConditionOccurrence extends BaseEntity {
 	public void setId(Long id) {
 		this.id = id;
 	}
+
+//------------NEW--------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------	
 
 	public FPerson getFPerson() {
 		return fPerson;

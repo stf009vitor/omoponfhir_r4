@@ -124,6 +124,9 @@ public class OmopCondition extends BaseOmopResource<Condition, ConditionOccurren
 			conditionStatusCodeableConcept.setId( "" );
 			condition.setClinicalStatus(conditionStatusCodeableConcept);
 		}
+		
+//------------NEW--------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------	
 
 		// TODO: Need to map the following
 		// ??Condition.abatement.abatementString, but we are using abatementDateTime for

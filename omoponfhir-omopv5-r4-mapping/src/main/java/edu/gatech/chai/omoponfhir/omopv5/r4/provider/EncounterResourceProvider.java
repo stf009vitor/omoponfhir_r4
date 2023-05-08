@@ -301,16 +301,6 @@ public class EncounterResourceProvider implements IResourceProvider {
 			if (theIncludes.contains(new Include("Encounter:subject"))) {
 				includes.add("Encounter:subject");
 			}
-			
-			if (theIncludes.contains(new Include("Encounter:observation"))) {
-				includes.add("Encounter:observation");
-			 }
-
-			/* TODO: colocar uma linha observation aqui */
-			// if (theIncludes.contains(new Include("Encounter:observation"))) {
-			// includes.add("Encounter:observation");
-			// }
-			/* ---------------------------------------- */
 
 
 			if (paramList.size() == 0) {
