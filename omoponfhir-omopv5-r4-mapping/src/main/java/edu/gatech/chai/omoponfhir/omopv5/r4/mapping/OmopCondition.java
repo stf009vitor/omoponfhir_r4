@@ -134,11 +134,18 @@ public class OmopCondition extends BaseOmopResource<Condition, ConditionOccurren
 		}
 		
 		if(conditionOccurrence.get_condition_recorded_datetime() != null){
-			Date recoredDatetimeDate = new SimpleDateFormat("dd/MM/yyyy HH.mm.ss").parse(conditionOccurrence.get_condition_recorded_datetime());
-			if (recoredDatetimeDate != null){
-				condition.setRecordedDate(recoredDatetimeDate);
+			
+			try {
+				Date recoredDatetimeDate = new SimpleDateFormat("dd/MM/yyyy HH.mm.ss").parse(conditionOccurrence.get_condition_recorded_datetime());
+				if (recoredDatetimeDate != null){
+					condition.setRecordedDate(recoredDatetimeDate);
+				}
+			} catch (Exception e) {
+				logger.error("Failed to get Condition.RecordedDatetime value");
 			}
 		}
+
+		
 
 		//get_condition_class_text()
 		//get_condition_class_code()
