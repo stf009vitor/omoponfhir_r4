@@ -454,6 +454,7 @@ public class OmopCondition extends BaseOmopResource<Condition, ConditionOccurren
 
 				Class_CodeableConcept.setCoding(class_coding);
 				condition.setCode(Class_CodeableConcept);
+			}
 		}
 	}
 
