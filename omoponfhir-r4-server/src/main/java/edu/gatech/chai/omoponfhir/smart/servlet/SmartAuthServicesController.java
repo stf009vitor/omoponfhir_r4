@@ -875,7 +875,7 @@ public class SmartAuthServicesController {
 	}
 
 	private String makeScope(String appType, String user_condition_r, user_documentreference_r, user_encounter_r,
-							user_medicationstatement_r,user_medicationdispense_r, user_medicationrequest_r, user_observation_r, user_patient_r,
+							user_medicationstatement_r, user_medicationdispense_r, user_medicationrequest_r, user_observation_r, user_patient_r,
 							user_procedure_r, patient_condition_r, patient_documentreference_r, patient_encounter_r,
 							patient_medicationstatement_r, patient_medicationdispense_r, patient_medicationrequest_r, patient_observation_r,
 							patient_patient_r, patient_procedure_r, user_condition_w, user_documentreference_w,
@@ -1038,13 +1038,13 @@ public class SmartAuthServicesController {
 		String scope;
 		if (selectedScopes == null || selectedScopes.isEmpty()) {
 			scope = makeScope(appType, user_condition_r, user_documentreference_r, user_encounter_r,
-					user_medicationstatement_r,user_medicationdispense_r, user_medicationrequest_r, user_observation_r, user_patient_r,
+					user_medicationstatement_r, user_medicationdispense_r, user_medicationrequest_r, user_observation_r, user_patient_r,
 					user_procedure_r, patient_condition_r, patient_documentreference_r, patient_encounter_r,
 					patient_medicationstatement_r, patient_medicationdispense_r, patient_medicationrequest_r, patient_observation_r,
 					patient_patient_r, patient_procedure_r, user_condition_w, user_documentreference_w,
 					user_encounter_w, user_medicationstatement_w, user_medicationdispense_w, user_medicationrequest_w, user_observation_w,
 					user_patient_w, user_procedure_w, patient_condition_w, patient_documentreference_w,
-					patient_encounter_w, patient_medicationstatement_w, patient_medicationdispense_w patient_medicationrequest_w,
+					patient_encounter_w, patient_medicationstatement_w, patient_medicationdispense_w, patient_medicationrequest_w,
 					patient_observation_w, patient_patient_w, patient_procedure_w);
 		} else {
 			scope = makeScope(appType, selectedScopes);
@@ -1137,13 +1137,13 @@ public class SmartAuthServicesController {
 		String scope;
 		if (selectedScopes == null || selectedScopes.isEmpty()) {
 			scope = makeScope(appType, user_condition_r, user_documentreference_r, user_encounter_r,
-								user_medicationstatement_r,user_medicationdispense_r, user_medicationrequest_r, user_observation_r, user_patient_r,
+								user_medicationstatement_r, user_medicationdispense_r, user_medicationrequest_r, user_observation_r, user_patient_r,
 								user_procedure_r, patient_condition_r, patient_documentreference_r, patient_encounter_r,
 								patient_medicationstatement_r, patient_medicationdispense_r, patient_medicationrequest_r, patient_observation_r,
 								patient_patient_r, patient_procedure_r, user_condition_w, user_documentreference_w,
 								user_encounter_w, user_medicationstatement_w, user_medicationdispense_w, user_medicationrequest_w, user_observation_w,
 								user_patient_w, user_procedure_w, patient_condition_w, patient_documentreference_w,
-								patient_encounter_w, patient_medicationstatement_w, patient_medicationdispense_w patient_medicationrequest_w,
+								patient_encounter_w, patient_medicationstatement_w, patient_medicationdispense_w, patient_medicationrequest_w,
 								patient_observation_w, patient_patient_w, patient_procedure_w);
 		} else {
 			scope = makeScope(appType, selectedScopes);
