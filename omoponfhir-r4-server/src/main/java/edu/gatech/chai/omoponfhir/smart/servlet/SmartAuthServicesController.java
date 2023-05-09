@@ -874,15 +874,17 @@ public class SmartAuthServicesController {
 		}
 	}
 
-	private String makeScope(String appType, String String user_condition_r, String user_documentreference_r, String user_encounter_r,
-							String user_medicationstatement_r, String user_medicationdispense_r, String user_medicationrequest_r, String user_observation_r, String user_patient_r,
-							String user_procedure_r, String patient_condition_r, String patient_documentreference_r, String patient_encounter_r,
-							String patient_medicationstatement_r, String patient_medicationdispense_r, String patient_medicationrequest_r, String patient_observation_r,
-							String patient_patient_r, String patient_procedure_r, String user_condition_w, String user_documentreference_w,
-							String user_encounter_w, String user_medicationstatement_w, String user_medicationdispense_w, String user_medicationrequest_w, String user_observation_w,
-							String user_patient_w, String user_procedure_w, String patient_condition_w, String patient_documentreference_w,
-							String patient_encounter_w, String patient_medicationstatement_w, String patient_medicationdispense_w patient_medicationrequest_w,
-							String patient_observation_w, String patient_patient_w, String patient_procedure_w) {
+	private String makeScope(String appType, String user_condition_r, String user_documentreference_r,
+							String user_encounter_r, String user_medicationstatement_r, String user_medicationdispense_r, String user_medicationrequest_r,
+							String user_observation_r, String user_patient_r, String user_procedure_r, String patient_condition_r,
+							String patient_documentreference_r, String patient_encounter_r, String patient_medicationstatement_r, String patient_medicationdispense_r,
+							String patient_medicationrequest_r, String patient_observation_r, String patient_patient_r,
+							String patient_procedure_r, String user_condition_w, String user_documentreference_w,
+							String user_encounter_w, String user_medicationstatement_w, String user_medicationdispense_w, String user_medicationrequest_w,
+							String user_observation_w, String user_patient_w, String user_procedure_w, String patient_condition_w,
+							String patient_documentreference_w, String patient_encounter_w, String patient_medicationstatement_w, String patient_medicationdispense_w,
+							String patient_medicationrequest_w, String patient_observation_w, String patient_patient_w,
+							String patient_procedure_w) {
 		String scope = "launch profile openid online_access ";
 		if ("Patient".equals(appType))
 			scope += "launch/patient ";
