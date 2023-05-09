@@ -138,6 +138,7 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 	@Override
 	public MedicationRequest constructResource(Long fhirId, DrugExposure entity, List<String> includes) {
 		MedicationRequest fhirResource = constructFHIR(fhirId, entity);
+		return MedicationRequest;
 
 		if (!includes.isEmpty()) {
 			if (includes.contains("MedicationRequest:medication")) {
