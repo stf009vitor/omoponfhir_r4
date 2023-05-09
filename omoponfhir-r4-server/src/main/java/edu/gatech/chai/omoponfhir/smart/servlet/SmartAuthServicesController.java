@@ -874,17 +874,15 @@ public class SmartAuthServicesController {
 		}
 	}
 
-	private String makeScope(String appType, String user_condition_r, String user_documentreference_r,
-			String user_encounter_r, String user_medicationstatement_r, String user_medicationrequest_r,
-			String user_observation_r, String user_patient_r, String user_procedure_r, String patient_condition_r,
-			String patient_documentreference_r, String patient_encounter_r, String patient_medicationstatement_r,
-			String patient_medicationrequest_r, String patient_observation_r, String patient_patient_r,
-			String patient_procedure_r, String user_condition_w, String user_documentreference_w,
-			String user_encounter_w, String user_medicationstatement_w, String user_medicationrequest_w,
-			String user_observation_w, String user_patient_w, String user_procedure_w, String patient_condition_w,
-			String patient_documentreference_w, String patient_encounter_w, String patient_medicationstatement_w,
-			String patient_medicationrequest_w, String patient_observation_w, String patient_patient_w,
-			String patient_procedure_w) {
+	private String makeScope(String appType, String user_condition_r, user_documentreference_r, user_encounter_r,
+							user_medicationstatement_r,user_medicationdispense_r, user_medicationrequest_r, user_observation_r, user_patient_r,
+							user_procedure_r, patient_condition_r, patient_documentreference_r, patient_encounter_r,
+							patient_medicationstatement_r, patient_medicationdispense_r, patient_medicationrequest_r, patient_observation_r,
+							patient_patient_r, patient_procedure_r, user_condition_w, user_documentreference_w,
+							user_encounter_w, user_medicationstatement_w, user_medicationdispense_w, user_medicationrequest_w, user_observation_w,
+							user_patient_w, user_procedure_w, patient_condition_w, patient_documentreference_w,
+							patient_encounter_w, patient_medicationstatement_w, patient_medicationdispense_w patient_medicationrequest_w,
+							patient_observation_w, patient_patient_w, patient_procedure_w) {
 		String scope = "launch profile openid online_access ";
 		if ("Patient".equals(appType))
 			scope += "launch/patient ";
@@ -898,6 +896,8 @@ public class SmartAuthServicesController {
 			scope += "user/Encounter.read ";
 		if (user_medicationstatement_r != null)
 			scope += "user/MedicationStatement.read ";
+		if (user_medicationdispense_r != null)
+			scope += "user/MedicationDispense.read ";
 		if (user_medicationrequest_r != null)
 			scope += "user/MedicationRequest.read ";
 		if (user_observation_r != null)
@@ -914,6 +914,8 @@ public class SmartAuthServicesController {
 			scope += "patient/Encounter.read ";
 		if (patient_medicationstatement_r != null)
 			scope += "patient/MedicationStatement.read ";
+		if (patient_medicationdispense_r != null)
+			scope += "patient/MedicationDispense.read ";
 		if (patient_medicationrequest_r != null)
 			scope += "patient/MedicationRequest.read ";
 		if (patient_observation_r != null)
@@ -932,6 +934,8 @@ public class SmartAuthServicesController {
 			scope += "user/Encounter.write ";
 		if (user_medicationstatement_w != null)
 			scope += "user/MedicationStatement.write ";
+		if (user_medicationdispense_w != null)
+			scope += "user/MedicationDispense.write ";
 		if (user_medicationrequest_w != null)
 			scope += "user/MedicationRequest.write ";
 		if (user_observation_w != null)
@@ -948,6 +952,8 @@ public class SmartAuthServicesController {
 			scope += "patient/Encounter.write ";
 		if (patient_medicationstatement_w != null)
 			scope += "patient/MedicationStatement.write ";
+		if (patient_medicationdispense_w != null)
+			scope += "patient/MedicationDispense.write ";
 		if (patient_medicationrequest_w != null)
 			scope += "patient/MedicationRequest.write ";
 		if (patient_observation_w != null)
@@ -993,6 +999,7 @@ public class SmartAuthServicesController {
 			@RequestParam(name = "user_documentreference_r", required = false) String user_documentreference_r,
 			@RequestParam(name = "user_encounter_r", required = false) String user_encounter_r,
 			@RequestParam(name = "user_medicationstatement_r", required = false) String user_medicationstatement_r,
+			@RequestParam(name = "user_medicationdispense_r", required = false) String user_medicationdispense_r,
 			@RequestParam(name = "user_medicationrequest_r", required = false) String user_medicationrequest_r,
 			@RequestParam(name = "user_observation_r", required = false) String user_observation_r,
 			@RequestParam(name = "user_patient_r", required = false) String user_patient_r,
@@ -1001,6 +1008,7 @@ public class SmartAuthServicesController {
 			@RequestParam(name = "patient_documentreference_r", required = false) String patient_documentreference_r,
 			@RequestParam(name = "patient_encounter_r", required = false) String patient_encounter_r,
 			@RequestParam(name = "patient_medicationstatement_r", required = false) String patient_medicationstatement_r,
+			@RequestParam(name = "patient_medicationdispense_r", required = false) String patient_medicationdispense_r,
 			@RequestParam(name = "patient_medicationrequest_r", required = false) String patient_medicationrequest_r,
 			@RequestParam(name = "patient_observation_r", required = false) String patient_observation_r,
 			@RequestParam(name = "patient_patient_r", required = false) String patient_patient_r,
@@ -1009,6 +1017,7 @@ public class SmartAuthServicesController {
 			@RequestParam(name = "user_documentreference_w", required = false) String user_documentreference_w,
 			@RequestParam(name = "user_encounter_w", required = false) String user_encounter_w,
 			@RequestParam(name = "user_medicationstatement_w", required = false) String user_medicationstatement_w,
+			@RequestParam(name = "user_medicationdispense_w", required = false) String user_medicationdispense_w,
 			@RequestParam(name = "user_medicationrequest_w", required = false) String user_medicationrequest_w,
 			@RequestParam(name = "user_observation_w", required = false) String user_observation_w,
 			@RequestParam(name = "user_patient_w", required = false) String user_patient_w,
@@ -1017,6 +1026,7 @@ public class SmartAuthServicesController {
 			@RequestParam(name = "patient_documentreference_w", required = false) String patient_documentreference_w,
 			@RequestParam(name = "patient_encounter_w", required = false) String patient_encounter_w,
 			@RequestParam(name = "patient_medicationstatement_w", required = false) String patient_medicationstatement_w,
+			@RequestParam(name = "patient_medicationdispense_w", required = false) String patient_medicationdispense_w,
 			@RequestParam(name = "patient_medicationrequest_w", required = false) String patient_medicationrequest_w,
 			@RequestParam(name = "patient_observation_w", required = false) String patient_observation_w,
 			@RequestParam(name = "patient_patient_w", required = false) String patient_patient_w,
@@ -1028,13 +1038,13 @@ public class SmartAuthServicesController {
 		String scope;
 		if (selectedScopes == null || selectedScopes.isEmpty()) {
 			scope = makeScope(appType, user_condition_r, user_documentreference_r, user_encounter_r,
-					user_medicationstatement_r, user_medicationrequest_r, user_observation_r, user_patient_r,
+					user_medicationstatement_r,user_medicationdispense_r, user_medicationrequest_r, user_observation_r, user_patient_r,
 					user_procedure_r, patient_condition_r, patient_documentreference_r, patient_encounter_r,
-					patient_medicationstatement_r, patient_medicationrequest_r, patient_observation_r,
+					patient_medicationstatement_r, patient_medicationdispense_r, patient_medicationrequest_r, patient_observation_r,
 					patient_patient_r, patient_procedure_r, user_condition_w, user_documentreference_w,
-					user_encounter_w, user_medicationstatement_w, user_medicationrequest_w, user_observation_w,
+					user_encounter_w, user_medicationstatement_w, user_medicationdispense_w, user_medicationrequest_w, user_observation_w,
 					user_patient_w, user_procedure_w, patient_condition_w, patient_documentreference_w,
-					patient_encounter_w, patient_medicationstatement_w, patient_medicationrequest_w,
+					patient_encounter_w, patient_medicationstatement_w, patient_medicationdispense_w patient_medicationrequest_w,
 					patient_observation_w, patient_patient_w, patient_procedure_w);
 		} else {
 			scope = makeScope(appType, selectedScopes);
@@ -1088,6 +1098,7 @@ public class SmartAuthServicesController {
 			@RequestParam(name = "user_documentreference_r", required = false) String user_documentreference_r,
 			@RequestParam(name = "user_encounter_r", required = false) String user_encounter_r,
 			@RequestParam(name = "user_medicationstatement_r", required = false) String user_medicationstatement_r,
+			@RequestParam(name = "user_medicationdispense_r", required = false) String user_medicationdispense_r,
 			@RequestParam(name = "user_medicationrequest_r", required = false) String user_medicationrequest_r,
 			@RequestParam(name = "user_observation_r", required = false) String user_observation_r,
 			@RequestParam(name = "user_patient_r", required = false) String user_patient_r,
@@ -1096,6 +1107,7 @@ public class SmartAuthServicesController {
 			@RequestParam(name = "patient_documentreference_r", required = false) String patient_documentreference_r,
 			@RequestParam(name = "patient_encounter_r", required = false) String patient_encounter_r,
 			@RequestParam(name = "patient_medicationstatement_r", required = false) String patient_medicationstatement_r,
+			@RequestParam(name = "patient_medicationdispense_r", required = false) String patient_medicationdispense_r,
 			@RequestParam(name = "patient_medicationrequest_r", required = false) String patient_medicationrequest_r,
 			@RequestParam(name = "patient_observation_r", required = false) String patient_observation_r,
 			@RequestParam(name = "patient_patient_r", required = false) String patient_patient_r,
@@ -1104,6 +1116,7 @@ public class SmartAuthServicesController {
 			@RequestParam(name = "user_documentreference_w", required = false) String user_documentreference_w,
 			@RequestParam(name = "user_encounter_w", required = false) String user_encounter_w,
 			@RequestParam(name = "user_medicationstatement_w", required = false) String user_medicationstatement_w,
+			@RequestParam(name = "user_medicationdispense_w", required = false) String user_medicationdispense_w,
 			@RequestParam(name = "user_medicationrequest_w", required = false) String user_medicationrequest_w,
 			@RequestParam(name = "user_observation_w", required = false) String user_observation_w,
 			@RequestParam(name = "user_patient_w", required = false) String user_patient_w,
@@ -1112,6 +1125,7 @@ public class SmartAuthServicesController {
 			@RequestParam(name = "patient_documentreference_w", required = false) String patient_documentreference_w,
 			@RequestParam(name = "patient_encounter_w", required = false) String patient_encounter_w,
 			@RequestParam(name = "patient_medicationstatement_w", required = false) String patient_medicationstatement_w,
+			@RequestParam(name = "patient_medicationdispense_w", required = false) String patient_medicationdispense_w,
 			@RequestParam(name = "patient_medicationrequest_w", required = false) String patient_medicationrequest_w,
 			@RequestParam(name = "patient_observation_w", required = false) String patient_observation_w,
 			@RequestParam(name = "patient_patient_w", required = false) String patient_patient_w,
@@ -1123,14 +1137,14 @@ public class SmartAuthServicesController {
 		String scope;
 		if (selectedScopes == null || selectedScopes.isEmpty()) {
 			scope = makeScope(appType, user_condition_r, user_documentreference_r, user_encounter_r,
-					user_medicationstatement_r, user_medicationrequest_r, user_observation_r, user_patient_r,
-					user_procedure_r, patient_condition_r, patient_documentreference_r, patient_encounter_r,
-					patient_medicationstatement_r, patient_medicationrequest_r, patient_observation_r,
-					patient_patient_r, patient_procedure_r, user_condition_w, user_documentreference_w,
-					user_encounter_w, user_medicationstatement_w, user_medicationrequest_w, user_observation_w,
-					user_patient_w, user_procedure_w, patient_condition_w, patient_documentreference_w,
-					patient_encounter_w, patient_medicationstatement_w, patient_medicationrequest_w,
-					patient_observation_w, patient_patient_w, patient_procedure_w);
+								user_medicationstatement_r,user_medicationdispense_r, user_medicationrequest_r, user_observation_r, user_patient_r,
+								user_procedure_r, patient_condition_r, patient_documentreference_r, patient_encounter_r,
+								patient_medicationstatement_r, patient_medicationdispense_r, patient_medicationrequest_r, patient_observation_r,
+								patient_patient_r, patient_procedure_r, user_condition_w, user_documentreference_w,
+								user_encounter_w, user_medicationstatement_w, user_medicationdispense_w, user_medicationrequest_w, user_observation_w,
+								user_patient_w, user_procedure_w, patient_condition_w, patient_documentreference_w,
+								patient_encounter_w, patient_medicationstatement_w, patient_medicationdispense_w patient_medicationrequest_w,
+								patient_observation_w, patient_patient_w, patient_procedure_w);
 		} else {
 			scope = makeScope(appType, selectedScopes);
 		}

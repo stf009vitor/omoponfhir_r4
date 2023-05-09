@@ -95,6 +95,10 @@ public class RestfulServlet extends RestfulServer {
 		MedicationResourceProvider medicationResourceProvider = new MedicationResourceProvider();
 		providers.add(medicationResourceProvider);
 
+		//New Row
+		MedicationDispenseResourceProvider MedicationDispenseResourceProvider = new MedicationDispenseResourceProvider();
+		providers.add(MedicationDispenseResourceProvider);
+
 		MedicationStatementResourceProvider medicationStatementResourceProvider = new MedicationStatementResourceProvider();
 		providers.add(medicationStatementResourceProvider);
 
