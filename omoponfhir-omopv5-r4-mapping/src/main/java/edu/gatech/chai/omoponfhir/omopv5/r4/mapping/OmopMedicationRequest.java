@@ -182,7 +182,7 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 		// Setting Medication Code & Ingredients
 		String medType = System.getenv("MEDICATION_TYPE");			
 		if (medType != null && !medType.isEmpty() && "local".equalsIgnoreCase(medType)) {
-			CodeableConcept medicationCodeableConcept;
+			CodeableConcept medicationCodeableConcept = new CodeableConcept();
 			CodeableConcept ingredientCodeableConcept;
 			Medication medicationResource = new Medication();
 			
