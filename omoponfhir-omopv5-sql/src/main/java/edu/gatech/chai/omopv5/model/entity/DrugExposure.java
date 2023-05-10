@@ -60,13 +60,13 @@ public class DrugExposure extends BaseEntity {
 	private String drug_indication;		
 
 	@Column(name="drug_min_dose_value", nullable=false)
-	private String drug_min_dose_value;	
+	private long drug_min_dose_value;	
 
 	@Column(name="drug_min_dose_unit", nullable=false)
 	private String drug_min_dose_unit;	
 
 	@Column(name="drug_max_dose_value", nullable=false)
-	private String drug_max_dose_value;	
+	private long drug_max_dose_value;	
 
 	@Column(name="drug_max_dose_unit", nullable=false)
 	private String drug_max_dose_unit;	
@@ -75,7 +75,7 @@ public class DrugExposure extends BaseEntity {
 	private String drug_frequency;	
 
 	@Column(name="drug_quantity_ordered_value", nullable=false)
-	private String drug_quantity_ordered_value;	
+	private long drug_quantity_ordered_value;	
 
 	@Column(name="drug_quantity_ordered_unit", nullable=false)
 	private String drug_quantity_ordered_unit;		
@@ -87,7 +87,7 @@ public class DrugExposure extends BaseEntity {
 	private String drug_order_status;	
 
 	@Column(name="drug_quantity_dispensed_value", nullable=false)
-	private String drug_quantity_dispensed_value;	
+	private long drug_quantity_dispensed_value;	
 
 	@Column(name="drug_quantity_dispensed_unit", nullable=false)
 	private String drug_quantity_dispensed_unit;	
@@ -221,7 +221,7 @@ public class DrugExposure extends BaseEntity {
 	public void set_drug_min_dose_value(String drug_min_dose_value) {
 		this.drug_min_dose_value = drug_min_dose_value;
 	}
-	public String get_drug_min_dose_value() {
+	public long get_drug_min_dose_value() {
 		return drug_min_dose_value;
 	}
 	public void set_drug_min_dose_unit(String drug_min_dose_unit) {
@@ -235,13 +235,13 @@ public class DrugExposure extends BaseEntity {
 	public void set_drug_max_dose_value(String drug_max_dose_value) {
 		this.drug_max_dose_value = drug_max_dose_value;
 	}
-	public String get_drug_max_dose_value() {
+	public long get_drug_max_dose_value() {
 		return drug_max_dose_value;
 	}
 	public void set_drug_max_dose_unit(String drug_max_dose_unit) {
 		this.drug_max_dose_unit = drug_max_dose_unit;
 	}
-	public String get_drug_max_dose_unit() {
+	public long get_drug_max_dose_unit() {
 		return drug_max_dose_unit;
 	}
 	
@@ -265,7 +265,7 @@ public class DrugExposure extends BaseEntity {
 	public void set_drug_quantity_ordered_value(String drug_quantity_ordered_value) {
 		this.drug_quantity_ordered_value = drug_quantity_ordered_value;
 	}
-	public String get_drug_quantity_ordered_value() {
+	public long get_drug_quantity_ordered_value() {
 		return drug_quantity_ordered_value;
 	}
 	public void set_drug_quantity_ordered_unit(String drug_quantity_ordered_unit) {
@@ -287,7 +287,7 @@ public class DrugExposure extends BaseEntity {
 	public void set_drug_quantity_dispensed_value(String drug_quantity_dispensed_value) {
 		this.drug_quantity_dispensed_value = drug_quantity_dispensed_value;
 	}
-	public String get_drug_quantity_dispensed_value() {
+	public long get_drug_quantity_dispensed_value() {
 		return drug_quantity_dispensed_value;
 	}
 	public void set_drug_quantity_dispensed_unit(String drug_quantity_dispensed_unit) {
