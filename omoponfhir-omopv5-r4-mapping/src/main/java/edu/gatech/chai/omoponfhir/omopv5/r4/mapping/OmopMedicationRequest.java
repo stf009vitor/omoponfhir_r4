@@ -188,6 +188,7 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 			
 			try {
 					if(entity.getDrugConcept().getConceptName().equals("Henry")){
+						logger.debug("ENTROUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU");
 						Coding drug_coding = new Coding();
 						List<Coding> drug_codingList = new ArrayList<>();
 						
@@ -212,12 +213,15 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 						}
 					} 
 					else {
+						logger.debug("CONCEITOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
 						medicationCodeableConcept = CodeableConceptUtil.getCodeableConceptFromOmopConcept(entity.getDrugConcept());
 					}
 				
 				medicationResource.setCode(medicationCodeableConcept);
 				List<Concept> ingredients = conceptService.getIngredient(entity.getDrugConcept());
+				logger.debug("X111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111");
 				for (Concept ingredient: ingredients) {
+					logger.debug("X222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222");
 					ingredientCodeableConcept = CodeableConceptUtil.getCodeableConceptFromOmopConcept(ingredient);
 					MedicationIngredientComponent medIngredientComponent = new MedicationIngredientComponent();
 					medIngredientComponent.setItem(ingredientCodeableConcept);
@@ -226,6 +230,7 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 				}
 			} catch (FHIRException e) {
 				e.printStackTrace();
+				logger.debug("EXCPETIOOOOOooooooooooooOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOON");
 				return null;
 			}
 			medicationResource.setCode(medicationCodeableConcept);
@@ -246,7 +251,7 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 			}
 			medicationRequest.setMedication(medicationCodeableConcept);
 		}
-		
+		logger.debug("saiuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuUUUUUUUUuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu");
 		
 		
 		// Dosage mapping
