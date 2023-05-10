@@ -270,10 +270,14 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 				Quantity low = new Quantity();
 				Quantity high = new Quantity();
 
+				logger.debug("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
 				high.setValue(Integer.parseInt(entity.get_drug_max_dose_value()));
 				high.setUnit(entity.get_drug_max_dose_unit());
 				low.setValue(Integer.parseInt(entity.get_drug_min_dose_value()));
 				low.setUnit(entity.get_drug_min_dose_unit());
+
+				logger.debug("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
 				doseRange.setHigh(high);
 				doseRange.setLow(low);
