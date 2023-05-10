@@ -265,7 +265,7 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 		logger.debug("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
 
 		//Max and Minimum doses
-		if(entity.get_drug_max_dose_value() && entity.get_drug_max_dose_unit() != null && entity.get_drug_min_dose_value() && entity.get_drug_min_dose_unit() != null ) {
+		if( Long.toString(entity.get_drug_max_dose_value()) != null && entity.get_drug_max_dose_unit() != null && Long.toString(entity.get_drug_min_dose_value()) != null && entity.get_drug_min_dose_unit() != null ) {
 			//try {
 				Range doseRange = new Range();
 				Quantity low = new Quantity();
