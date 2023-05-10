@@ -265,7 +265,7 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 
 		//Max and Minimum doses
 		if(entity.get_drug_max_dose_value() != null && entity.get_drug_max_dose_unit() != null && entity.get_drug_min_dose_value() != null && entity.get_drug_min_dose_unit() != null ) {
-			try {
+			//try {
 				Range doseRange = new Range();
 				Quantity low = new Quantity();
 				Quantity high = new Quantity();
@@ -278,10 +278,10 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 				doseRange.setHigh(high);
 				doseRange.setLow(low);
 				dosageAndRate.setDose(doseRange);
-			}
-			catch(Exception e){
+			//}
+			//catch(Exception e){
 				logger.error("Error setting max and min dose value for a drug.");
-			}
+			//}
 
 		}
 
