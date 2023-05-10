@@ -255,7 +255,7 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 	
 //---------------------------------------------------------------------------------------------------------------------------------
 
-		Dosage dosage = New Dosage();
+		Dosage dosage = new Dosage();
 
 		//Drug Signature
 		if (entity.get_drug_indication() != null && entity.get_drug_indication().length() != 0){
