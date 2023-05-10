@@ -40,6 +40,24 @@ public class DrugExposure extends BaseEntity {
 	@JoinColumn(name="drug_concept_id", referencedColumnName="concept_id", nullable=false)
 	private Concept drugConcept;
 	
+//-------NEW------------------------------------------------------------------------------------------------------------------------------
+	@Column(name="drug_name", nullable=false)
+	private String drug_name;	
+
+	@Column(name="drug_RxNorm_code", nullable=false)
+	private String drug_RxNorm_code;	
+
+	@Column(name="drug_NDC_code", nullable=false)
+	private String drug_NDC_code;	
+
+	@Column(name="drug_other_code", nullable=false)
+	private String drug_other_code;	
+
+	@Column(name="drug_other_code_system", nullable=false)
+	private String drug_other_code_system;	
+	
+//----------------------------------------------------------------------------------------------------------------------------------------	
+	
 	@Column(name="drug_exposure_start_date", nullable=false)
 	private Date drugExposureStartDate;
 	
@@ -119,6 +137,41 @@ public class DrugExposure extends BaseEntity {
 	public void setFPerson(FPerson fPerson) {
 		this.fPerson = fPerson;
 	}
+	
+//-------NEW------------------------------------------------------------------------------------------------------------------------------
+	//Drug Code
+	public void set_drug_name(String drug_name) {
+		this.drug_name = drug_name;
+	}
+	public String get_drug_name() {
+		return drug_name;
+	}
+	public void set_drug_RxNorm_code(String drug_RxNorm_code) {
+		this.drug_RxNorm_code = drug_RxNorm_code;
+	}
+	public String get_drug_RxNorm_code() {
+		return drug_RxNorm_code;
+	}
+	public void set_drug_NDC_code(String drug_NDC_code) {
+		this.drug_NDC_code = drug_NDC_code;
+	}
+	public String get_drug_NDC_code() {
+		return drug_NDC_code;
+	}
+	public void set_drug_other_code(String drug_other_code) {
+		this.drug_other_code = drug_other_code;
+	}
+	public String get_drug_other_code() {
+		return drug_other_code;
+	}	
+	public void set_drug_other_code_system(String drug_other_code_system) {
+		this.drug_other_code_system = drug_other_code_system;
+	}
+	public String get_drug_other_code_system() {
+		return drug_other_code_system;
+	}
+	
+//----------------------------------------------------------------------------------------------------------------------------------------	
 
 	public Concept getDrugConcept() {
 		return this.drugConcept;

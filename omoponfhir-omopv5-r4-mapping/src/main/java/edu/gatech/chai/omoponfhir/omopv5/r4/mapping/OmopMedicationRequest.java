@@ -177,15 +177,45 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 //		Date endDate = entity.getDrugExposureEndDate();
 		if (startDate != null)
 			medicationRequest.setAuthoredOn(startDate);
+
 		
-		// See what type of Medication info we want to return
+		// Setting Medication Code & Ingredients
 		String medType = System.getenv("MEDICATION_TYPE");			
 		if (medType != null && !medType.isEmpty() && "local".equalsIgnoreCase(medType)) {
 			CodeableConcept medicationCodeableConcept;
 			CodeableConcept ingredientCodeableConcept;
 			Medication medicationResource = new Medication();
+			
 			try {
-				medicationCodeableConcept = CodeableConceptUtil.getCodeableConceptFromOmopConcept(entity.getDrugConcept());
+					if(entity.getDrugConcept().getConceptName().equals("Henry")){
+						Coding drug_coding = new Coding();
+						List<Coding> drug_codingList = new ArrayList<>();
+						
+						String drug_display = entity.get_drug_name();
+						String drug_code = entity.get_drug_other_code;
+						String drug_system = entity.get_drug_other_code_system();
+						
+						if (drug_display != null && drug_display.length() != 0){
+							if (drug_code == null || drug_code.length() == 0){
+								drug_code = "0";
+							}
+							if (drug_system == null || drug_system.length() == 0){
+								drug_system = "local hospital code";
+							}
+							
+							drug_coding.setSystem(condition_class_system);
+							drug_coding.setCode(condition_class_code);
+							drug_coding.setDisplay(condition_class_text); 
+
+							drug_codingList.add(class_coding);
+							medicationCodeableConcept.setCoding(drug_codingList);
+							medicationResource.setCode(medicationCodeableConcept);
+						}
+					} 
+					else {
+						medicationCodeableConcept = CodeableConceptUtil.getCodeableConceptFromOmopConcept(entity.getDrugConcept());
+					}
+				
 				List<Concept> ingredients = conceptService.getIngredient(entity.getDrugConcept());
 				for (Concept ingredient: ingredients) {
 					ingredientCodeableConcept = CodeableConceptUtil.getCodeableConceptFromOmopConcept(ingredient);
@@ -215,6 +245,8 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 			}
 			medicationRequest.setMedication(medicationCodeableConcept);
 		}
+		
+		
 		
 		// Dosage mapping
 //		Double dose = entity.getEffectiveDrugDose();
