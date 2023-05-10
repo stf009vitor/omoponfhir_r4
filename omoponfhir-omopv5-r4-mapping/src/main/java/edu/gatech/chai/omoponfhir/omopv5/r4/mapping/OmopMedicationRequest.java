@@ -174,7 +174,7 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 		
 		// AuthoredOn. TODO: endDate is lost if we map to AuthoredOn.
 		Date startDate = entity.getDrugExposureStartDate();
-//		Date endDate = entity.getDrugExposureEndDate();
+		// Date endDate = entity.getDrugExposureEndDate();
 		if (startDate != null)
 			medicationRequest.setAuthoredOn(startDate);
 
@@ -255,8 +255,20 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 	
 //---------------------------------------------------------------------------------------------------------------------------------
 
+		Dosage dosage = New Dosage();
+
 		//Drug Signature
-		
+		if (entity.get_drug_indication() != null && entity.get_drug_indication().length() != 0){
+			dosage.setText(entity.get_drug_indication());
+		}
+
+		List<Dosage> dosageList = new ArrayList<>();
+		dosageList.add(dosage);
+		medicationRequest.setDosageInstruction(dosageList); //List of Dosage
+
+		//Drug Indication
+		//medicationRequest.setReasonCode(); //List of CoadeableConcept
+
 	
 		// Dosage mapping
 //		Double dose = entity.getEffectiveDrugDose();
