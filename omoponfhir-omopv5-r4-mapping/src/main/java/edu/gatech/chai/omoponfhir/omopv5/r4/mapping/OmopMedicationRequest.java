@@ -265,7 +265,7 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 		logger.debug("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
 
 		//Max and Minimum doses
-		if(entity.get_drug_max_dose_value() != null && entity.get_drug_max_dose_unit() != null && entity.get_drug_min_dose_value() != null && entity.get_drug_min_dose_unit() != null ) {
+		if(entity.get_drug_max_dose_value() && entity.get_drug_max_dose_unit() != null && entity.get_drug_min_dose_value() && entity.get_drug_min_dose_unit() != null ) {
 			//try {
 				Range doseRange = new Range();
 				Quantity low = new Quantity();
@@ -273,9 +273,9 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 
 				logger.debug("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
-				high.setValue(Integer.parseInt(entity.get_drug_max_dose_value()));
+				high.setValue(entity.get_drug_max_dose_value());
 				high.setUnit(entity.get_drug_max_dose_unit());
-				low.setValue(Integer.parseInt(entity.get_drug_min_dose_value()));
+				low.setValue(entity.get_drug_min_dose_value());
 				low.setUnit(entity.get_drug_min_dose_unit());
 
 				logger.debug("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
