@@ -84,7 +84,7 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 	
 	private static final Logger logger = LoggerFactory.getLogger(OmopCondition.class);
 
-	public static Long MEDICATIONREQUEST_CONCEPT_TYPE_ID = 38000177L;
+	public static Long MEDICATIONREQUEST_CONCEPT_TYPE_ID = 2000000024L;
 	private static OmopMedicationRequest omopMedicationRequest = new OmopMedicationRequest();
 	private VisitOccurrenceService visitOccurrenceService;
 	private ConceptService conceptService;
@@ -321,8 +321,6 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 			medicationRequest.setEncounter(contextReference);
 		}
 		
-		
-		medicationRequest = new MedicationRequest();
 		return medicationRequest;
 	}
 	
@@ -443,62 +441,62 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 		return mapList;
 	}
 	
-//final ParameterWrapper filterParam = new ParameterWrapper(
-//		"Long",
-//		Arrays.asList("drugTypeConcept.id"),
-//		Arrays.asList("="),
-//		Arrays.asList(String.valueOf(OmopMedicationRequest.MEDICATIONREQUEST_CONCEPT_TYPE_ID)),
-//		"or"
-//		);
-//
-//@Override
-//public Long getSize() {
-//	List<ParameterWrapper> paramList = new ArrayList<ParameterWrapper> ();
-//	// call getSize with empty parameter list. The getSize will add filter parameter.
-//
-//	Long size = getSize(paramList);
-//	ExtensionUtil.addResourceCount(MedicationRequestResourceProvider.getType(), size);
-//	
-//	return size;
-//}
-//
-//@Override
-//public Long getSize(List<ParameterWrapper> paramList) {
-//	paramList.add(filterParam);
-//
-//	return getMyOmopService().getSize(paramList);
-//}
-//
-//@Override
-//public void searchWithoutParams(int fromIndex, int toIndex, List<IBaseResource> listResources,
-//		List<String> includes, String sort) {
-//
-//	// This is read all. But, since we will add an exception conditions to add filter.
-//	// we will call the search with params method.
-//	List<ParameterWrapper> paramList = new ArrayList<ParameterWrapper> ();
-//	searchWithParams (fromIndex, toIndex, paramList, listResources, includes, sort);
-//}
-//
-//@Override
-//public void searchWithParams(int fromIndex, int toIndex, List<ParameterWrapper> mapList,
-//		List<IBaseResource> listResources, List<String> includes, String sort) {
-//	mapList.add(filterParam);
-//
-//	List<DrugExposure> entities = getMyOmopService().searchWithParams(fromIndex, toIndex, mapList, sort);
-//
-//	for (DrugExposure entity : entities) {
-//		Long omopId = entity.getIdAsLong();
-//		Long fhirId = IdMapping.getFHIRfromOMOP(omopId, getMyFhirResourceType());
-//		MedicationRequest fhirResource = constructResource(fhirId, entity, includes);
-//		if (fhirResource != null) {
-//			listResources.add(fhirResource);			
-//			// Do the rev_include and add the resource to the list.
-//			addRevIncludes(omopId, includes, listResources);
-//		}
-//
-//	}
-//}
-//
+final ParameterWrapper filterParam = new ParameterWrapper(
+		"Long",
+		Arrays.asList("drugSourceConcept.id"), //drug_source_concept_id
+		Arrays.asList("="),
+		Arrays.asList(String.valueOf(OmopMedicationRequest.MEDICATIONREQUEST_CONCEPT_TYPE_ID)),
+		"or"
+		);
+
+@Override
+public Long getSize() {
+	List<ParameterWrapper> paramList = new ArrayList<ParameterWrapper> ();
+	// call getSize with empty parameter list. The getSize will add filter parameter.
+
+	Long size = getSize(paramList);
+	ExtensionUtil.addResourceCount(MedicationRequestResourceProvider.getType(), size);
+	
+	return size;
+}
+
+@Override
+public Long getSize(List<ParameterWrapper> paramList) {
+	paramList.add(filterParam);
+
+	return getMyOmopService().getSize(paramList);
+}
+
+@Override
+public void searchWithoutParams(int fromIndex, int toIndex, List<IBaseResource> listResources,
+		List<String> includes, String sort) {
+
+	// This is read all. But, since we will add an exception conditions to add filter.
+	// we will call the search with params method.
+	List<ParameterWrapper> paramList = new ArrayList<ParameterWrapper> ();
+	searchWithParams (fromIndex, toIndex, paramList, listResources, includes, sort);
+}
+
+@Override
+public void searchWithParams(int fromIndex, int toIndex, List<ParameterWrapper> mapList,
+		List<IBaseResource> listResources, List<String> includes, String sort) {
+	mapList.add(filterParam);
+
+	List<DrugExposure> entities = getMyOmopService().searchWithParams(fromIndex, toIndex, mapList, sort);
+
+	for (DrugExposure entity : entities) {
+		Long omopId = entity.getIdAsLong();
+		Long fhirId = IdMapping.getFHIRfromOMOP(omopId, getMyFhirResourceType());
+		MedicationRequest fhirResource = constructResource(fhirId, entity, includes);
+		if (fhirResource != null) {
+			listResources.add(fhirResource);			
+			// Do the rev_include and add the resource to the list.
+			addRevIncludes(omopId, includes, listResources);
+		}
+
+	}
+}
+
 	@Override
 	public DrugExposure constructOmop(Long omopId, MedicationRequest fhirResource) {
 		DrugExposure drugExposure = null;
