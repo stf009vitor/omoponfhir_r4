@@ -224,7 +224,7 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 						drug_system = "RxNorm Code";
 					} else{
 						if (entity.get_drug_NDC_code() != null){
-							drug_code = get_drug_NDC_code();
+							drug_code = entity.get_drug_NDC_code();
 							drug_system = "NDC Code";
 						}
 					}
