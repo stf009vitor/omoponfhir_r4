@@ -185,7 +185,7 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 			CodeableConcept medicationCodeableConcept = new CodeableConcept();
 			CodeableConcept ingredientCodeableConcept;
 			Medication medicationResource = new Medication();
-			
+			logger.debug("DENTROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO1111111111111111");
 			try {
 					if(entity.getDrugConcept().getConceptName().equals("Henry")){
 						logger.debug("ENTROUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU");
@@ -238,10 +238,12 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 			medicationRequest.addContained(medicationResource);
 			medicationRequest.setMedication(new Reference("#med1"));			
 		} else if (medType != null && !medType.isEmpty() && "link".equalsIgnoreCase(medType)) {
+			logger.debug("DENTROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO2222222222222222222222222222222222222222222222");
 			// Get Medication in a reference. 
 			Reference medicationReference = new Reference(new IdType(MedicationResourceProvider.getType(), entity.getDrugConcept().getId()));
 			medicationRequest.setMedication(medicationReference);			
 		} else {
+			logger.debug("DENTROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO3333333333333333333333333333333333333333333333");
 			CodeableConcept medicationCodeableConcept;
 			try {
 				medicationCodeableConcept = CodeableConceptUtil.getCodeableConceptFromOmopConcept(entity.getDrugConcept());
