@@ -26,6 +26,7 @@ import org.hl7.fhir.r4.model.MedicationRequest.MedicationRequestDispenseRequestC
 import org.hl7.fhir.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.instance.model.api.IIdType;
+import org.hl7.fhir.r4.model.codesystems.DoseRateType;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -254,13 +255,40 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 		}
 	
 //---------------------------------------------------------------------------------------------------------------------------------
-
 		Dosage dosage = new Dosage();
+		Dosage.DosageDoseAndRateComponent dosageAndRate = new Dosage.DosageDoseAndRateComponent();
 
 		//Drug Signature
 		if (entity.get_drug_indication() != null && entity.get_drug_indication().length() != 0){
 			dosage.setText(entity.get_drug_indication());
 		}
+
+		//Max and Minimum doses
+		if(entity.get_drug_max_dose_value() != null && entity.get_drug_max_dose_unit() != null && entity.get_drug_min_dose_value() != null && entity.get_drug_min_dose_unit() != null ) {
+			try {
+				Range doseRange = new Range();
+				Quantity low = new Quantity();
+				Quantity high = new Quantity();
+
+				high.setValue(Integer.parseInt(entity.get_drug_max_dose_value()));
+				high.setUnit(entity.get_drug_max_dose_unit());
+				low.setValue(Integer.parseInt(entity.get_drug_min_dose_value()));
+				low.setUnit(entity.get_drug_min_dose_unit());
+
+				doseRange.setHigh(high);
+				doseRange.setLow(low);
+				dosageAndRate.setDose(doseRange);
+			}
+			catch(Exception e){
+				logger.error("Error setting max and min dose value for a drug.");
+			}
+
+		}
+
+
+		List<Dosage.DosageDoseAndRateComponent> dosageAndRateList = new ArrayList<>();
+		dosageAndRateList.add(dosageAndRate);
+		dosage.setDoseAndRate(dosageAndRateList);
 
 		List<Dosage> dosageList = new ArrayList<>();
 		dosageList.add(dosage);
