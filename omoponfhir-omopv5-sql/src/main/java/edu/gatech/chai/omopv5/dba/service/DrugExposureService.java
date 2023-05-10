@@ -73,15 +73,15 @@ public interface DrugExposureService extends IService<DrugExposure> {
 					drugExposure.setStopReason(rs.getString(columnInfo));
 //-------NEW------------------------------------------------------------------------------------------------------------------------------
 				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_name")) {
-					visitOccurrence.set_drug_name(rs.getString(columnInfo));
+					drugExposure.set_drug_name(rs.getString(columnInfo));
 				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_RxNorm_code")) {
-					visitOccurrence.set_drug_RxNorm_code(rs.getString(columnInfo));
+					drugExposure.set_drug_RxNorm_code(rs.getString(columnInfo));
 				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_NDC_code")) {
-					visitOccurrence.set_drug_NDC_code(rs.getString(columnInfo));
+					drugExposure.set_drug_NDC_code(rs.getString(columnInfo));
 				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_other_code")) {
-					visitOccurrence.set_drug_other_code(rs.getString(columnInfo));
+					drugExposure.set_drug_other_code(rs.getString(columnInfo));
 				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_other_code_system")) {
-					visitOccurrence.set_drug_other_code_system(rs.getString(columnInfo));					
+					drugExposure.set_drug_other_code_system(rs.getString(columnInfo));					
 //----------------------------------------------------------------------------------------------------------------------------------------					
 				} else if (columnInfo.equalsIgnoreCase(alias + "_refills")) {
 					drugExposure.setRefills(rs.getInt(columnInfo));
@@ -177,15 +177,15 @@ public interface DrugExposureService extends IService<DrugExposure> {
 					drugExposure.setStopReason(rowResult.get(columnInfo).getStringValue());
 //-------NEW------------------------------------------------------------------------------------------------------------------------------
 			} else if (columnInfo.equalsIgnoreCase(alias + "_drug_name")) {
-				visitOccurrence.set_drug_name(rowResult.get(columnInfo).getStringValue());
+				drugExposure.set_drug_name(rowResult.get(columnInfo).getStringValue());
 			} else if (columnInfo.equalsIgnoreCase(alias + "_drug_RxNorm_code")) {
-				visitOccurrence.set_drug_RxNorm_code(rowResult.get(columnInfo).getStringValue());
+				drugExposure.set_drug_RxNorm_code(rowResult.get(columnInfo).getStringValue());
 			} else if (columnInfo.equalsIgnoreCase(alias + "_drug_NDC_code")) {
-				visitOccurrence.set_drug_NDC_code(rowResult.get(columnInfo).getStringValue());
+				drugExposure.set_drug_NDC_code(rowResult.get(columnInfo).getStringValue());
 			} else if (columnInfo.equalsIgnoreCase(alias + "_drug_other_code")) {
-				visitOccurrence.set_drug_other_code(rowResult.get(columnInfo).getStringValue());
+				drugExposure.set_drug_other_code(rowResult.get(columnInfo).getStringValue());
 			} else if (columnInfo.equalsIgnoreCase(alias + "_drug_other_code_system")) {
-				visitOccurrence.set_drug_other_code_system(rowResult.get(columnInfo).getStringValue());					
+				drugExposure.set_drug_other_code_system(rowResult.get(columnInfo).getStringValue());					
 //----------------------------------------------------------------------------------------------------------------------------------------	
 				} else if (columnInfo.equalsIgnoreCase(alias + "_refills")) {
 					drugExposure.setRefills((int) rowResult.get(columnInfo).getLongValue());
