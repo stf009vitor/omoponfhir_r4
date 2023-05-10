@@ -56,6 +56,44 @@ public class DrugExposure extends BaseEntity {
 	@Column(name="drug_other_code_system", nullable=false)
 	private String drug_other_code_system;	
 	
+	@Column(name="drug_indication", nullable=false)
+	private String drug_indication;		
+
+	@Column(name="drug_min_dose_value", nullable=false)
+	private String drug_min_dose_value;	
+
+	@Column(name="drug_min_dose_unit", nullable=false)
+	private String drug_min_dose_unit;	
+
+	@Column(name="drug_max_dose_value", nullable=false)
+	private String drug_max_dose_value;	
+
+	@Column(name="drug_max_dose_unit", nullable=false)
+	private String drug_max_dose_unit;	
+
+	@Column(name="drug_frequency", nullable=false)
+	private String drug_frequency;	
+
+	@Column(name="drug_quantity_ordered_value", nullable=false)
+	private String drug_quantity_ordered_value;	
+
+	@Column(name="drug_quantity_ordered_unit", nullable=false)
+	private String drug_quantity_ordered_unit;		
+	
+	@Column(name="drug_route", nullable=false)
+	private String drug_route;	
+
+	@Column(name="drug_order_status", nullable=false)
+	private String drug_order_status;	
+
+	@Column(name="drug_quantity_dispensed_value", nullable=false)
+	private String drug_quantity_dispensed_value;	
+
+	@Column(name="drug_quantity_dispensed_unit", nullable=false)
+	private String drug_quantity_dispensed_unit;	
+
+	@Column(name="rate", nullable=false)
+	private String rate;		
 //----------------------------------------------------------------------------------------------------------------------------------------	
 	
 	@Column(name="drug_exposure_start_date", nullable=false)
@@ -171,6 +209,101 @@ public class DrugExposure extends BaseEntity {
 		return drug_other_code_system;
 	}
 	
+	// Drug Signature
+	public void set_drug_indication(String drug_indication) {
+		this.drug_indication = drug_indication;
+	}
+	public String get_drug_indication() {
+		return drug_indication;
+	}
+	
+	//Drug Min Dose
+	public void set_drug_min_dose_value(String drug_min_dose_value) {
+		this.drug_min_dose_value = drug_min_dose_value;
+	}
+	public String get_drug_min_dose_value() {
+		return drug_min_dose_value;
+	}
+	public void set_drug_min_dose_unit(String drug_min_dose_unit) {
+		this.drug_min_dose_unit = drug_min_dose_unit;
+	}
+	public String get_drug_min_dose_unit() {
+		return drug_min_dose_unit;
+	}
+	
+	//Drug Max Dose
+	public void set_drug_max_dose_value(String drug_max_dose_value) {
+		this.drug_max_dose_value = drug_max_dose_value;
+	}
+	public String get_drug_max_dose_value() {
+		return drug_max_dose_value;
+	}
+	public void set_drug_max_dose_unit(String drug_max_dose_unit) {
+		this.drug_max_dose_unit = drug_max_dose_unit;
+	}
+	public String get_drug_max_dose_unit() {
+		return drug_max_dose_unit;
+	}
+	
+	//Drug Frequency
+	public void set_drug_frequency(String drug_frequency) {
+		this.drug_frequency = drug_frequency;
+	}
+	public String get_drug_frequency() {
+		return drug_frequency;
+	}
+	
+	//Drug Route
+	public void set_drug_route(String drug_route) {
+		this.drug_route = drug_route;
+	}
+	public String get_drug_route() {
+		return drug_route;
+	}
+	
+	//Drug Quantity Ordered
+	public void set_drug_quantity_ordered_value(String drug_quantity_ordered_value) {
+		this.drug_quantity_ordered_value = drug_quantity_ordered_value;
+	}
+	public String get_drug_quantity_ordered_value() {
+		return drug_quantity_ordered_value;
+	}
+	public void set_drug_quantity_ordered_unit(String drug_quantity_ordered_unit) {
+		this.drug_quantity_ordered_unit = drug_quantity_ordered_unit;
+	}
+	public String get_drug_quantity_ordered_unit() {
+		return drug_quantity_ordered_unit;
+	}
+	
+	//Drug Order Status
+	public void set_drug_order_status(String drug_order_status) {
+		this.drug_order_status = drug_order_status;
+	}
+	public String get_drug_order_status() {
+		return drug_order_status;
+	}
+	
+	//Quantity Dispensed
+	public void set_drug_quantity_dispensed_value(String drug_quantity_dispensed_value) {
+		this.drug_quantity_dispensed_value = drug_quantity_dispensed_value;
+	}
+	public String get_drug_quantity_dispensed_value() {
+		return drug_quantity_dispensed_value;
+	}
+	public void set_drug_quantity_dispensed_unit(String drug_quantity_dispensed_unit) {
+		this.drug_quantity_dispensed_unit = drug_quantity_dispensed_unit;
+	}
+	public String get_drug_quantity_dispensed_unit() {
+		return drug_quantity_dispensed_unit;
+	}
+	
+	//Rate
+	public void set_rate(String rate) {
+		this.rate = rate;
+	}
+	public String get_rate() {
+		return rate;
+	}
 //----------------------------------------------------------------------------------------------------------------------------------------	
 
 	public Concept getDrugConcept() {

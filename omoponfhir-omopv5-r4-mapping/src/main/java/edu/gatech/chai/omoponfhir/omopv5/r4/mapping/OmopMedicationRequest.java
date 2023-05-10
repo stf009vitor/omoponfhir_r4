@@ -186,34 +186,7 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 			CodeableConcept ingredientCodeableConcept;
 			Medication medicationResource = new Medication();
 			try {
-					if(entity.getDrugConcept().getConceptName().equals("Henry")){
-						Coding drug_coding = new Coding();
-						List<Coding> drug_codingList = new ArrayList<>();
-						
-						String drug_display = entity.get_drug_name();
-						String drug_code = entity.get_drug_other_code();
-						String drug_system = entity.get_drug_other_code_system();
-						
-						if (drug_display != null && drug_display.length() != 0){
-							if (drug_code == null || drug_code.length() == 0){
-								drug_code = "0";
-							}
-							if (drug_system == null || drug_system.length() == 0){
-								drug_system = "local hospital code";
-							}
-							
-							drug_coding.setDisplay(drug_display); 
-							drug_coding.setCode(drug_code);
-							drug_coding.setSystem(drug_system);
-							
-							drug_codingList.add(drug_coding);
-							medicationCodeableConcept.setCoding(drug_codingList);
-						}
-					} 
-					else {
-						medicationCodeableConcept = CodeableConceptUtil.getCodeableConceptFromOmopConcept(entity.getDrugConcept());
-					}
-				
+				medicationCodeableConcept = CodeableConceptUtil.getCodeableConceptFromOmopConcept(entity.getDrugConcept());
 				medicationResource.setCode(medicationCodeableConcept);
 				List<Concept> ingredients = conceptService.getIngredient(entity.getDrugConcept());
 				for (Concept ingredient: ingredients) {
@@ -246,6 +219,16 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 					String drug_code = entity.get_drug_other_code();
 					String drug_system = entity.get_drug_other_code_system();
 					
+					if (entity.get_drug_RxNorm_code() != null){
+						drug_code = entity.get_drug_RxNorm_code();
+						drug_system = "RxNorm Code";
+					} else{
+						if (entity.get_drug_NDC_code() != null){
+							drug_code = get_drug_NDC_code();
+							drug_system = "NDC Code";
+						}
+					}
+						
 					if (drug_display != null && drug_display.length() != 0){
 						if (drug_code == null || drug_code.length() == 0){
 							drug_code = "0";
@@ -269,7 +252,12 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 			}
 			medicationRequest.setMedication(medicationCodeableConcept);
 		}
+	
+//---------------------------------------------------------------------------------------------------------------------------------
+
+		//Drug Signature
 		
+	
 		// Dosage mapping
 //		Double dose = entity.getEffectiveDrugDose();
 //		SimpleQuantity doseQuantity = new SimpleQuantity();

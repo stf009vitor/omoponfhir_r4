@@ -81,7 +81,35 @@ public interface DrugExposureService extends IService<DrugExposure> {
 				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_other_code")) {
 					drugExposure.set_drug_other_code(rs.getString(columnInfo));
 				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_other_code_system")) {
-					drugExposure.set_drug_other_code_system(rs.getString(columnInfo));					
+					drugExposure.set_drug_other_code_system(rs.getString(columnInfo));	
+				} else if (columnInfo.equalsIgnoreCase(alias + "_rate")) {
+					drugExposure.set_rate(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_indication")) {
+					drugExposure.set_drug_indication(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_min_dose_value")) {
+					drugExposure.set_drug_min_dose_value(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_min_dose_unit")) {
+					drugExposure.set_drug_min_dose_unit(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_max_dose_value")) {
+					drugExposure.set_drug_max_dose_value(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_max_dose_unit")) {
+					drugExposure.set_drug_max_dose_unit(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_frequency")) {
+					drugExposure.set_drug_frequency(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_route")) {
+					drugExposure.set_drug_route(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_quantity_ordered_value")) {
+					drugExposure.set_drug_quantity_ordered_value(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_quantity_ordered_unit")) {
+					drugExposure.set_drug_quantity_ordered_unit(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_order_status")) {
+					drugExposure.set_drug_order_status(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_quantity_dispensed_value")) {
+					drugExposure.set_drug_quantity_dispensed_value(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_quantity_dispensed_unit")) {
+					drugExposure.set_drug_quantity_dispensed_unit(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_rate")) {
+					drugExposure.set_rate(rs.getString(columnInfo));					
 //----------------------------------------------------------------------------------------------------------------------------------------					
 				} else if (columnInfo.equalsIgnoreCase(alias + "_refills")) {
 					drugExposure.setRefills(rs.getInt(columnInfo));
@@ -176,16 +204,44 @@ public interface DrugExposureService extends IService<DrugExposure> {
 				} else if (columnInfo.equalsIgnoreCase(alias + "_stop_reason")) {
 					drugExposure.setStopReason(rowResult.get(columnInfo).getStringValue());
 //-------NEW------------------------------------------------------------------------------------------------------------------------------
-			} else if (columnInfo.equalsIgnoreCase(alias + "_drug_name")) {
-				drugExposure.set_drug_name(rowResult.get(columnInfo).getStringValue());
-			} else if (columnInfo.equalsIgnoreCase(alias + "_drug_RxNorm_code")) {
-				drugExposure.set_drug_RxNorm_code(rowResult.get(columnInfo).getStringValue());
-			} else if (columnInfo.equalsIgnoreCase(alias + "_drug_NDC_code")) {
-				drugExposure.set_drug_NDC_code(rowResult.get(columnInfo).getStringValue());
-			} else if (columnInfo.equalsIgnoreCase(alias + "_drug_other_code")) {
-				drugExposure.set_drug_other_code(rowResult.get(columnInfo).getStringValue());
-			} else if (columnInfo.equalsIgnoreCase(alias + "_drug_other_code_system")) {
-				drugExposure.set_drug_other_code_system(rowResult.get(columnInfo).getStringValue());					
+				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_name")) {
+					drugExposure.set_drug_name(rowResult.get(columnInfo).getStringValue());
+				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_RxNorm_code")) {
+					drugExposure.set_drug_RxNorm_code(rowResult.get(columnInfo).getStringValue());
+				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_NDC_code")) {
+					drugExposure.set_drug_NDC_code(rowResult.get(columnInfo).getStringValue());
+				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_other_code")) {
+					drugExposure.set_drug_other_code(rowResult.get(columnInfo).getStringValue());
+				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_other_code_system")) {
+					drugExposure.set_drug_other_code_system(rowResult.get(columnInfo).getStringValue());	
+				} else if (columnInfo.equalsIgnoreCase(alias + "_rate")) {
+					drugExposure.set_rate(rowResult.get(columnInfo).getStringValue());
+				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_indication")) {
+					drugExposure.set_drug_indication(rowResult.get(columnInfo).getStringValue());
+				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_min_dose_value")) {
+					drugExposure.set_drug_min_dose_value(rowResult.get(columnInfo).getStringValue());
+				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_min_dose_unit")) {
+					drugExposure.set_drug_min_dose_unit(rowResult.get(columnInfo).getStringValue());
+				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_max_dose_value")) {
+					drugExposure.set_drug_max_dose_value(rowResult.get(columnInfo).getStringValue());
+				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_max_dose_unit")) {
+					drugExposure.set_drug_max_dose_unit(rowResult.get(columnInfo).getStringValue());
+				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_frequency")) {
+					drugExposure.set_drug_frequency(rowResult.get(columnInfo).getStringValue());
+				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_route")) {
+					drugExposure.set_drug_route(rowResult.get(columnInfo).getStringValue());
+				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_quantity_ordered_value")) {
+					drugExposure.set_drug_quantity_ordered_value(rowResult.get(columnInfo).getStringValue());
+				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_quantity_ordered_unit")) {
+					drugExposure.set_drug_quantity_ordered_unit(rowResult.get(columnInfo).getStringValue());
+				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_order_status")) {
+					drugExposure.set_drug_order_status(rowResult.get(columnInfo).getStringValue());
+				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_quantity_dispensed_value")) {
+					drugExposure.set_drug_quantity_dispensed_value(rowResult.get(columnInfo).getStringValue());
+				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_quantity_dispensed_unit")) {
+					drugExposure.set_drug_quantity_dispensed_unit(rowResult.get(columnInfo).getStringValue());
+				} else if (columnInfo.equalsIgnoreCase(alias + "_rate")) {
+					drugExposure.set_rate(rowResult.get(columnInfo).getStringValue());				
 //----------------------------------------------------------------------------------------------------------------------------------------	
 				} else if (columnInfo.equalsIgnoreCase(alias + "_refills")) {
 					drugExposure.setRefills((int) rowResult.get(columnInfo).getLongValue());
