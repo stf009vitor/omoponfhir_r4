@@ -209,19 +209,20 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 							
 							drug_codingList.add(drug_coding);
 							medicationCodeableConcept.setCoding(drug_codingList);
-							medicationResource.setCode(medicationCodeableConcept);
 						}
 					} 
 					else {
 						medicationCodeableConcept = CodeableConceptUtil.getCodeableConceptFromOmopConcept(entity.getDrugConcept());
 					}
 				
+				medicationResource.setCode(medicationCodeableConcept);
 				List<Concept> ingredients = conceptService.getIngredient(entity.getDrugConcept());
 				for (Concept ingredient: ingredients) {
 					ingredientCodeableConcept = CodeableConceptUtil.getCodeableConceptFromOmopConcept(ingredient);
 					MedicationIngredientComponent medIngredientComponent = new MedicationIngredientComponent();
 					medIngredientComponent.setItem(ingredientCodeableConcept);
-					medicationResource.addIngredient(medIngredientComponent);					
+					medicationResource.addIngredient(medIngredientComponent);	
+					
 				}
 			} catch (FHIRException e) {
 				e.printStackTrace();
