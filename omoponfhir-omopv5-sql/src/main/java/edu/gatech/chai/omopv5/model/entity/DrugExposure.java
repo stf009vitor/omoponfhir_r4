@@ -241,7 +241,7 @@ public class DrugExposure extends BaseEntity {
 	public void set_drug_max_dose_unit(String drug_max_dose_unit) {
 		this.drug_max_dose_unit = drug_max_dose_unit;
 	}
-	public long get_drug_max_dose_unit() {
+	public String get_drug_max_dose_unit() {
 		return drug_max_dose_unit;
 	}
 	
