@@ -203,10 +203,10 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 								drug_system = "local hospital code";
 							}
 							
-							drug_coding.setSystem(condition_class_system);
-							drug_coding.setCode(condition_class_code);
-							drug_coding.setDisplay(condition_class_text); 
-
+							drug_coding.setDisplay(drug_display); 
+							drug_coding.setCode(drug_code);
+							drug_coding.setSystem(drug_system);
+							
 							drug_codingList.add(class_coding);
 							medicationCodeableConcept.setCoding(drug_codingList);
 							medicationResource.setCode(medicationCodeableConcept);
