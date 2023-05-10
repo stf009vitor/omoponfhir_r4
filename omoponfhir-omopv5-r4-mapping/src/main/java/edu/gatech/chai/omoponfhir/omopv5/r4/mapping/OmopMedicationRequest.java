@@ -185,10 +185,8 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 			CodeableConcept medicationCodeableConcept = new CodeableConcept();
 			CodeableConcept ingredientCodeableConcept;
 			Medication medicationResource = new Medication();
-			logger.debug("DENTROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO1111111111111111");
 			try {
 					if(entity.getDrugConcept().getConceptName().equals("Henry")){
-						logger.debug("ENTROUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU");
 						Coding drug_coding = new Coding();
 						List<Coding> drug_codingList = new ArrayList<>();
 						
@@ -213,15 +211,12 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 						}
 					} 
 					else {
-						logger.debug("CONCEITOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
 						medicationCodeableConcept = CodeableConceptUtil.getCodeableConceptFromOmopConcept(entity.getDrugConcept());
 					}
 				
 				medicationResource.setCode(medicationCodeableConcept);
 				List<Concept> ingredients = conceptService.getIngredient(entity.getDrugConcept());
-				logger.debug("X111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111");
 				for (Concept ingredient: ingredients) {
-					logger.debug("X222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222");
 					ingredientCodeableConcept = CodeableConceptUtil.getCodeableConceptFromOmopConcept(ingredient);
 					MedicationIngredientComponent medIngredientComponent = new MedicationIngredientComponent();
 					medIngredientComponent.setItem(ingredientCodeableConcept);
@@ -230,7 +225,6 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 				}
 			} catch (FHIRException e) {
 				e.printStackTrace();
-				logger.debug("EXCPETIOOOOOooooooooooooOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOON");
 				return null;
 			}
 			medicationResource.setCode(medicationCodeableConcept);
@@ -238,23 +232,43 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 			medicationRequest.addContained(medicationResource);
 			medicationRequest.setMedication(new Reference("#med1"));			
 		} else if (medType != null && !medType.isEmpty() && "link".equalsIgnoreCase(medType)) {
-			logger.debug("DENTROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO2222222222222222222222222222222222222222222222");
 			// Get Medication in a reference. 
 			Reference medicationReference = new Reference(new IdType(MedicationResourceProvider.getType(), entity.getDrugConcept().getId()));
 			medicationRequest.setMedication(medicationReference);			
 		} else {
-			logger.debug("DENTROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO3333333333333333333333333333333333333333333333");
-			CodeableConcept medicationCodeableConcept;
+			CodeableConcept medicationCodeableConcept = new CodeableConcept();
 			try {
-				medicationCodeableConcept = CodeableConceptUtil.getCodeableConceptFromOmopConcept(entity.getDrugConcept());
+				if(entity.getDrugConcept().getConceptName().equals("Henry")){
+					Coding drug_coding = new Coding();
+					List<Coding> drug_codingList = new ArrayList<>();
+					
+					String drug_display = entity.get_drug_name();
+					String drug_code = entity.get_drug_other_code();
+					String drug_system = entity.get_drug_other_code_system();
+					
+					if (drug_display != null && drug_display.length() != 0){
+						if (drug_code == null || drug_code.length() == 0){
+							drug_code = "0";
+						}
+						if (drug_system == null || drug_system.length() == 0){
+							drug_system = "local hospital code";
+						}
+						drug_coding.setDisplay(drug_display); 
+						drug_coding.setCode(drug_code);
+						drug_coding.setSystem(drug_system);
+						
+						drug_codingList.add(drug_coding);
+						medicationCodeableConcept.setCoding(drug_codingList);
+					}
+				} else {
+					medicationCodeableConcept = CodeableConceptUtil.getCodeableConceptFromOmopConcept(entity.getDrugConcept());
+				}
 			} catch (FHIRException e1) {
 				e1.printStackTrace();
 				return null;
 			}
 			medicationRequest.setMedication(medicationCodeableConcept);
 		}
-		logger.debug("saiuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuUUUUUUUUuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu");
-		
 		
 		// Dosage mapping
 //		Double dose = entity.getEffectiveDrugDose();
