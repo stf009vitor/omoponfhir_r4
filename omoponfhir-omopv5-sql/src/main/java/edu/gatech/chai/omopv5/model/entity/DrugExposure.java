@@ -82,8 +82,8 @@ public class DrugExposure extends BaseEntity {
 	@Column(name="drug_quantity_ordered_unit", nullable=false)
 	private String drug_quantity_ordered_unit;		
 	
-	@Column(name="drug_route", nullable=false)
-	private String drug_route;	
+	@Column(name="route_source_value", nullable=false)
+	private String route_source_value;	
 
 	@Column(name="drug_order_status", nullable=false)
 	private String drug_order_status;	
@@ -256,11 +256,11 @@ public class DrugExposure extends BaseEntity {
 	}
 	
 	//Drug Route
-	public void set_drug_route(String drug_route) {
-		this.drug_route = drug_route;
+	public void set_drug_route_source_value(String route_source_value) {
+		this.route_source_value = route_source_value;
 	}
-	public String get_drug_route() {
-		return drug_route;
+	public String get_drug_route_source_value() {
+		return route_source_value;
 	}
 	
 	//Drug Quantity Ordered
