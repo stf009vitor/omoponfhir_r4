@@ -60,13 +60,13 @@ public class DrugExposure extends BaseEntity {
 	private String drug_indication;		
 
 	@Column(name="drug_min_dose_value", nullable=false)
-	private long drug_min_dose_value;	
+	private Double drug_min_dose_value;	
 
 	@Column(name="drug_min_dose_unit", nullable=false)
 	private String drug_min_dose_unit;	
 
 	@Column(name="drug_max_dose_value", nullable=false)
-	private long drug_max_dose_value;	
+	private Double drug_max_dose_value;	
 
 	@Column(name="drug_max_dose_unit", nullable=false)
 	private String drug_max_dose_unit;	
