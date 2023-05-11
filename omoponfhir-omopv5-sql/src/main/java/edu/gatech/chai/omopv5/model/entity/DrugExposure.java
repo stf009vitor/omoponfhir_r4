@@ -218,10 +218,10 @@ public class DrugExposure extends BaseEntity {
 	}
 	
 	//Drug Min Dose
-	public void set_drug_min_dose_value(long drug_min_dose_value) {
+	public void set_drug_min_dose_value(Double drug_min_dose_value) {
 		this.drug_min_dose_value = drug_min_dose_value;
 	}
-	public long get_drug_min_dose_value() {
+	public Double get_drug_min_dose_value() {
 		return drug_min_dose_value;
 	}
 	public void set_drug_min_dose_unit(String drug_min_dose_unit) {
@@ -232,10 +232,10 @@ public class DrugExposure extends BaseEntity {
 	}
 	
 	//Drug Max Dose
-	public void set_drug_max_dose_value(long drug_max_dose_value) {
+	public void set_drug_max_dose_value(Double drug_max_dose_value) {
 		this.drug_max_dose_value = drug_max_dose_value;
 	}
-	public long get_drug_max_dose_value() {
+	public Double get_drug_max_dose_value() {
 		return drug_max_dose_value;
 	}
 	public void set_drug_max_dose_unit(String drug_max_dose_unit) {

@@ -263,8 +263,8 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 			dosage.setText(entity.get_drug_indication());
 		}
 
-		//Max and Minimum doses
-		if( Long.toString(entity.get_drug_max_dose_value()) != null && entity.get_drug_max_dose_unit() != null && Long.toString(entity.get_drug_min_dose_value()) != null && entity.get_drug_min_dose_unit() != null ) {
+		//Try to set the Drug dose as Max and Minimum doses
+		if(entity.get_drug_max_dose_unit() != null && entity.get_drug_min_dose_unit() != null ) {
 			try {
 				Range doseRange = new Range();
 				Quantity low = new Quantity();
@@ -282,7 +282,25 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 			catch(Exception e){
 				logger.error("Error setting max and min dose value for a drug.");
 			}
+		} else {
+			//If not try to set the Drug dose as a simple dose + unit
+			if (Double.toString(entity.getQuantity()) != null && entity.getDoseUnitSourceValue()) {
+				try {
+					SimpleQuantity simpleQuantity = new SimpleQuantity();
+					simpleQuantity.setValue(entity.getQuantity());
+					simpleQuantity.setUnit(entity.getDoseUnitSourceValue());
+					dosageAndRate.setDose(simpleQuantity);
+				} catch (Exception e) {
+					logger.error("Error setting simple dose for a drug.");
+				}
+			}
+		}
 
+		//Drug Route
+		if(entity.get_drug_route() != null){
+			CodeableConcept codeableConceptRoute = new CodeableConcept();
+			codeableConceptRoute.setText(entity.get_drug_route());
+			dosage.setRoute(codeableConceptRoute);
 		}
 
 		List<Dosage.DosageDoseAndRateComponent> dosageAndRateList = new ArrayList<>();
@@ -308,7 +326,11 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 			medicationRequest.setReasonCode(reasonCodeCodeableConceptList);
 		}
 		
-	
+		//Drug Status
+		if(entity.get_drug_order_status() != null){
+			medicationRequest.setStatus(entity.get_drug_order_status());
+		}
+
 		// Dosage mapping
 //		Double dose = entity.getEffectiveDrugDose();
 //		SimpleQuantity doseQuantity = new SimpleQuantity();
@@ -352,15 +374,29 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 //		}
 
 		// dispense request mapping.
-		Integer refills = entity.getRefills();
 		MedicationRequestDispenseRequestComponent dispenseRequest = new MedicationRequestDispenseRequestComponent();
+
+		// Set refills
+		Integer refills = entity.getRefills();
 		if (refills != null) {
 			dispenseRequest.setNumberOfRepeatsAllowed(refills);
 		}
 
+		//Set dispense duration
+		try{
+			Period dispensePeriod = new Period();
+			dispensePeriod.setStart(entity.getDrugExposureStartDateTime());
+			dispensePeriod.setEnd(entity.getDrugExposureEndDateTime());
+			dispenseRequest.setValidityPeriod(dispensePeriod);
+		}
+		catch (Excepction e){
+			logger.error("Error setting up the dispense period");
+		}
+
+
 		String unitSystem = "";
 		String unitCode = "";
-		String unitUnit = entity.get_drug_quantity_dispensed_unit();
+		String unitUnit = entity.get_drug_quantity_ordered_value();
 		if (unitUnit != null && !unitUnit.isEmpty()) {
 			Concept unitConcept = CodeableConceptUtil.getOmopConceptWithOmopCode(conceptService, unitUnit);
 			if (unitConcept != null) {
@@ -371,7 +407,7 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 			}
 		}
 		
-		Double quantity = entity.get_drug_quantity_dispensed_value();
+		Double quantity = entity.get_drug_quantity_ordered_unit();
 		if (quantity != null) {
 			SimpleQuantity simpleQty = new SimpleQuantity();
 			simpleQty.setValue(quantity);

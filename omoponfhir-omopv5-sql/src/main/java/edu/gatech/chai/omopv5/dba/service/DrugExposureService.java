@@ -87,11 +87,11 @@ public interface DrugExposureService extends IService<DrugExposure> {
 				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_indication")) {
 					drugExposure.set_drug_indication(rs.getString(columnInfo));
 				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_min_dose_value")) {
-					drugExposure.set_drug_min_dose_value(rs.getLong(columnInfo));
+					drugExposure.set_drug_min_dose_value(rs.getDouble(columnInfo));
 				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_min_dose_unit")) {
 					drugExposure.set_drug_min_dose_unit(rs.getString(columnInfo));
 				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_max_dose_value")) {
-					drugExposure.set_drug_max_dose_value(rs.getLong(columnInfo));
+					drugExposure.set_drug_max_dose_value(rs.getDouble(columnInfo));
 				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_max_dose_unit")) {
 					drugExposure.set_drug_max_dose_unit(rs.getString(columnInfo));
 				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_frequency")) {
@@ -219,11 +219,11 @@ public interface DrugExposureService extends IService<DrugExposure> {
 				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_indication")) {
 					drugExposure.set_drug_indication(rowResult.get(columnInfo).getStringValue());
 				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_min_dose_value")) {
-					drugExposure.set_drug_min_dose_value(rowResult.get(columnInfo).getLongValue());
+					drugExposure.set_drug_min_dose_value(rowResult.get(columnInfo).getDoubleValue());
 				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_min_dose_unit")) {
 					drugExposure.set_drug_min_dose_unit(rowResult.get(columnInfo).getStringValue());
 				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_max_dose_value")) {
-					drugExposure.set_drug_max_dose_value(rowResult.get(columnInfo).getLongValue());
+					drugExposure.set_drug_max_dose_value(rowResult.get(columnInfo).getDoubleValue());
 				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_max_dose_unit")) {
 					drugExposure.set_drug_max_dose_unit(rowResult.get(columnInfo).getStringValue());
 				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_frequency")) {
