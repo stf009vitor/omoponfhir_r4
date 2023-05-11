@@ -481,6 +481,8 @@ public class OmopObservation extends BaseOmopResource<Observation, FObservationV
 	//---------------------------------------------------------------------------------------------------------------------------------------
 	//---------------------------------------------------------------------------------------------------------------------------------------
 		if(fObservationView.getObservationConcept().getConceptCode().equals("61")){
+
+			//Image Study Method
 			if(fObservationView.get_img_mod_txt() != null){
 				Coding modalityCoding = new Coding();
 				List<Coding> modalityCodingList = new ArrayList<>();
@@ -495,6 +497,75 @@ public class OmopObservation extends BaseOmopResource<Observation, FObservationV
 				observation.setMethod(modalityCodeableConcept);
 			}
 
+			//Imaging Procedure
+			if(fObservationView.get_img_prc_txt() != null){
+				Coding categoryCoding = new Coding();
+				List<Coding> categoryCodingList = new ArrayList<>();
+				CodeableConcept categoryCodeableConcept = new CodeableConcept();
+				List<CodeableConcept> categoryCodeableConceptList = new ArrayList<>();
+
+				categoryCoding.setDisplay(fObservationView.get_img_prc_txt());
+				categoryCodingList.add(categoryCoding);
+				categoryCodeableConcept.setCoding(categoryCodingList);
+				categoryCodeableConceptList.add(categoryCodeableConcept);
+
+				observation.setCategory(categoryCodeableConceptList);
+			}
+
+			//Reason for Imaging
+			if(fObservationView.get_img_rsn_txt() != null){
+				Annotation note = new Annotation();
+				List<Annotation> noteList = new ArrayList<>();
+
+				note.setText(fObservationView.get_img_rsn_txt());
+				observation.setNote(noteList);
+			}
+
+			//Imaging Description
+			if(fObservationView.get_img_dscrp_txt() != null){
+				Coding descriptionCoding = new Coding();
+				List<Coding> descriptionCodingList = new ArrayList<>();
+				CodeableConcept descriptionCodeableConcept = new CodeableConcept();
+				//List<CodeableConcept> descriptionCodeableConceptList = new ArrayList<>();
+
+				descriptionCoding.setDisplay(fObservationView.get_img_dscrp_txt());
+				descriptionCodingList.add(descriptionCoding);
+				descriptionCodeableConcept.setCoding(descriptionCodingList);
+				//descriptionCodeableConceptList.add(descriptionCodeableConcept);
+
+				observation.setValue(descriptionCodeableConcept);
+			}
+
+			//Imaging Interpretation
+			if(fObservationView.getValueAsString() != null){
+				Coding interpretationCoding = new Coding();
+				List<Coding> interpretationCodingList = new ArrayList<>();
+				CodeableConcept interpretationCodeableConcept = new CodeableConcept();
+				List<CodeableConcept> interpretationCodeableConceptList = new ArrayList<>();
+
+				interpretationCoding.setDisplay(fObservationView.getValueAsString());
+				interpretationCodingList.add(interpretationCoding);
+				interpretationCodeableConcept.setCoding(interpretationCodingList);
+				interpretationCodeableConceptList.add(interpretationCodeableConcept);
+
+				observation.setInterpretation(interpretationCodeableConceptList);
+			}
+
+			//Imaging Status
+			if(fObservationView.get_img_status_txt() != null){
+				if(fObservationView.get_img_status_txt().equals('Cancelled')){
+					observation.setStatus(ObservationStatus.CANCELLED);
+				}
+				else if (fObservationView.get_img_status_txt().equals('Preliminary')){
+					observation.setStatus(ObservationStatus.PRELIMINARY);
+				}
+				else if (fObservationView.get_img_status_txt().equals('Corrected')){
+					observation.setStatus(ObservationStatus.CORRECTED);
+				}
+				else{
+					observation.setStatus(ObservationStatus.FINAL);
+				}
+			}
 
 		}
 
