@@ -487,6 +487,8 @@ public class OmopObservation extends BaseOmopResource<Observation, FObservationV
 	//---------------------------------------------------------------------------------------------------------------------------------------
 		if(fObservationView.getObservationConcept().getConceptCode() == "61"){
 
+			logger.debug("AQUIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");
+			logger.debug(fObservationView.get_img_mod_txt());
 			if(fObservationView.get_img_mod_txt() != null){
 				Coding modalityCoding = new Coding();
 				List<Coding> modalityCodingList = new ArrayList<>();
