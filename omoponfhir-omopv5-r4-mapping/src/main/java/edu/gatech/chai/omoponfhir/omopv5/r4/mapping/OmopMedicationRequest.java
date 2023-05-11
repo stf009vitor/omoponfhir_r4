@@ -321,7 +321,7 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 			Coding routeCode = new Coding();
 			List<Coding> routeCodeList = new ArrayList<>();
 
-			routeCode.setDisplay(entity.get_drug_route());
+			routeCode.setDisplay(entity.get_drug_route_source_value());
 			routeCodeList.add(routeCode);
 			codeableConceptRoute.setCoding(routeCodeList);
 			dosage.setRoute(codeableConceptRoute);
