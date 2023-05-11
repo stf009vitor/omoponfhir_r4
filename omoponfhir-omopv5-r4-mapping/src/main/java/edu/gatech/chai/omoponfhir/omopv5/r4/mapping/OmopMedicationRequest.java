@@ -164,16 +164,16 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 	@Override
 	public MedicationRequest constructFHIR(Long fhirId, DrugExposure entity) {
 		MedicationRequest medicationRequest = new MedicationRequest();
-		
-		
 		medicationRequest.setId(new IdType(fhirId));
 		
 		// Subject from FPerson
+		//---------------------------------------------------------------------------------------------------------------------------------
 		Reference patientRef = new Reference(new IdType(PatientResourceProvider.getType(), entity.getFPerson().getId()));
 		patientRef.setDisplay(entity.getFPerson().getNameAsSingleString());
 		medicationRequest.setSubject(patientRef);		
 		
-		// AuthoredOn.
+		// Created Datetime.
+		//---------------------------------------------------------------------------------------------------------------------------------
 		Date verbatimDate = entity.getVerbatimEndDate();
 		// Date endDate = entity.getDrugExposureEndDate();
 		if (verbatimDate != null)
@@ -181,6 +181,7 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 
 		
 		// Setting Medication Code & Ingredients
+		//---------------------------------------------------------------------------------------------------------------------------------
 		String medType = System.getenv("MEDICATION_TYPE");			
 		if (medType != null && !medType.isEmpty() && "local".equalsIgnoreCase(medType)) {
 			CodeableConcept medicationCodeableConcept = new CodeableConcept();
@@ -254,16 +255,18 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 			medicationRequest.setMedication(medicationCodeableConcept);
 		}
 	
-//---------------------------------------------------------------------------------------------------------------------------------
+
 		Dosage dosage = new Dosage();
 		Dosage.DosageDoseAndRateComponent dosageAndRate = new Dosage.DosageDoseAndRateComponent();
 
 		//Drug Signature
+		//---------------------------------------------------------------------------------------------------------------------------------
 		if (entity.get_drug_indication() != null && entity.get_drug_indication().length() != 0){
 			dosage.setText(entity.get_drug_indication());
 		}
 
-		//Try to set the Drug dose as Max and Minimum doses
+		//Drug Dose (Try to set the Drug dose as Max and Minimum doses)
+		//---------------------------------------------------------------------------------------------------------------------------------
 		if(entity.get_drug_max_dose_unit() != null && entity.get_drug_max_dose_unit().length() != 0 && entity.get_drug_min_dose_unit() != null && entity.get_drug_min_dose_unit().length() != 0 ) {
 			try {
 				Range doseRange = new Range();
@@ -284,6 +287,7 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 			}
 		} else {
 			//If not try to set the Drug dose as a simple dose + unit
+			//---------------------------------------------------------------------------------------------------------------------------------
 			if (entity.getDoseUnitSourceValue() != null) {
 				try {
 					SimpleQuantity simpleQuantity = new SimpleQuantity();
@@ -296,9 +300,11 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 			}
 		}
 
-		//Start and End time
+		Timing dosageTiming = new Timing();
+
+		//Start and End Order time
+		//---------------------------------------------------------------------------------------------------------------------------------
 		try {
-			Timing dosageTiming = new Timing();
 			DateTimeType date1 = new DateTimeType();
 			DateTimeType date2 = new DateTimeType();
 			List<DateTimeType> eventDateTimeList = new ArrayList<>();
@@ -309,13 +315,32 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 			eventDateTimeList.add(date2);
 
 			dosageTiming.setEvent(eventDateTimeList);
-			dosage.setTiming(dosageTiming);
+
 		}
 		catch(Exception e){
 			logger.error("Error setting up the start and end time of the dosage");
 		}
 
+		//Frequency
+		//---------------------------------------------------------------------------------------------------------------------------------
+		if(entity.get_drug_frequency() != null){
+			Coding freqCode = new Code();
+			List<Coding> freqCodingList = new ArrayList<>();
+
+			freqCode.setDisplay("Frequency of Administration");
+			freqCode.setCode(entity.get_drug_frequency());
+			freqCodingList.add(freqCode);
+
+			CodeableConcept freqCodeableConcept = new CodeableConcept();
+			freqCodeableConcept.setCoding(freqCodingList);
+
+			dosageTiming.setCode(freqCodeableConcept);
+		}
+		
+		dosage.setTiming(dosageTiming);
+
 		//Drug Route
+		//---------------------------------------------------------------------------------------------------------------------------------
 		if(entity.getRouteSourceValue()!= null){
 			CodeableConcept codeableConceptRoute = new CodeableConcept();
 			Coding routeCode = new Coding();
@@ -336,6 +361,7 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 		medicationRequest.setDosageInstruction(dosageList);
 
 		//Drug Indication
+		//---------------------------------------------------------------------------------------------------------------------------------
 		if (entity.get_drug_indication() != null && entity.get_drug_indication().length() != 0) {
 			Coding reasonCode = new Coding();
 			List<Coding> reasonCodeList = new ArrayList<>();
@@ -351,6 +377,7 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 		}
 		
 		//Drug Status
+		//---------------------------------------------------------------------------------------------------------------------------------
 		if(entity.get_drug_order_status() != null && (entity.get_drug_order_status()).equals("canceled") ){
 			medicationRequest.setStatus(MedicationRequest.MedicationRequestStatus.CANCELLED);
 		} else {
@@ -399,15 +426,17 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 //			medicationRequest.addDosageInstruction(dosage);
 //		}
 
-		// dispense request mapping.
 		MedicationRequestDispenseRequestComponent dispenseRequest = new MedicationRequestDispenseRequestComponent();
 
 		// Set refills
+		//---------------------------------------------------------------------------------------------------------------------------------
 		Integer refills = entity.getRefills();
 		if (refills != null) {
 			dispenseRequest.setNumberOfRepeatsAllowed(refills);
 		}
 
+		// Dispense Ordered Quantity
+		//---------------------------------------------------------------------------------------------------------------------------------
 		String unitSystem = "";
 		String unitCode = "";
 		String unitUnit = entity.get_drug_quantity_ordered_unit();
@@ -431,23 +460,24 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 			dispenseRequest.setQuantity(simpleQty);
 		}
 		
-		Integer daysSupply = entity.getDaysSupply();
-		if (daysSupply != null) {
-			Duration qty = new Duration();
-			qty.setValue(daysSupply);
-			// Set the UCUM unit to day.
-			String fhirUri = fhirOmopVocabularyMap.getFhirSystemNameFromOmopVocabulary("UCUM");
-			qty.setSystem(fhirUri);
-			qty.setCode("d");
-			qty.setUnit("day");
-			dispenseRequest.setExpectedSupplyDuration(qty);
-		}
+	//	Integer daysSupply = entity.getDaysSupply();
+	//	if (daysSupply != null) {
+	//		Duration qty = new Duration();
+	//		qty.setValue(daysSupply);
+	//		// Set the UCUM unit to day.
+	//		String fhirUri = fhirOmopVocabularyMap.getFhirSystemNameFromOmopVocabulary("UCUM");
+	//		qty.setSystem(fhirUri);
+	//		qty.setCode("d");
+	//		qty.setUnit("day");
+	//		dispenseRequest.setExpectedSupplyDuration(qty);
+	//	}
 		
 		if (!dispenseRequest.isEmpty()) {
 			medicationRequest.setDispenseRequest(dispenseRequest);
 		}
 		
 		// Recorder mapping
+		//---------------------------------------------------------------------------------------------------------------------------------
 		Provider provider = entity.getProvider();
 		if (provider != null) {
 			Reference recorderReference = 
@@ -457,6 +487,7 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 		}
 		
 		// Context mapping
+		//---------------------------------------------------------------------------------------------------------------------------------
 		VisitOccurrence visitOccurrence = entity.getVisitOccurrence();
 		if (visitOccurrence != null) {
 			Reference contextReference = 
