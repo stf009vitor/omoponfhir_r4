@@ -173,11 +173,11 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 		patientRef.setDisplay(entity.getFPerson().getNameAsSingleString());
 		medicationRequest.setSubject(patientRef);		
 		
-		// AuthoredOn. TODO: endDate is lost if we map to AuthoredOn.
-		Date startDate = entity.getDrugExposureStartDate();
+		// AuthoredOn.
+		Date verbatimDate = entity.getVerbatimEndDate();
 		// Date endDate = entity.getDrugExposureEndDate();
-		if (startDate != null)
-			medicationRequest.setAuthoredOn(startDate);
+		if (verbatimDate != null)
+			medicationRequest.setAuthoredOn(verbatimDate);
 
 		
 		// Setting Medication Code & Ingredients
@@ -264,7 +264,7 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 		}
 
 		//Try to set the Drug dose as Max and Minimum doses
-		if(entity.get_drug_max_dose_unit() != null && entity.get_drug_min_dose_unit() != null ) {
+		if(entity.get_drug_max_dose_unit() != null && entity.get_drug_max_dose_unit().length() != 0 && entity.get_drug_min_dose_unit() != null && entity.get_drug_min_dose_unit().length() != 0 ) {
 			try {
 				Range doseRange = new Range();
 				Quantity low = new Quantity();
@@ -387,9 +387,13 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 		//Set dispense duration
 		try{
 			Period dispensePeriod = new Period();
+			logger.debug("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 			dispensePeriod.setStart(entity.getDrugExposureStartDateTime());
+			logger.debug("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 			dispensePeriod.setEnd(entity.getDrugExposureEndDateTime());
+			logger.debug("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 			dispenseRequest.setValidityPeriod(dispensePeriod);
+
 		}
 		catch (Exception e){
 			logger.error("Error setting up the dispense period");
