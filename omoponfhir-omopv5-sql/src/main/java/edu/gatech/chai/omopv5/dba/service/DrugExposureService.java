@@ -99,7 +99,7 @@ public interface DrugExposureService extends IService<DrugExposure> {
 				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_route")) {
 					drugExposure.set_drug_route(rs.getString(columnInfo));
 				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_quantity_ordered_value")) {
-					drugExposure.set_drug_quantity_ordered_value(rs.getLong(columnInfo));
+					drugExposure.set_drug_quantity_ordered_value(rs.getDouble(columnInfo));
 				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_quantity_ordered_unit")) {
 					drugExposure.set_drug_quantity_ordered_unit(rs.getString(columnInfo));
 				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_order_status")) {
@@ -231,7 +231,7 @@ public interface DrugExposureService extends IService<DrugExposure> {
 				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_route")) {
 					drugExposure.set_drug_route(rowResult.get(columnInfo).getStringValue());
 				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_quantity_ordered_value")) {
-					drugExposure.set_drug_quantity_ordered_value(rowResult.get(columnInfo).getLongValue());
+					drugExposure.set_drug_quantity_ordered_value(rowResult.get(columnInfo).getDoubleValue());
 				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_quantity_ordered_unit")) {
 					drugExposure.set_drug_quantity_ordered_unit(rowResult.get(columnInfo).getStringValue());
 				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_order_status")) {

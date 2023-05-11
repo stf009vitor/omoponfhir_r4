@@ -75,7 +75,7 @@ public class DrugExposure extends BaseEntity {
 	private String drug_frequency;	
 
 	@Column(name="drug_quantity_ordered_value", nullable=false)
-	private long drug_quantity_ordered_value;	
+	private Double drug_quantity_ordered_value;	
 
 	@Column(name="drug_quantity_ordered_unit", nullable=false)
 	private String drug_quantity_ordered_unit;		
@@ -262,10 +262,10 @@ public class DrugExposure extends BaseEntity {
 	}
 	
 	//Drug Quantity Ordered
-	public void set_drug_quantity_ordered_value(long drug_quantity_ordered_value) {
+	public void set_drug_quantity_ordered_value(Double drug_quantity_ordered_value) {
 		this.drug_quantity_ordered_value = drug_quantity_ordered_value;
 	}
-	public long get_drug_quantity_ordered_value() {
+	public Double get_drug_quantity_ordered_value() {
 		return drug_quantity_ordered_value;
 	}
 	public void set_drug_quantity_ordered_unit(String drug_quantity_ordered_unit) {
