@@ -360,7 +360,7 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 
 		String unitSystem = "";
 		String unitCode = "";
-		String unitUnit = entity.getDoseUnitSourceValue();
+		String unitUnit = entity.get_drug_quantity_dispensed_unit();
 		if (unitUnit != null && !unitUnit.isEmpty()) {
 			Concept unitConcept = CodeableConceptUtil.getOmopConceptWithOmopCode(conceptService, unitUnit);
 			if (unitConcept != null) {
@@ -371,7 +371,7 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 			}
 		}
 		
-		Double quantity = entity.getQuantity();
+		Double quantity = entity.get_drug_quantity_dispensed_value();
 		if (quantity != null) {
 			SimpleQuantity simpleQty = new SimpleQuantity();
 			simpleQty.setValue(quantity);
