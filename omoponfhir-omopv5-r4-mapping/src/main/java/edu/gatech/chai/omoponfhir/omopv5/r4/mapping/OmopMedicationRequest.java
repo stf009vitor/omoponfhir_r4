@@ -262,34 +262,28 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 		if (entity.get_drug_indication() != null && entity.get_drug_indication().length() != 0){
 			dosage.setText(entity.get_drug_indication());
 		}
-		logger.debug("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
 
 		//Max and Minimum doses
 		if( Long.toString(entity.get_drug_max_dose_value()) != null && entity.get_drug_max_dose_unit() != null && Long.toString(entity.get_drug_min_dose_value()) != null && entity.get_drug_min_dose_unit() != null ) {
-			//try {
+			try {
 				Range doseRange = new Range();
 				Quantity low = new Quantity();
 				Quantity high = new Quantity();
-
-				logger.debug("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
 				high.setValue(entity.get_drug_max_dose_value());
 				high.setUnit(entity.get_drug_max_dose_unit());
 				low.setValue(entity.get_drug_min_dose_value());
 				low.setUnit(entity.get_drug_min_dose_unit());
 
-				logger.debug("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-
 				doseRange.setHigh(high);
 				doseRange.setLow(low);
 				dosageAndRate.setDose(doseRange);
-			//}
-			//catch(Exception e){
+			}
+			catch(Exception e){
 				logger.error("Error setting max and min dose value for a drug.");
-			//}
+			}
 
 		}
-
 
 		List<Dosage.DosageDoseAndRateComponent> dosageAndRateList = new ArrayList<>();
 		dosageAndRateList.add(dosageAndRate);
@@ -297,11 +291,23 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 
 		List<Dosage> dosageList = new ArrayList<>();
 		dosageList.add(dosage);
-		medicationRequest.setDosageInstruction(dosageList); //List of Dosage
+		medicationRequest.setDosageInstruction(dosageList);
 
 		//Drug Indication
-		//medicationRequest.setReasonCode(); //List of CoadeableConcept
+		if (entity.get_drug_indication() != null && entity.get_drug_indication().length() != 0) {
+			Coding reasonCode = new Coding();
+			List<Coding> reasonCodeList = new ArrayList<>();
+			CodeableConcept reasonCodeCodeableConcept = new CodeableConcept();
+			List<CodeableConcept> reasonCodeCodeableConceptList = new ArrayList<>();
 
+			reasonCode.setDisplay(entity.get_drug_indication());
+			reasonCodeList.add(reasonCode);
+			reasonCodeCodeableConcept.setCoding(reasonCodeList);
+			reasonCodeCodeableConceptList.add(reasonCodeCodeableConcept);
+
+			medicationRequest.setReasonCode(reasonCodeCodeableConceptList);
+		}
+		
 	
 		// Dosage mapping
 //		Double dose = entity.getEffectiveDrugDose();
