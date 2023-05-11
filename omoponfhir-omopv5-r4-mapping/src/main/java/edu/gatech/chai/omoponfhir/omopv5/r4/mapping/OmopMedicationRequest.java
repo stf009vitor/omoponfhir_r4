@@ -316,7 +316,9 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 		}
 
 		//Drug Route
+		logger.debug("NLOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
 		if(entity.get_drug_route_source_value()!= null){
+			logger.debug("ENTRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
 			CodeableConcept codeableConceptRoute = new CodeableConcept();
 			Coding routeCode = new Coding();
 			List<Coding> routeCodeList = new ArrayList<>();

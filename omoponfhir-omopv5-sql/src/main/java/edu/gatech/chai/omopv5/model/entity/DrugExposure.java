@@ -149,9 +149,6 @@ public class DrugExposure extends BaseEntity {
 	@JoinColumn(name="drug_source_concept_id", referencedColumnName="concept_id")
 	private Concept drugSourceConcept;
 	
-	@Column(name="route_source_value")
-	private String routeSourceValue;
-	
 	@Column(name="dose_unit_source_value")
 	private String doseUnitSourceValue;
 	
