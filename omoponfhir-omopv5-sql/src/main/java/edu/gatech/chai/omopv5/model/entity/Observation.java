@@ -27,7 +27,7 @@ import edu.gatech.chai.omopv5.model.entity.custom.Id;
 import edu.gatech.chai.omopv5.model.entity.custom.JoinColumn;
 import edu.gatech.chai.omopv5.model.entity.custom.Table;
 
-@Table(name = "observation")
+@Table(name = "fhir_observation")
 public class Observation extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="observation_id_seq")

@@ -327,8 +327,8 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 			Coding freqCode = new Coding();
 			List<Coding> freqCodingList = new ArrayList<>();
 
-			freqCode.setDisplay("Frequency of Administration");
-			freqCode.setCode(entity.get_drug_frequency());
+			freqCode.setSystem("Frequency");
+			freqCode.setDisplay(entity.get_drug_frequency());
 			freqCodingList.add(freqCode);
 
 			CodeableConcept freqCodeableConcept = new CodeableConcept();
