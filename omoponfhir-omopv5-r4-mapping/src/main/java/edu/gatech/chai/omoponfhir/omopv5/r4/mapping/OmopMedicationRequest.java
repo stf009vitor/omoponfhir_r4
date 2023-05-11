@@ -324,7 +324,7 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 		//Frequency
 		//---------------------------------------------------------------------------------------------------------------------------------
 		if(entity.get_drug_frequency() != null){
-			Coding freqCode = new Code();
+			Coding freqCode = new Coding();
 			List<Coding> freqCodingList = new ArrayList<>();
 
 			freqCode.setDisplay("Frequency of Administration");
