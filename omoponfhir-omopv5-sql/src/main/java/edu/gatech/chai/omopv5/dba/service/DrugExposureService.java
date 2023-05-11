@@ -134,7 +134,7 @@ public interface DrugExposureService extends IService<DrugExposure> {
 					Concept drugSourceConcept = ConceptService._construct(rs, null, "drugSourceConcept");
 					drugExposure.setDrugSourceConcpet(drugSourceConcept);
 				} else if (columnInfo.equalsIgnoreCase(alias + "_route_source_value")) {
-					drugExposure.setRouteSourceValue(rs.getString(columnInfo));
+					drugExposure.set_drug_route_source_value(rs.getString(columnInfo));
 				} else if (columnInfo.equalsIgnoreCase(alias + "_dose_unit_source_value")) {
 					drugExposure.setDoseUnitSourceValue(rs.getString(columnInfo));
 				}
@@ -264,7 +264,7 @@ public interface DrugExposureService extends IService<DrugExposure> {
 					Concept drugSourceConcept = ConceptService._construct(rowResult, null, "drugSourceConcept", columns);
 					drugExposure.setDrugSourceConcpet(drugSourceConcept);
 				} else if (columnInfo.equalsIgnoreCase(alias + "_route_source_value")) {
-					drugExposure.setRouteSourceValue(rowResult.get(columnInfo).getStringValue());
+					drugExposure.set_drug_route_source_value(rowResult.get(columnInfo).getStringValue());
 				} else if (columnInfo.equalsIgnoreCase(alias + "_dose_unit_source_value")) {
 					drugExposure.setDoseUnitSourceValue(rowResult.get(columnInfo).getStringValue());
 				}
