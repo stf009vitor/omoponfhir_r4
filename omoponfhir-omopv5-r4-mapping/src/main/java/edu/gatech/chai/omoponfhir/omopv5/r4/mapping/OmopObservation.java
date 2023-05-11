@@ -139,11 +139,6 @@ public class OmopObservation extends BaseOmopResource<Observation, FObservationV
 		Observation observation = new Observation();
 		observation.setId(new IdType(fhirId));
 
-		//HERE
-		logger.debug("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-		logger.debug(fObservationView.getObservationConcept().getConceptCode());
-
-
 		String omopVocabulary = fObservationView.getObservationConcept().getVocabularyId();
 		String systemUriString = fhirOmopVocabularyMap.getFhirSystemNameFromOmopVocabulary(omopVocabulary);
 		if ("None".equals(systemUriString)) {
@@ -485,10 +480,7 @@ public class OmopObservation extends BaseOmopResource<Observation, FObservationV
 	//61 is the code for Image Exams
 	//---------------------------------------------------------------------------------------------------------------------------------------
 	//---------------------------------------------------------------------------------------------------------------------------------------
-		if(fObservationView.getObservationConcept().getConceptCode() == "61"){
-
-			logger.debug("AQUIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");
-			logger.debug(fObservationView.get_img_mod_txt());
+		if(fObservationView.getObservationConcept().getConceptCode().equals("61")){
 			if(fObservationView.get_img_mod_txt() != null){
 				Coding modalityCoding = new Coding();
 				List<Coding> modalityCodingList = new ArrayList<>();
@@ -509,7 +501,7 @@ public class OmopObservation extends BaseOmopResource<Observation, FObservationV
 	//60 is the code for Lab Exams
 	//---------------------------------------------------------------------------------------------------------------------------------------
 	//---------------------------------------------------------------------------------------------------------------------------------------
-		if(fObservationView.getObservationConcept().getConceptCode() == "60"){
+		if(fObservationView.getObservationConcept().getConceptCode().equals("60")){
 			logger.debug("Y");
 		}
 
