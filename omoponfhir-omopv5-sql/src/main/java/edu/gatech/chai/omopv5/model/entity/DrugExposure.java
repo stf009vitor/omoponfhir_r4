@@ -82,9 +82,6 @@ public class DrugExposure extends BaseEntity {
 	@Column(name="drug_quantity_ordered_unit", nullable=false)
 	private String drug_quantity_ordered_unit;		
 	
-	@Column(name="route_source_value", nullable=false)
-	private String route_source_value;	
-
 	@Column(name="drug_order_status", nullable=false)
 	private String drug_order_status;	
 
@@ -148,6 +145,9 @@ public class DrugExposure extends BaseEntity {
 	
 	@JoinColumn(name="drug_source_concept_id", referencedColumnName="concept_id")
 	private Concept drugSourceConcept;
+	
+	@Column(name="route_source_value")
+	private String routeSourceValue;
 	
 	@Column(name="dose_unit_source_value")
 	private String doseUnitSourceValue;
@@ -253,11 +253,11 @@ public class DrugExposure extends BaseEntity {
 	}
 	
 	//Drug Route
-	public void set_drug_route_source_value(String route_source_value) {
-		this.route_source_value = route_source_value;
+	public void set_drug_routeSourceValue(String routeSourceValue) {
+		this.routeSourceValue = routeSourceValue;
 	}
-	public String get_drug_route_source_value() {
-		return route_source_value;
+	public String get_drug_routeSourceValue() {
+		return routeSourceValue;
 	}
 	
 	//Drug Quantity Ordered
@@ -449,6 +449,14 @@ public class DrugExposure extends BaseEntity {
 		this.drugSourceConcept = drugSourceConcept;
 	}
 
+	public String getRouteSourceValue() {
+		return this.routeSourceValue;
+	}
+
+	public void setRouteSourceValue(String routeSourceValue) {
+		this.routeSourceValue = routeSourceValue;
+	}
+
 	public String getDoseUnitSourceValue() {
 		return doseUnitSourceValue;
 	}
@@ -528,8 +536,8 @@ public class DrugExposure extends BaseEntity {
 //		if ("fPerson".equals(columnVariable))
 //			return "drug_exposure.person_id";
 //
-//		if ("route_source_value".equals(columnVariable))
-//			return "drug_exposure.route_source_value";
+//		if ("routeSourceValue".equals(columnVariable))
+//			return "drug_exposure.routeSourceValue";
 //
 //		if ("doseUnitSourceValue".equals(columnVariable))
 //			return "drug_exposure.dose_unit_source_value";
