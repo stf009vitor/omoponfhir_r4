@@ -76,6 +76,34 @@ public interface FObservationViewService extends IService<FObservationView> {
 					fObservationView.setObservationDate(rs.getDate(columnInfo));
 				} else if (columnInfo.equalsIgnoreCase(alias + "_observation_datetime")) {
 					fObservationView.setObservationDateTime(rs.getDate(columnInfo));
+					
+//-------NEW------------------------------------------------------------------------------------------------------------------------------
+				} else if (columnInfo.equalsIgnoreCase(alias + "_lab_txt")) {
+				observation.set_lab_txt(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_lab_cd")) {
+				observation.set_lab_cd(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_lab_cdsys")) {
+				observation.set_lab_cdsys(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_lab_rslt_lln_num")) {
+				observation.set_lab_rslt_lln_num(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_lab_rslt_lln_unit")) {
+				observation.set_lab_rslt_lln_unit(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_lab_rslt_uln_num")) {
+				observation.set_lab_rslt_uln_num(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_lab_rslt_uln_unit")) {
+				observation.set_lab_rslt_uln_unit(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_img_mod_txt")) {
+				observation.set_img_mod_txt(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_img_prc_txt")) {
+				observation.set_img_prc_txt(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_img_rsn_txt")) {
+				observation.set_img_rsn_txt(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_img_dscrp_txt")) {
+				observation.set_img_dscrp_txt(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_img_status_txt")) {
+				observation.set_img_status_txt(rs.getString(columnInfo));
+//----------------------------------------------------------------------------------------------------------------------------------------
+					
 				} else if (columnInfo.equalsIgnoreCase(alias + "_value_as_string")) {
 					String valueAsString = rs.getString(columnInfo);
 					if (!rs.wasNull()) {
@@ -167,6 +195,34 @@ public interface FObservationViewService extends IService<FObservationView> {
 				}
 			} else if (columnInfo.equalsIgnoreCase(alias + "_value_as_string")) {
 				fObservationView.setValueAsString(rowResult.get(columnInfo).getStringValue());
+				
+//-------NEW------------------------------------------------------------------------------------------------------------------------------
+			} else if (columnInfo.equalsIgnoreCase(alias + "_lab_txt")) {
+			observation.set_lab_txt(rowResult.get(columnInfo).getStringValue());
+			} else if (columnInfo.equalsIgnoreCase(alias + "_lab_cd")) {
+			observation.set_lab_cd(rowResult.get(columnInfo).getStringValue());
+			} else if (columnInfo.equalsIgnoreCase(alias + "_lab_cdsys")) {
+			observation.set_lab_cdsys(rowResult.get(columnInfo).getStringValue());
+			} else if (columnInfo.equalsIgnoreCase(alias + "_lab_rslt_lln_num")) {
+			observation.set_lab_rslt_lln_num(rowResult.get(columnInfo).getStringValue());
+			} else if (columnInfo.equalsIgnoreCase(alias + "_lab_rslt_lln_unit")) {
+			observation.set_lab_rslt_lln_unit(rowResult.get(columnInfo).getStringValue());
+			} else if (columnInfo.equalsIgnoreCase(alias + "_lab_rslt_uln_num")) {
+			observation.set_lab_rslt_uln_num(rowResult.get(columnInfo).getStringValue());
+			} else if (columnInfo.equalsIgnoreCase(alias + "_lab_rslt_uln_unit")) {
+			observation.set_lab_rslt_uln_unit(rowResult.get(columnInfo).getStringValue());
+			} else if (columnInfo.equalsIgnoreCase(alias + "_img_mod_txt")) {
+			observation.set_img_mod_txt(rowResult.get(columnInfo).getStringValue());
+			} else if (columnInfo.equalsIgnoreCase(alias + "_img_prc_txt")) {
+			observation.set_img_prc_txt(rowResult.get(columnInfo).getStringValue());
+			} else if (columnInfo.equalsIgnoreCase(alias + "_img_rsn_txt")) {
+			observation.set_img_rsn_txt(rowResult.get(columnInfo).getStringValue());
+			} else if (columnInfo.equalsIgnoreCase(alias + "_img_dscrp_txt")) {
+			observation.set_img_dscrp_txt(rowResult.get(columnInfo).getStringValue());
+			} else if (columnInfo.equalsIgnoreCase(alias + "_img_status_txt")) {
+			observation.set_img_status_txt(rowResult.get(columnInfo).getStringValue());	
+//----------------------------------------------------------------------------------------------------------------------------------------
+				
 			} else if (columnInfo.equalsIgnoreCase(alias + "_value_as_number")) {
 				fObservationView.setValueAsNumber(rowResult.get(columnInfo).getDoubleValue());
 			} else if (columnInfo.equalsIgnoreCase("valueAsConcept_concept_id")) {

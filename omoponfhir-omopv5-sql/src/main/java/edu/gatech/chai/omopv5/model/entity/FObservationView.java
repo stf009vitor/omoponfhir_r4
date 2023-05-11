@@ -29,7 +29,7 @@ import edu.gatech.chai.omopv5.model.entity.custom.Id;
 import edu.gatech.chai.omopv5.model.entity.custom.JoinColumn;
 import edu.gatech.chai.omopv5.model.entity.custom.Table;
 
-@Table(name = "f_observation_view")
+@Table(name = "fhir_observation")
 public class FObservationView extends BaseEntity {
 	private static final Logger logger = LoggerFactory.getLogger(FObservationView.class);
 
@@ -57,6 +57,44 @@ public class FObservationView extends BaseEntity {
 
 	@Column(name="value_as_number")
 	private Double valueAsNumber;
+	
+//-------NEW------------------------------------------------------------------------------------------------------------------------------
+	@Column(name="lab_txt", nullable=false)
+	private String lab_txt;	
+
+	@Column(name="lab_cd", nullable=false)
+	private String lab_cd;	
+
+	@Column(name="lab_cdsys", nullable=false)
+	private String lab_cdsys;	
+
+	@Column(name="lab_rslt_lln_num", nullable=false)
+	private String lab_rslt_lln_num;	
+
+	@Column(name="lab_rslt_lln_unit", nullable=false)
+	private String lab_rslt_lln_unit;	
+
+	@Column(name="lab_rslt_uln_num", nullable=false)
+	private String lab_rslt_uln_num;	
+
+	@Column(name="lab_rslt_uln_unit", nullable=false)
+	private String lab_rslt_uln_unit;	
+
+	@Column(name="img_mod_txt", nullable=false)
+	private String img_mod_txt;	
+
+	@Column(name="img_prc_txt", nullable=false)
+	private String img_prc_txt;	
+
+	@Column(name="img_rsn_txt", nullable=false)
+	private String img_rsn_txt;	
+
+	@Column(name="img_dscrp_txt", nullable=false)
+	private String img_dscrp_txt;	
+
+	@Column(name="img_status_txt", nullable=false)
+	private String img_status_txt;		
+//----------------------------------------------------------------------------------------------------------------------------------------
 	
 	@Column(name="value_as_string")
 	private String valueAsString;
@@ -168,6 +206,98 @@ public class FObservationView extends BaseEntity {
 	public void setValueAsString(String valueAsString) {
 		this.valueAsString = valueAsString;
 	}
+	
+//-------NEW------------------------------------------------------------------------------------------------------------------------------
+	// Lab Exam Text
+	public void set_lab_txt(String lab_txt) {
+		this.lab_txt = lab_txt;
+	}
+	public String get_lab_txt() {
+		return lab_txt;
+	}
+	
+	//Lab Exam Code
+	public void set_lab_cd(String lab_cd) {
+		this.lab_cd = lab_cd;
+	}
+	public String get_lab_cd() {
+		return lab_cd;
+	}
+	
+	//Lab Exam System
+	public void set_lab_cdsys(String lab_cdsys) {
+		this.lab_cdsys = lab_cdsys;
+	}
+	public String get_lab_cdsys() {
+		return lab_cdsys;
+	}
+	
+	//Lab Results Range Values
+	public void set_lab_rslt_lln_num(String lab_rslt_lln_num) {
+		this.lab_rslt_lln_num = lab_rslt_lln_num;
+	}
+	public String get_lab_rslt_lln_num() {
+		return lab_rslt_lln_num;
+	}
+	public void set_lab_rslt_lln_unit(String lab_rslt_lln_unit) {
+		this.lab_rslt_lln_unit = lab_rslt_lln_unit;
+	}
+	public String get_lab_rslt_lln_unit() {
+		return lab_rslt_lln_unit;
+	}
+	public void set_lab_rslt_uln_num(String lab_rslt_uln_num) {
+		this.lab_rslt_uln_num = lab_rslt_uln_num;
+	}
+	public String get_lab_rslt_uln_num() {
+		return lab_rslt_uln_num;
+	}
+	public void set_lab_rslt_uln_unit(String lab_rslt_uln_unit) {
+		this.lab_rslt_uln_unit = lab_rslt_uln_unit;
+	}
+	public String get_lab_rslt_uln_unit() {
+		return lab_rslt_uln_unit;
+	}
+	
+	//Image Exam Modality
+	public void set_img_mod_txt(String img_mod_txt) {
+		this.img_mod_txt = img_mod_txt;
+	}
+	public String get_img_mod_txt() {
+		return img_mod_txt;
+	}
+	
+	//Image Exam Procedure
+	public void set_img_prc_txt(String img_prc_txt) {
+		this.img_prc_txt = img_prc_txt;
+	}
+	public String get_img_prc_txt() {
+		return img_prc_txt;
+	}
+	
+	//Image Exam Reason
+	public void set_img_rsn_txt(String img_rsn_txt) {
+		this.img_rsn_txt = img_rsn_txt;
+	}
+	public String get_img_rsn_txt() {
+		return img_rsn_txt;
+	}
+	
+	//Image Description
+	public void set_img_dscrp_txt(String img_dscrp_txt) {
+		this.img_dscrp_txt = img_dscrp_txt;
+	}
+	public String get_img_dscrp_txt() {
+		return img_dscrp_txt;
+	}
+	
+	//Image Status
+	public void set_img_status_txt(String img_status_txt) {
+		this.img_status_txt = img_status_txt;
+	}
+	public String get_img_status_txt() {
+		return img_status_txt;
+	}
+//----------------------------------------------------------------------------------------------------------------------------------------
 
 	public Concept getValueAsConcept() {
 		return valueAsConcept;
