@@ -303,19 +303,24 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 			dosage.setRoute(codeableConceptRoute);
 		}
 
-		//Time
-		Timing dosageTiming = new Timing();
-		DateTimeType date1 = new DateTimeType();
-		DateTimeType date2 = new DateTimeType();
-		List<DateTimeType> eventDateTimeList = new ArrayList<>();
+		//Start and End time
+		try {
+			Timing dosageTiming = new Timing();
+			DateTimeType date1 = new DateTimeType();
+			DateTimeType date2 = new DateTimeType();
+			List<DateTimeType> eventDateTimeList = new ArrayList<>();
 
-		date1.setValue(entity.getVerbatimEndDate());
-		date2.setValue(entity.getVerbatimEndDate());
-		eventDateTimeList.add(date1);
-		eventDateTimeList.add(date2);
+			date1.setValue(entity.getDrugExposureStartDate());
+			date2.setValue(entity.getDrugExposureEndDate());
+			eventDateTimeList.add(date1);
+			eventDateTimeList.add(date2);
 
-		dosageTiming.setEvent(eventDateTimeList);
-		dosage.setTiming(dosageTiming);
+			dosageTiming.setEvent(eventDateTimeList);
+			dosage.setTiming(dosageTiming);
+		}
+		catch(Exception e){
+			logger.error("Error setting up the start and end time of the dosage");
+		}
 
 
 

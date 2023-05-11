@@ -19,6 +19,8 @@ package edu.gatech.chai.omopv5.model.entity;
 import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.List;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 import edu.gatech.chai.omopv5.model.entity.custom.Column;
 import edu.gatech.chai.omopv5.model.entity.custom.GeneratedValue;
