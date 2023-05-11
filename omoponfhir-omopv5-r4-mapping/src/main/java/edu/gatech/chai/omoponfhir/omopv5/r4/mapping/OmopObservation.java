@@ -143,227 +143,355 @@ public class OmopObservation extends BaseOmopResource<Observation, FObservationV
 		logger.debug("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 		logger.debug(fObservationView.getObservationConcept().getConceptCode());
 
+
+		String omopVocabulary = fObservationView.getObservationConcept().getVocabularyId();
+		String systemUriString = fhirOmopVocabularyMap.getFhirSystemNameFromOmopVocabulary(omopVocabulary);
+		if ("None".equals(systemUriString)) {
+			// If we can't find FHIR Uri or system name, just use Omop Vocabulary Id.
+			systemUriString = omopVocabulary;
+		}
+
+		// If we have unit, this should be used across all the value.
+		String unitSystemUri = null;
+		String unitCode = null;
+		String unitUnit = null;
+		String unitSource = null;
+		Concept unitConcept = fObservationView.getUnitConcept();
+		if (unitConcept == null || unitConcept.getId() == 0L) {
+			// see if we can get the unit from source column.
+			unitSource = fObservationView.getUnitSourceValue();
+			if (unitSource != null && !unitSource.isEmpty()) {
+				unitUnit = unitSource;
+				unitConcept = CodeableConceptUtil.getOmopConceptWithOmopVacabIdAndCode(conceptService, OmopCodeableConceptMapping.UCUM.getOmopVocabulary(), unitSource.replace("'", "''"));
+			}
+		}
+		
+		if (unitConcept != null && unitConcept.getId() != 0L) {
+			String omopUnitVocabularyId = unitConcept.getVocabularyId();
+			unitSystemUri = fhirOmopVocabularyMap.getFhirSystemNameFromOmopVocabulary(omopUnitVocabularyId);
+			if ("None".equals(unitSystemUri)) {
+				unitSystemUri = omopUnitVocabularyId;
+			}
+
+			unitUnit = unitConcept.getConceptName();
+			unitCode = unitConcept.getConceptCode();
+		} 
+
+		String codeString = fObservationView.getObservationConcept().getConceptCode();
+		String displayString;
+		if (fObservationView.getObservationConcept().getId() == 0L) {
+			displayString = fObservationView.getObservationSourceValue();
+		} else {
+			displayString = fObservationView.getObservationConcept().getConceptName();
+		}
+
+		// OMOP database maintains Systolic and Diastolic Blood Pressures
+		// separately.
+		// FHIR however keeps them together. Observation DAO filters out
+		// Diastolic values.
+		// Here, when we are reading systolic, we search for matching diastolic
+		// and put them
+		// together. The Observation ID will be systolic's OMOP ID.
+		// public static final Long SYSTOLIC_CONCEPT_ID = new Long(3004249);
+		// public static final Long DIASTOLIC_CONCEPT_ID = new Long(3012888);
+		if (OmopObservation.SYSTOLIC_CONCEPT_ID == fObservationView.getObservationConcept().getId()) {
+			// Set coding for systolic and diastolic observation
+			systemUriString = OmopCodeableConceptMapping.LOINC.getFhirUri();
+			codeString = BP_SYSTOLIC_DIASTOLIC_CODE;
+			displayString = BP_SYSTOLIC_DIASTOLIC_DISPLAY;
+
+			List<ObservationComponentComponent> components = new ArrayList<ObservationComponentComponent>();
+			// First we add systolic component.
+			ObservationComponentComponent comp = new ObservationComponentComponent();
+			Coding coding = new Coding(systemUriString, fObservationView.getObservationConcept().getConceptCode(),
+					fObservationView.getObservationConcept().getConceptName());
+			CodeableConcept componentCode = new CodeableConcept();
+			componentCode.addCoding(coding);
+			comp.setCode(componentCode);
+			
+
+			if (fObservationView.getValueAsNumber() != null) {
+				Quantity quantity = new Quantity(fObservationView.getValueAsNumber().doubleValue());
+
+				// Unit is defined as a concept code in omop v4, then unit and
+				// code are the same in this case
+				if (unitSystemUri != null || unitCode != null || unitUnit != null) {
+					quantity.setUnit(unitUnit);
+					quantity.setCode(unitCode);
+					quantity.setSystem(unitSystemUri);
+					comp.setValue(quantity);
+				} else {
+					if (unitSource != null) {
+						quantity.setUnit(unitSource);
+					}
+				}
+			}
+			components.add(comp);
+
+			// Now search for diastolic component.
+			WebApplicationContext myAppCtx = ContextLoaderListener.getCurrentWebApplicationContext();
+			FObservationViewService myService = myAppCtx.getBean(FObservationViewService.class);
+			FObservationView diastolicDb = myService.findDiastolic(DIASTOLIC_CONCEPT_ID,
+					fObservationView.getFPerson().getId(), fObservationView.getObservationDate(), fObservationView.getObservationDateTime());
+			if (diastolicDb != null) {
+				comp = new ObservationComponentComponent();
+				coding = new Coding(systemUriString, diastolicDb.getObservationConcept().getConceptCode(),
+						diastolicDb.getObservationConcept().getConceptName());
+				componentCode = new CodeableConcept();
+				componentCode.addCoding(coding);
+				comp.setCode(componentCode);
+
+				if (diastolicDb.getValueAsNumber() != null) {
+					Quantity quantity = new Quantity(diastolicDb.getValueAsNumber().doubleValue());
+					// Unit is defined as a concept code in omop v4, then unit
+					// and code are the same in this case
+					if (diastolicDb.getUnitConcept() != null && diastolicDb.getUnitConcept().getId() != 0L) {
+						quantity.setUnit(diastolicDb.getUnitConcept().getConceptName());
+						quantity.setCode(diastolicDb.getUnitConcept().getConceptCode());
+						String unitSystem = fhirOmopVocabularyMap.getFhirSystemNameFromOmopVocabulary(
+								diastolicDb.getUnitConcept().getVocabularyId());
+						if ("None".equals(unitSystem))
+							unitSystem = diastolicDb.getUnitConcept().getVocabularyId();
+						quantity.setSystem(unitSystem);
+						comp.setValue(quantity);
+					} else {
+						String diastolicUnitSource = diastolicDb.getUnitSourceValue();
+						if (diastolicUnitSource != null && !diastolicUnitSource.isEmpty()) {
+							Concept diastolicUnitConcept = CodeableConceptUtil.getOmopConceptWithOmopVacabIdAndCode(conceptService, "UCUM", unitSource);
+							if (diastolicUnitConcept != null && diastolicUnitConcept.getId() != 0L) {
+								quantity.setUnit(diastolicUnitConcept.getConceptName());
+								quantity.setCode(diastolicUnitConcept.getConceptCode());
+								String unitSystem = fhirOmopVocabularyMap.getFhirSystemNameFromOmopVocabulary(
+										diastolicUnitConcept.getVocabularyId());
+								if ("None".equals(unitSystem))
+									unitSystem = diastolicUnitConcept.getVocabularyId();
+								quantity.setSystem(unitSystem);
+							} else {
+								quantity.setUnit(diastolicUnitSource);
+							}
+							comp.setValue(quantity);								
+						}
+					}
+				}
+				components.add(comp);
+			}
+
+			if (!components.isEmpty()) {
+				observation.setComponent(components);
+			}
+		} else {
+			if (fObservationView.getValueAsNumber() != null 
+				&& (fObservationView.getValueAsString() == null 
+				&& fObservationView.getValueAsConcept() == null)) {
+				Quantity quantity = new Quantity(fObservationView.getValueAsNumber().doubleValue());
+				if (unitSystemUri != null || unitCode != null || unitUnit != null) {
+					quantity.setUnit(unitUnit);
+					quantity.setCode(unitCode);
+					quantity.setSystem(unitSystemUri);
+				} else {
+					if (unitSource != null) {
+						quantity.setUnit(unitSource);
+					}
+				}
+				
+//				if (fObservationView.getUnitConcept() != null) {
+//					// Unit is defined as a concept code in omop v4, then unit
+//					// and code are the same in this case
+//					quantity.setUnit(unitUnit);
+//					quantity.setCode(unitCode);
+//					quantity.setSystem(unitSystemUri);
+//				}
+				observation.setValue(quantity);
+			} else if (fObservationView.getValueAsString() != null) {
+				// Check if this is ratio.
+				String valueString = fObservationView.getValueAsString();
+				String[] valueStrings = valueString.split(":");
+				if (valueStrings.length == 2) {
+					try {
+						double numerator = Double.parseDouble(valueStrings[0]);
+						double denominator = Double.parseDouble(valueStrings[1]);
+
+						Ratio ratio = new Ratio();
+						ratio.setNumerator(new Quantity(numerator));
+						ratio.setDenominator(new Quantity(denominator));
+
+						observation.setValue(ratio);
+					} catch (NumberFormatException nfe) {
+						observation.setValue(new StringType(valueString));
+					}
+				} else {
+					observation.setValue(new StringType(valueString));
+				}
+			} else if (fObservationView.getValueAsConcept() != null
+					&& fObservationView.getValueAsConcept().getId() != 0L) {
+				// vocabulary is a required attribute for concept, then it's
+				// expected to not be null
+				String valueSystem = fhirOmopVocabularyMap.getFhirSystemNameFromOmopVocabulary(
+						fObservationView.getValueAsConcept().getVocabularyId());
+				if ("None".equals(valueSystem))
+					valueSystem = fObservationView.getValueAsConcept().getVocabularyId();
+				Coding coding = new Coding(valueSystem, fObservationView.getValueAsConcept().getConceptCode(),
+						fObservationView.getValueAsConcept().getConceptName());
+				CodeableConcept valueAsConcept = new CodeableConcept();
+				valueAsConcept.addCoding(coding);
+				observation.setValue(valueAsConcept);
+			} else {
+				observation.setValue(new StringType(fObservationView.getValueSourceValue()));
+			}
+		}
+
+		if (fObservationView.getRangeLow() != null) {
+			SimpleQuantity low = new SimpleQuantity();
+			low.setValue(fObservationView.getRangeLow().doubleValue());
+			low.setSystem(unitSystemUri);
+			low.setCode(unitCode);
+			low.setUnit(unitUnit);
+			observation.getReferenceRangeFirstRep().setLow(low);
+		}
+		if (fObservationView.getRangeHigh() != null) {
+			SimpleQuantity high = new SimpleQuantity();
+			high.setValue(fObservationView.getRangeHigh().doubleValue());
+			high.setSystem(unitSystemUri);
+			high.setCode(unitCode);
+			high.setUnit(unitUnit);
+			observation.getReferenceRangeFirstRep().setHigh(high);
+		}
+
+		Coding resourceCoding = new Coding(systemUriString, codeString, displayString);
+		CodeableConcept code = new CodeableConcept();
+		code.addCoding(resourceCoding);
+		observation.setCode(code);
+
+		observation.setStatus(ObservationStatus.FINAL);
+
+		if (fObservationView.getObservationDate() != null) {
+			Date myDate = createDateTime(fObservationView);
+			if (myDate != null) {
+				DateTimeType appliesDate = new DateTimeType(myDate);
+				observation.setEffective(appliesDate);
+			}
+		}
+		
+		if (fObservationView.getFPerson() != null) {
+			Reference personRef = new Reference(
+					new IdType(PatientResourceProvider.getType(), fObservationView.getFPerson().getId()));
+			personRef.setDisplay(fObservationView.getFPerson().getNameAsSingleString());
+			observation.setSubject(personRef);
+		}
+		
+		if (fObservationView.getVisitOccurrence() != null)
+			observation.getEncounter().setReferenceElement(
+					new IdType(EncounterResourceProvider.getType(), fObservationView.getVisitOccurrence().getId()));
+
+		if (fObservationView.getObservationTypeConcept() != null) {
+			if (fObservationView.getObservationTypeConcept().getId() == 44818701L
+				|| fObservationView.getObservationTypeConcept().getId() == 38000280L
+				|| fObservationView.getObservationTypeConcept().getId() == 38000281L) {
+			// This is From physical examination.
+
+				CodeableConcept typeConcept = new CodeableConcept();
+				Coding typeCoding = new Coding("http://hl7.org/fhir/observation-category", "exam", "");
+				typeConcept.addCoding(typeCoding);
+				observation.addCategory(typeConcept);
+			} else if (fObservationView.getObservationTypeConcept().getId() == 44818702L
+					|| fObservationView.getObservationTypeConcept().getId() == 44791245L
+					|| fObservationView.getObservationTypeConcept().getId() == 38000277L
+					|| fObservationView.getObservationTypeConcept().getId() == 38000278L) {
+				CodeableConcept typeConcept = new CodeableConcept();
+				// This is Lab result
+				Coding typeCoding = new Coding("http://hl7.org/fhir/observation-category", "laboratory", "");
+				typeConcept.addCoding(typeCoding);
+				observation.addCategory(typeConcept);
+			} else if (fObservationView.getObservationTypeConcept().getId() == 45905771L) {
+				CodeableConcept typeConcept = new CodeableConcept();
+				// This is Lab result
+				Coding typeCoding = new Coding("http://hl7.org/fhir/observation-category", "survey", "");
+				typeConcept.addCoding(typeCoding);
+				observation.addCategory(typeConcept);
+			}
+		}
+
+		if (fObservationView.getProvider() != null) {
+			Reference performerRef = new Reference(
+					new IdType(PractitionerResourceProvider.getType(), fObservationView.getProvider().getId()));
+			String providerName = fObservationView.getProvider().getProviderName();
+			if (providerName != null && !providerName.isEmpty())
+				performerRef.setDisplay(providerName);
+			observation.addPerformer(performerRef);
+		}
+		
+		String identifierString = fObservationView.getObservationSourceValue();
+		if (identifierString != null && !identifierString.isEmpty()) {
+			Identifier identifier = new Identifier();
+			identifier.setValue(identifierString);
+			observation.addIdentifier(identifier);
+		}
+
+		if (fObservationView.getId() > 0) {
+			List<BaseEntity> methods = factRelationshipService.searchMeasurementUsingMethod(fObservationView.getId());
+			if (methods != null && !methods.isEmpty()) {
+				for (BaseEntity method : methods) {
+					if (method instanceof Note) {
+						Note note = (Note) method;
+						String methodString = noteService.findById(note.getId()).getNoteText();
+						CodeableConcept methodCodeable = new CodeableConcept();
+						methodCodeable.setText(methodString);
+						observation.setMethod(methodCodeable);
+					} else if (method instanceof Concept) {
+						Concept concept = (Concept) method;
+						CodeableConcept methodCodeable = CodeableConceptUtil
+								.getCodeableConceptFromOmopConcept(conceptService.findById(concept.getId()));
+						observation.setMethod(methodCodeable);
+					} else {
+						logger.error("Method couldn't be retrieved. Method class type undefined");
+					}
+				}
+			}
+
+			List<Note> notes = factRelationshipService.searchMeasurementContainsComments(fObservationView.getId());
+			String comments = "";
+			for (Note note : notes) {
+				comments = comments.concat(noteService.findById(note.getId()).getNoteText());
+			}
+			if (!comments.isEmpty()) {
+				Annotation tempAnnotation = new Annotation();
+				tempAnnotation.setText(comments);
+				observation.addNote(tempAnnotation);
+			}
+		}
+		// observation.value_as_string
+		Double value = fObservationView.getValueAsNumber();
+		if ( value != null ){
+			Quantity quantity = new Quantity();
+			quantity.setValue(value);
+			observation.setValue(quantity);
+
+			// unit_concept_id
+			if (fObservationView.getUnitConcept() != null) {
+				String unitString = fObservationView.getUnitConcept().getConceptName();
+				quantity.setUnit(unitString);
+			}
+		}
+		
+		//FIX VALUE AS STRING
+		String s_value = fObservationView.getValueAsString();
+		if (s_value != null){
+			//O que é isso?
+			observation.setValue(new StringType(s_value));
+			logger.debug(s_value);
+		}
+		
+
 	//61 is the code for Image Exams
 	//---------------------------------------------------------------------------------------------------------------------------------------
 	//---------------------------------------------------------------------------------------------------------------------------------------
 		if(fObservationView.getObservationConcept().getConceptCode() == "61"){
-			String omopVocabulary = fObservationView.getObservationConcept().getVocabularyId();
-			String systemUriString = fhirOmopVocabularyMap.getFhirSystemNameFromOmopVocabulary(omopVocabulary);
-			if ("None".equals(systemUriString)) {
-				// If we can't find FHIR Uri or system name, just use Omop Vocabulary Id.
-				systemUriString = omopVocabulary;
-			}
-
-			// If we have unit, this should be used across all the value.
-			String unitSystemUri = null;
-			String unitCode = null;
-			String unitUnit = null;
-			String unitSource = null;
-			Concept unitConcept = fObservationView.getUnitConcept();
-			if (unitConcept == null || unitConcept.getId() == 0L) {
-				// see if we can get the unit from source column.
-				unitSource = fObservationView.getUnitSourceValue();
-				if (unitSource != null && !unitSource.isEmpty()) {
-					unitUnit = unitSource;
-					unitConcept = CodeableConceptUtil.getOmopConceptWithOmopVacabIdAndCode(conceptService, OmopCodeableConceptMapping.UCUM.getOmopVocabulary(), unitSource.replace("'", "''"));
-				}
-			}
-			
-			if (unitConcept != null && unitConcept.getId() != 0L) {
-				String omopUnitVocabularyId = unitConcept.getVocabularyId();
-				unitSystemUri = fhirOmopVocabularyMap.getFhirSystemNameFromOmopVocabulary(omopUnitVocabularyId);
-				if ("None".equals(unitSystemUri)) {
-					unitSystemUri = omopUnitVocabularyId;
-				}
-
-				unitUnit = unitConcept.getConceptName();
-				unitCode = unitConcept.getConceptCode();
-			} 
-
-			String codeString = fObservationView.getObservationConcept().getConceptCode();
-			String displayString;
-			if (fObservationView.getObservationConcept().getId() == 0L) {
-				displayString = fObservationView.getObservationSourceValue();
-			} else {
-				displayString = fObservationView.getObservationConcept().getConceptName();
-			}
-
-			// OMOP database maintains Systolic and Diastolic Blood Pressures
-			// separately.
-			// FHIR however keeps them together. Observation DAO filters out
-			// Diastolic values.
-			// Here, when we are reading systolic, we search for matching diastolic
-			// and put them
-			// together. The Observation ID will be systolic's OMOP ID.
-			// public static final Long SYSTOLIC_CONCEPT_ID = new Long(3004249);
-			// public static final Long DIASTOLIC_CONCEPT_ID = new Long(3012888);
-			
-				if (fObservationView.getValueAsNumber() != null 
-					&& (fObservationView.getValueAsString() == null 
-					&& fObservationView.getValueAsConcept() == null)) {
-					Quantity quantity = new Quantity(fObservationView.getValueAsNumber().doubleValue());
-					if (unitSystemUri != null || unitCode != null || unitUnit != null) {
-						quantity.setUnit(unitUnit);
-						quantity.setCode(unitCode);
-						quantity.setSystem(unitSystemUri);
-					} else {
-						if (unitSource != null) {
-							quantity.setUnit(unitSource);
-						}
-					}
-					
-	//				if (fObservationView.getUnitConcept() != null) {
-	//					// Unit is defined as a concept code in omop v4, then unit
-	//					// and code are the same in this case
-	//					quantity.setUnit(unitUnit);
-	//					quantity.setCode(unitCode);
-	//					quantity.setSystem(unitSystemUri);
-	//				}
-					observation.setValue(quantity);
-				} else if (fObservationView.getValueAsString() != null) {
-					// Check if this is ratio.
-					String valueString = fObservationView.getValueAsString();
-					String[] valueStrings = valueString.split(":");
-					if (valueStrings.length == 2) {
-						try {
-							double numerator = Double.parseDouble(valueStrings[0]);
-							double denominator = Double.parseDouble(valueStrings[1]);
-
-							Ratio ratio = new Ratio();
-							ratio.setNumerator(new Quantity(numerator));
-							ratio.setDenominator(new Quantity(denominator));
-
-							observation.setValue(ratio);
-						} catch (NumberFormatException nfe) {
-							observation.setValue(new StringType(valueString));
-						}
-					} else {
-						observation.setValue(new StringType(valueString));
-					}
-				} else if (fObservationView.getValueAsConcept() != null
-						&& fObservationView.getValueAsConcept().getId() != 0L) {
-					// vocabulary is a required attribute for concept, then it's
-					// expected to not be null
-					String valueSystem = fhirOmopVocabularyMap.getFhirSystemNameFromOmopVocabulary(
-							fObservationView.getValueAsConcept().getVocabularyId());
-					if ("None".equals(valueSystem))
-						valueSystem = fObservationView.getValueAsConcept().getVocabularyId();
-					Coding coding = new Coding(valueSystem, fObservationView.getValueAsConcept().getConceptCode(),
-							fObservationView.getValueAsConcept().getConceptName());
-					CodeableConcept valueAsConcept = new CodeableConcept();
-					valueAsConcept.addCoding(coding);
-					observation.setValue(valueAsConcept);
-				} else {
-					observation.setValue(new StringType(fObservationView.getValueSourceValue()));
-				}
-			
-
-
-			Coding resourceCoding = new Coding(systemUriString, codeString, displayString);
-			CodeableConcept code = new CodeableConcept();
-			code.addCoding(resourceCoding);
-			observation.setCode(code);
-
-			observation.setStatus(ObservationStatus.FINAL);
-
-			if (fObservationView.getObservationDate() != null) {
-				Date myDate = createDateTime(fObservationView);
-				if (myDate != null) {
-					DateTimeType appliesDate = new DateTimeType(myDate);
-					observation.setEffective(appliesDate);
-				}
-			}
-			
-			if (fObservationView.getFPerson() != null) {
-				Reference personRef = new Reference(
-						new IdType(PatientResourceProvider.getType(), fObservationView.getFPerson().getId()));
-				personRef.setDisplay(fObservationView.getFPerson().getNameAsSingleString());
-				observation.setSubject(personRef);
-			}
-			
-			if (fObservationView.getVisitOccurrence() != null)
-				observation.getEncounter().setReferenceElement(
-						new IdType(EncounterResourceProvider.getType(), fObservationView.getVisitOccurrence().getId()));
-
-
-			if (fObservationView.getProvider() != null) {
-				Reference performerRef = new Reference(
-						new IdType(PractitionerResourceProvider.getType(), fObservationView.getProvider().getId()));
-				String providerName = fObservationView.getProvider().getProviderName();
-				if (providerName != null && !providerName.isEmpty())
-					performerRef.setDisplay(providerName);
-				observation.addPerformer(performerRef);
-			}
-			
-			String identifierString = fObservationView.getObservationSourceValue();
-			if (identifierString != null && !identifierString.isEmpty()) {
-				Identifier identifier = new Identifier();
-				identifier.setValue(identifierString);
-				observation.addIdentifier(identifier);
-			}
-
-			if (fObservationView.getId() > 0) {
-				List<BaseEntity> methods = factRelationshipService.searchMeasurementUsingMethod(fObservationView.getId());
-				if (methods != null && !methods.isEmpty()) {
-					for (BaseEntity method : methods) {
-						if (method instanceof Note) {
-							Note note = (Note) method;
-							String methodString = noteService.findById(note.getId()).getNoteText();
-							CodeableConcept methodCodeable = new CodeableConcept();
-							methodCodeable.setText(methodString);
-							observation.setMethod(methodCodeable);
-						} else if (method instanceof Concept) {
-							Concept concept = (Concept) method;
-							CodeableConcept methodCodeable = CodeableConceptUtil
-									.getCodeableConceptFromOmopConcept(conceptService.findById(concept.getId()));
-							observation.setMethod(methodCodeable);
-						} else {
-							logger.error("Method couldn't be retrieved. Method class type undefined");
-						}
-					}
-				}
-
-				List<Note> notes = factRelationshipService.searchMeasurementContainsComments(fObservationView.getId());
-				String comments = "";
-				for (Note note : notes) {
-					comments = comments.concat(noteService.findById(note.getId()).getNoteText());
-				}
-				if (!comments.isEmpty()) {
-					Annotation tempAnnotation = new Annotation();
-					tempAnnotation.setText(comments);
-					observation.addNote(tempAnnotation);
-				}
-			}
-			// observation.value_as_string
-			Double value = fObservationView.getValueAsNumber();
-			if ( value != null ){
-				Quantity quantity = new Quantity();
-				quantity.setValue(value);
-				observation.setValue(quantity);
-
-				// unit_concept_id
-				if (fObservationView.getUnitConcept() != null) {
-					String unitString = fObservationView.getUnitConcept().getConceptName();
-					quantity.setUnit(unitString);
-				}
-			}
-			
-			//FIX VALUE AS STRING
-			String s_value = fObservationView.getValueAsString();
-			if (s_value != null){
-				//O que é isso?
-				observation.setValue(new StringType(s_value));
-				logger.debug(s_value);
-			}
+			logger.debug("X");
 		}
 
-
-
 	//60 is the code for Lab Exams
-	//---------------------------------------------------------------------------------------------------------------------------------------
-	//---------------------------------------------------------------------------------------------------------------------------------------
 		if(fObservationView.getObservationConcept().getConceptCode() == "60"){
-
+			logger.debug("Y");
 		}
 
 
