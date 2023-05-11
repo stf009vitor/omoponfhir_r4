@@ -516,6 +516,7 @@ public class OmopObservation extends BaseOmopResource<Observation, FObservationV
 			if(fObservationView.get_img_rsn_txt() != null){
 				Annotation note = new Annotation();
 				List<Annotation> noteList = new ArrayList<>();
+				noteList.add(note);
 
 				note.setText(fObservationView.get_img_rsn_txt());
 				observation.setNote(noteList);
