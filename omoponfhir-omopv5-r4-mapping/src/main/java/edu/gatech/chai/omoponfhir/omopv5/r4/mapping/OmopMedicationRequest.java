@@ -296,18 +296,6 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 			}
 		}
 
-		//Drug Route
-		if(entity.get_drug_route() != null){
-			CodeableConcept codeableConceptRoute = new CodeableConcept();
-			Coding routeCode = new Coding();
-			List<Coding> routeCodeList = new ArrayList<>();
-			
-			routeCode.setDisplay(entity.get_drug_route());
-			routeCodeList.add(routeCode);
-			codeableConceptRoute.setCoding(routeCodeList);
-			dosage.setRoute(codeableConceptRoute);
-		}
-
 		//Start and End time
 		try {
 			Timing dosageTiming = new Timing();
@@ -327,7 +315,19 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 			logger.error("Error setting up the start and end time of the dosage");
 		}
 
+		//Drug Route
+		if(entity.get_drug_route() != null){
+			CodeableConcept codeableConceptRoute = new CodeableConcept();
+			Coding routeCode = new Coding();
+			List<Coding> routeCodeList = new ArrayList<>();
 
+			routeCode.setDisplay(entity.get_drug_route());
+			routeCodeList.add(routeCode);
+			codeableConceptRoute.setCoding(routeCodeList);
+			dosage.setRoute(codeableConceptRoute);
+
+			logger.debug("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+		}
 
 		List<Dosage.DosageDoseAndRateComponent> dosageAndRateList = new ArrayList<>();
 		dosageAndRateList.add(dosageAndRate);
