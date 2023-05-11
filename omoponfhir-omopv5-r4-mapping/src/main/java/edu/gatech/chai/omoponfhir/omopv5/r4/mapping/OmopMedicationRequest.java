@@ -284,7 +284,7 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 			}
 		} else {
 			//If not try to set the Drug dose as a simple dose + unit
-			if (entity.getDoseUnitSourceValue()) {
+			if (entity.getDoseUnitSourceValue() != null) {
 				try {
 					SimpleQuantity simpleQuantity = new SimpleQuantity();
 					simpleQuantity.setValue(entity.getQuantity());
@@ -327,8 +327,10 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 		}
 		
 		//Drug Status
-		if(entity.get_drug_order_status() != null){
-			medicationRequest.setStatus(entity.get_drug_order_status());
+		if(entity.get_drug_order_status() != null && (entity.get_drug_order_status()).equals("canceled") ){
+			medicationRequest.setStatus(MedicationRequest.MedicationRequestStatus.CANCELLED);
+		} else {
+			medicationRequest.setStatus(MedicationRequest.MedicationRequestStatus.COMPLETED);
 		}
 
 		// Dosage mapping
