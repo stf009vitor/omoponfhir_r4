@@ -388,9 +388,9 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 		try{
 			Period dispensePeriod = new Period();
 			logger.debug("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-			dispensePeriod.setStart(entity.getDrugExposureStartDateTime());
+			dispensePeriod.setStart(entity.getVerbatimEndDate());
 			logger.debug("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-			dispensePeriod.setEnd(entity.getDrugExposureEndDateTime());
+			dispensePeriod.setEnd(entity.getVerbatimEndDate());
 			logger.debug("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 			dispenseRequest.setValidityPeriod(dispensePeriod);
 			logger.debug("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
