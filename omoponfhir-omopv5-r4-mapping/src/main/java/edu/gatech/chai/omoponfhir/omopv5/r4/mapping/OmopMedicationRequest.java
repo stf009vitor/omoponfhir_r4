@@ -391,14 +391,14 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 			dispensePeriod.setEnd(entity.getDrugExposureEndDateTime());
 			dispenseRequest.setValidityPeriod(dispensePeriod);
 		}
-		catch (Excepction e){
+		catch (Exception e){
 			logger.error("Error setting up the dispense period");
 		}
 
 
 		String unitSystem = "";
 		String unitCode = "";
-		String unitUnit = entity.get_drug_quantity_ordered_value();
+		String unitUnit = entity.get_drug_quantity_ordered_unit();
 		if (unitUnit != null && !unitUnit.isEmpty()) {
 			Concept unitConcept = CodeableConceptUtil.getOmopConceptWithOmopCode(conceptService, unitUnit);
 			if (unitConcept != null) {
@@ -409,7 +409,7 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 			}
 		}
 		
-		Double quantity = entity.get_drug_quantity_ordered_unit();
+		Double quantity = entity.get_drug_quantity_ordered_value();
 		if (quantity != null) {
 			SimpleQuantity simpleQty = new SimpleQuantity();
 			simpleQty.setValue(quantity);
