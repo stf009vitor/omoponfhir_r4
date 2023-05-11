@@ -553,17 +553,18 @@ public class OmopObservation extends BaseOmopResource<Observation, FObservationV
 
 			//Imaging Status
 			if(fObservationView.get_img_status_txt() != null){
+
+				//Standard value
+				observation.setStatus(ObservationStatus.FINAL);
+
 				if(fObservationView.get_img_status_txt().equals('Cancelled')){
 					observation.setStatus(ObservationStatus.CANCELLED);
 				}
-				else if (fObservationView.get_img_status_txt().equals('Preliminary')){
+				if (fObservationView.get_img_status_txt().equals('Preliminary')){
 					observation.setStatus(ObservationStatus.PRELIMINARY);
 				}
-				else if (fObservationView.get_img_status_txt().equals('Corrected')){
+				if (fObservationView.get_img_status_txt().equals('Corrected')){
 					observation.setStatus(ObservationStatus.CORRECTED);
-				}
-				else{
-					observation.setStatus(ObservationStatus.FINAL);
 				}
 			}
 
