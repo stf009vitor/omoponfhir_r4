@@ -284,7 +284,7 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 			}
 		} else {
 			//If not try to set the Drug dose as a simple dose + unit
-			if (Double.toString(entity.getQuantity()) != null && entity.getDoseUnitSourceValue()) {
+			if (entity.getDoseUnitSourceValue()) {
 				try {
 					SimpleQuantity simpleQuantity = new SimpleQuantity();
 					simpleQuantity.setValue(entity.getQuantity());
