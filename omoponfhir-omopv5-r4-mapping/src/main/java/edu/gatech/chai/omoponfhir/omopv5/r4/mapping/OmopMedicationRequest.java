@@ -388,7 +388,7 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 		try{
 			Period dispensePeriod = new Period();
 			logger.debug("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-			dispensePeriod.setStart(entity.getVerbatimEndDate());
+			dispensePeriod.setStartElement(entity.getDrugExposureStartDateTime());
 			logger.debug("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 			dispensePeriod.setEnd(entity.getVerbatimEndDate());
 			logger.debug("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
@@ -398,11 +398,6 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 		catch (Exception e){
 			logger.error("Error setting up the dispense period");
 		}
-		Period x = dispenseRequest.getValidityPeriod();
-		if (x == null){
-			logger.debug("BUG HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEERE");
-		}
-
 
 		String unitSystem = "";
 		String unitCode = "";
