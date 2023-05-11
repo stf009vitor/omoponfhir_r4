@@ -303,6 +303,22 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 			dosage.setRoute(codeableConceptRoute);
 		}
 
+		//Time
+		Timing dosageTiming = new Timing();
+		DateTimeType date1 = new DateTimeType();
+		DateTimeType date2 = new DateTimeType();
+		List<DateTimeType> eventDateTimeList = new ArrayList<>();
+
+		date1.setValue(entity.getVerbatimEndDate());
+		date2.setValue(entity.getVerbatimEndDate());
+		eventDateTimeList.add(date1);
+		eventDateTimeList.add(date2);
+
+		dosageTiming.setEvent(eventDateTimeList);
+		dosage.setTiming(dosageTiming);
+
+
+
 		List<Dosage.DosageDoseAndRateComponent> dosageAndRateList = new ArrayList<>();
 		dosageAndRateList.add(dosageAndRate);
 		dosage.setDoseAndRate(dosageAndRateList);
@@ -382,21 +398,6 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 		Integer refills = entity.getRefills();
 		if (refills != null) {
 			dispenseRequest.setNumberOfRepeatsAllowed(refills);
-		}
-
-		//Set dispense duration
-		try{
-			Period dispensePeriod = new Period();
-			logger.debug("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-			dispensePeriod.setStartElement(entity.getDrugExposureStartDateTime());
-			logger.debug("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-			dispensePeriod.setEnd(entity.getVerbatimEndDate());
-			logger.debug("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-			dispenseRequest.setValidityPeriod(dispensePeriod);
-			logger.debug("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-		}
-		catch (Exception e){
-			logger.error("Error setting up the dispense period");
 		}
 
 		String unitSystem = "";
