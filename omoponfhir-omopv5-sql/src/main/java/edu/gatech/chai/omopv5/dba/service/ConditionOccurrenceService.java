@@ -74,7 +74,7 @@ public interface ConditionOccurrenceService extends IService<ConditionOccurrence
 				} else if (columnInfo.equalsIgnoreCase(alias + "_condition_severity")) {
 					conditionOccurrence.set_condition_severity(rs.getString(columnInfo));
 				} else if (columnInfo.equalsIgnoreCase(alias + "_condition_status_source_value")) {
-					conditionOccurrence.set_condition_severity(rs.getString(columnInfo));
+					conditionOccurrence.setConditionStatusSourceValue(rs.getString(columnInfo));
 //-----------------------------------------------------------------------------------------------------------------------------------------	
 					Concept conditionTypeConcept = ConceptService._construct(rs, null, "conditionTypeConcept");
 					conditionOccurrence.setConditionTypeConcept(conditionTypeConcept);
@@ -150,7 +150,7 @@ public interface ConditionOccurrenceService extends IService<ConditionOccurrence
 			} else if (columnInfo.equalsIgnoreCase(alias + "_condition_severity")) {
 				conditionOccurrence.set_condition_severity(rowResult.get(columnInfo).getStringValue());
 			} else if (columnInfo.equalsIgnoreCase(alias + "_condition_status_source_value")) {
-				conditionOccurrence.set_condition_severity(rowResult.get(columnInfo).getStringValue());
+				conditionOccurrence.setConditionStatusSourceValue(rowResult.get(columnInfo).getStringValue());
 //-----------------------------------------------------------------------------------------------------------------------------------------	
 				
 			} else if (columnInfo.equalsIgnoreCase("provider_provider_id")) {
