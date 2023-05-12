@@ -271,7 +271,7 @@ public class OmopMedicationDispense extends BaseOmopResource<MedicationDispense,
 		}
 
 		//Quantity Dispensed
-		if(!Objects.isNull(entity.get_drug_quantity_dispensed_value()) && entity.get_drug_quantity_dispensed_unit() != null){
+		if(entity.get_drug_quantity_dispensed_unit() != null){
 			try {
 				SimpleQuantity dispensedQuantity = new SimpleQuantity();
 				dispensedQuantity.setValue(entity.get_drug_quantity_dispensed_value() );
