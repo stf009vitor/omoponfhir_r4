@@ -258,7 +258,26 @@ public class OmopMedicationDispense extends BaseOmopResource<MedicationDispense,
 		}
 
 		medicationDispense.setMedication(medicationCodeableConcept);
-		
+
+		//Dispensed DateTime
+		//---------------------------------------------------------------------------------------------------------------------------------
+		if(entity.getVerbatimEndDate() != null){
+			try {
+				medicationDispense.getWhenHandedOver(entity.getVerbatimEndDate());
+			} catch(Exception e){
+				logger.error("Error setting up dispense time");
+				e.printStackTrace();
+			}
+		}
+
+		//Dispensed Days Supply
+		//---------------------------------------------------------------------------------------------------------------------------------
+		if(entity.getDaysSupply() != null){
+			SimpleQuantity daysSupplyQuantity = new SimpleQuantity();
+			daysSupplyQuantity.setValue(entity.getDaysSupply());
+			medicationDispense.setDaysSupply(daysSupplyQuantity);
+		}
+
 		Dosage dosage = new Dosage();
 		Dosage.DosageDoseAndRateComponent dosageAndRate = new Dosage.DosageDoseAndRateComponent();
 
@@ -278,6 +297,7 @@ public class OmopMedicationDispense extends BaseOmopResource<MedicationDispense,
 				dosageAndRate.setDose(simpleQuantity);
 			} catch (Exception e) {
 				logger.error("Error setting simple dose for a drug.");
+				e.printStackTrace();
 			}
 		}
 		
