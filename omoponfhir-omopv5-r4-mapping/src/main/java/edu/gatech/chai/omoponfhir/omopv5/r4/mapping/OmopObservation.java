@@ -489,6 +489,7 @@ public class OmopObservation extends BaseOmopResource<Observation, FObservationV
 				CodeableConcept modalityCodeableConcept = new CodeableConcept();
 				//List<CodeableConcept> modalityCodeableConceptList = new ArrayList<>();
 
+				modalityCoding.setSystem("Imaging Modality");
 				modalityCoding.setDisplay(fObservationView.get_img_mod_txt());
 				modalityCodingList.add(modalityCoding);
 				modalityCodeableConcept.setCoding(modalityCodingList);
@@ -504,6 +505,7 @@ public class OmopObservation extends BaseOmopResource<Observation, FObservationV
 				CodeableConcept categoryCodeableConcept = new CodeableConcept();
 				List<CodeableConcept> categoryCodeableConceptList = new ArrayList<>();
 
+				categoryCoding.setSystem("Imaging Procedure");
 				categoryCoding.setDisplay(fObservationView.get_img_prc_txt());
 				categoryCodingList.add(categoryCoding);
 				categoryCodeableConcept.setCoding(categoryCodingList);
@@ -529,6 +531,7 @@ public class OmopObservation extends BaseOmopResource<Observation, FObservationV
 				CodeableConcept descriptionCodeableConcept = new CodeableConcept();
 				//List<CodeableConcept> descriptionCodeableConceptList = new ArrayList<>();
 
+				descriptionCoding.setSystem("Imaging Description");
 				descriptionCoding.setDisplay(fObservationView.get_img_dscrp_txt());
 				descriptionCodingList.add(descriptionCoding);
 				descriptionCodeableConcept.setCoding(descriptionCodingList);
@@ -544,6 +547,7 @@ public class OmopObservation extends BaseOmopResource<Observation, FObservationV
 				CodeableConcept interpretationCodeableConcept = new CodeableConcept();
 				List<CodeableConcept> interpretationCodeableConceptList = new ArrayList<>();
 
+				interpretationCoding.setSystem("Imaging Interpretation");
 				interpretationCoding.setDisplay(fObservationView.getValueAsString());
 				interpretationCodingList.add(interpretationCoding);
 				interpretationCodeableConcept.setCoding(interpretationCodingList);
@@ -575,7 +579,37 @@ public class OmopObservation extends BaseOmopResource<Observation, FObservationV
 	//---------------------------------------------------------------------------------------------------------------------------------------
 	//---------------------------------------------------------------------------------------------------------------------------------------
 		if(fObservationView.getObservationConcept().getConceptCode().equals("60")){
-			logger.debug("Y");
+
+			//Lab Exam Code
+			if(fObservationView.get_lab_txt() != null){
+				Coding examCoding = new Coding();
+				List<Coding> examCodingList = new ArrayList<>();
+				CodeableConcept examCodeableConcept = new CodeableConcept();
+
+				String lab_text = fObservationView.get_lab_txt();
+				String lab_code = fObservationView.get_lab_cd();
+				String lab_system = fObservationView.get_lab_cdsys();
+
+				if(fObservationView.get_lab_cd() == null){
+					lab_code = "0";
+				}
+
+				if(fObservationView.get_lab_cdsys() == null){
+					lab_system = "local hospital code system";
+				}
+
+				examCoding.setDisplay(lab_text);
+				examCoding.setCode(lab_code);
+				examCoding.setSystem(lab_system);
+				examCodingList.add(examCoding);
+				examCodeableConcept.setCoding(examCodingList);
+
+				ObservationComponentComponent observationComponentComponent = new ObservationComponentComponent();
+				List<ObservationComponentComponent> observationComponentComponentList = new ArrayList<>();
+				observationComponentComponent.setCode(examCodeableConcept);
+				observationComponentComponentList.add(observationComponentComponent);
+				observation.setComponent(observationComponentComponentList);
+			}
 		}
 
 
