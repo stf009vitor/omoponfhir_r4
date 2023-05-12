@@ -610,7 +610,7 @@ public class OmopObservation extends BaseOmopResource<Observation, FObservationV
 				observationComponentComponentList.add(observationComponentComponent);
 				observation.setComponent(observationComponentComponentList);
 			}
-			
+
 			//Results Value
 			if(fObservationView.getValueAsString() != null){
 				Double examValueAsNumber = 0.0;

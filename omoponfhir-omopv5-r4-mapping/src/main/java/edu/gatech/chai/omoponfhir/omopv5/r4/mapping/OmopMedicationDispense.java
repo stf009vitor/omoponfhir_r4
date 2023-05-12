@@ -90,7 +90,7 @@ import edu.gatech.chai.omoponfhir.omopv5.r4.provider.MedicationDispenseResourceP
 public class OmopMedicationDispense extends BaseOmopResource<MedicationDispense, DrugExposure, DrugExposureService> {
 	private static final Logger logger = LoggerFactory.getLogger(OmopMedicationDispense.class);
 
-	private static Long MEDICATIONDISPENSE_CONCEPT_TYPE_ID = 38000177L;
+	private static Long MEDICATIONDISPENSE_CONCEPT_TYPE_ID = 2000000041L;
 	private static OmopMedicationDispense omopMedicationDispense = new OmopMedicationDispense();
 	private VisitOccurrenceService visitOccurrenceService;
 	private ConceptService conceptService;
@@ -571,56 +571,56 @@ public class OmopMedicationDispense extends BaseOmopResource<MedicationDispense,
 		return mapList;
 	}
 
-//	final ParameterWrapper filterParam = new ParameterWrapper("Long", Arrays.asList("drugTypeConcept.id"),
-//			Arrays.asList("="), Arrays.asList(String.valueOf(MEDICATIONDISPENSE_CONCEPT_TYPE_ID)), "or");
+	final ParameterWrapper filterParam = new ParameterWrapper("Long", Arrays.asList("drugSourceConcept.id"),
+			Arrays.asList("="), Arrays.asList(String.valueOf(MEDICATIONDISPENSE_CONCEPT_TYPE_ID)), "or");
 
-//	@Override
-//	public Long getSize() {
-//		List<ParameterWrapper> mapList = new ArrayList<ParameterWrapper>();
-//		return getMyOmopService().getSize(mapList);
-//	}
-//
-//	@Override
-//	public Long getSize(List<ParameterWrapper> mapList) {
-////		List<ParameterWrapper> exceptions = new ArrayList<ParameterWrapper>();
-////		exceptions.add(filterParam);
-////		map.put(MAP_EXCEPTION_FILTER, exceptions);
-//
-//		return getMyOmopService().getSize(mapList);
-//	}
+	@Override
+	public Long getSize() {
+		List<ParameterWrapper> mapList = new ArrayList<ParameterWrapper>();
+		return getMyOmopService().getSize(mapList);
+	}
 
-//	@Override
-//	public void searchWithoutParams(int fromIndex, int toIndex, List<IBaseResource> listResources,
-//			List<String> includes) {
-//
-//		// This is read all. But, since we will add an exception conditions to
-//		// add filter.
-//		// we will call the search with params method.
-//		List<ParameterWrapper> mapList = new ArrayList<ParameterWrapper> ();
-//		searchWithParams(fromIndex, toIndex, mapList, listResources, includes);
-//	}
-//
-//	@Override
-//	public void searchWithParams(int fromIndex, int toIndex, List<ParameterWrapper> mapList,
-//			List<IBaseResource> listResources, List<String> includes) {
-////		List<ParameterWrapper> exceptions = new ArrayList<ParameterWrapper>();
-////		exceptions.add(filterParam);
-////		map.put(MAP_EXCEPTION_FILTER, exceptions);
-//
-//		List<DrugExposure> entities = getMyOmopService().searchWithParams(fromIndex, toIndex, mapList);
-//
-//		for (DrugExposure entity : entities) {
-//			Long omopId = entity.getIdAsLong();
-//			Long fhirId = IdMapping.getFHIRfromOMOP(omopId, getMyFhirResourceType());
-//			MedicationDispense fhirResource = constructResource(fhirId, entity, includes);
-//			if (fhirResource != null) {
-//				listResources.add(fhirResource);
-//				// Do the rev_include and add the resource to the list.
-//				addRevIncludes(omopId, includes, listResources);
-//			}
-//
-//		}
-//	}
+	@Override
+	public Long getSize(List<ParameterWrapper> mapList) {
+		List<ParameterWrapper> exceptions = new ArrayList<ParameterWrapper>();
+		exceptions.add(filterParam);
+		map.put(MAP_EXCEPTION_FILTER, exceptions);
+
+		return getMyOmopService().getSize(mapList);
+	}
+
+	@Override
+	public void searchWithoutParams(int fromIndex, int toIndex, List<IBaseResource> listResources,
+			List<String> includes) {
+
+		// This is read all. But, since we will add an exception conditions to
+		// add filter.
+		// we will call the search with params method.
+		List<ParameterWrapper> mapList = new ArrayList<ParameterWrapper> ();
+		searchWithParams(fromIndex, toIndex, mapList, listResources, includes);
+	}
+
+	@Override
+	public void searchWithParams(int fromIndex, int toIndex, List<ParameterWrapper> mapList,
+			List<IBaseResource> listResources, List<String> includes) {
+		List<ParameterWrapper> exceptions = new ArrayList<ParameterWrapper>();
+		exceptions.add(filterParam);
+		map.put(MAP_EXCEPTION_FILTER, exceptions);
+
+		List<DrugExposure> entities = getMyOmopService().searchWithParams(fromIndex, toIndex, mapList);
+
+		for (DrugExposure entity : entities) {
+			Long omopId = entity.getIdAsLong();
+			Long fhirId = IdMapping.getFHIRfromOMOP(omopId, getMyFhirResourceType());
+			MedicationDispense fhirResource = constructResource(fhirId, entity, includes);
+			if (fhirResource != null) {
+				listResources.add(fhirResource);
+				// Do the rev_include and add the resource to the list.
+				addRevIncludes(omopId, includes, listResources);
+			}
+
+		}
+	}
 
 	@Override
 	public DrugExposure constructOmop(Long omopId, MedicationDispense fhirResource) {
