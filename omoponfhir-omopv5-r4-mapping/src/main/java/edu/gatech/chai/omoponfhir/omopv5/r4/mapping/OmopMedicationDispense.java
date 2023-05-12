@@ -15,39 +15,36 @@
  *******************************************************************************/
 package edu.gatech.chai.omoponfhir.omopv5.r4.mapping;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.hl7.fhir.r4.model.*;
-import org.hl7.fhir.r4.model.MedicationDispense.MedicationDispenseStatus;
-import org.hl7.fhir.r4.model.ValueSet.ConceptReferenceComponent;
-import org.hl7.fhir.r4.model.ValueSet.ConceptSetComponent;
+import org.hl7.fhir.r4.model.Medication.MedicationIngredientComponent;
+import org.hl7.fhir.r4.model.MedicationDispense.MedicationDispenseDispenseDispenseComponent;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.hl7.fhir.instance.model.api.IIdType;
+import org.hl7.fhir.r4.model.codesystems.DoseRateType;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.WebApplicationContext;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.TokenParam;
-import ca.uhn.fhir.rest.param.TokenParamModifier;
 import edu.gatech.chai.omoponfhir.omopv5.r4.utilities.CodeableConceptUtil;
 import edu.gatech.chai.omoponfhir.omopv5.r4.utilities.DateUtil;
-import edu.gatech.chai.omoponfhir.omopv5.r4.utilities.TerminologyServiceClient;
+import edu.gatech.chai.omoponfhir.omopv5.r4.utilities.ExtensionUtil;
 import edu.gatech.chai.omoponfhir.omopv5.r4.provider.EncounterResourceProvider;
-import edu.gatech.chai.omoponfhir.omopv5.r4.provider.MedicationRequestResourceProvider;
+import edu.gatech.chai.omoponfhir.omopv5.r4.provider.MedicationDispenseResourceProvider;
+import edu.gatech.chai.omoponfhir.omopv5.r4.provider.MedicationResourceProvider;
+import edu.gatech.chai.omoponfhir.omopv5.r4.provider.MedicationStatementResourceProvider;
 import edu.gatech.chai.omoponfhir.omopv5.r4.provider.PatientResourceProvider;
 import edu.gatech.chai.omoponfhir.omopv5.r4.provider.PractitionerResourceProvider;
-import edu.gatech.chai.omoponfhir.omopv5.r4.utilities.ThrowFHIRExceptions;
 import edu.gatech.chai.omopv5.dba.service.ConceptService;
 import edu.gatech.chai.omopv5.dba.service.DrugExposureService;
 import edu.gatech.chai.omopv5.dba.service.FPersonService;
@@ -60,38 +57,35 @@ import edu.gatech.chai.omopv5.model.entity.FPerson;
 import edu.gatech.chai.omopv5.model.entity.Provider;
 import edu.gatech.chai.omopv5.model.entity.VisitOccurrence;
 
-import edu.gatech.chai.omoponfhir.omopv5.r4.provider.MedicationDispenseResourceProvider;
-//import ca.uhn.fhir.model.r4.resource.MedicationDispense.DosageInstruction;
-
 /**
  * 
  * @author mc142
  *
- *         concept id OHDSI drug type FHIR 38000179 Physician administered drug
- *         (identified as procedure), MedicationAdministration 38000180
- *         Inpatient administration, MedicationAdministration 43542356 Physician
- *         administered drug (identified from EHR problem list),
- *         MedicationAdministration 43542357 Physician administered drug
- *         (identified from referral record), MedicationAdministration 43542358
- *         Physician administered drug (identified from EHR observation),
- *         MedicationAdministration 581373 Physician administered drug
- *         (identified from EHR order), MedicationAdministration 38000175
- *         Prescription dispensed in pharmacy, MedicationDispense 38000176
- *         Prescription dispensed through mail order, MedicationDispense 581452
- *         Dispensed in Outpatient office, MedicationDispense ****** 38000177
- *         Prescription written, MedicationRequest ****** 44787730 Patient
- *         Self-Reported Medication, MedicationDispense 38000178 Medication
- *         list entry 38000181 Drug era - 0 days persistence window 38000182
- *         Drug era - 30 days persistence window 44777970 Randomized Drug
- * 
- *         NOTE: We will take all the drug exposure into MedicationDispense.
- *         It's hard to distinguish the medicaitons for MedicationDispense.
- *
+ * concept id	OHDSI drug type	FHIR
+ * 38000179		Physician administered drug (identified as procedure), MedicationAdministration
+ * 38000180		Inpatient administration, MedicationAdministration
+ * 43542356	Physician administered drug (identified from EHR problem list), MedicationAdministration
+ * 43542357	Physician administered drug (identified from referral record), MedicationAdministration
+ * 43542358	Physician administered drug (identified from EHR observation), MedicationAdministration
+ * 581373	Physician administered drug (identified from EHR order), MedicationAdministration
+ * ******
+ * 38000175	Prescription dispensed in pharmacy, MedicationDispense
+ * 38000176	Prescription dispensed through mail order, MedicationDispense
+ * 581452	Dispensed in Outpatient office, MedicationDispense
+ * ******
+ * 38000177	Prescription written, MedicationDispense
+ * ******
+ * 44787730	Patient Self-Reported Medication, MedicationStatement
+ * 38000178	Medication list entry	 
+ * 38000181	Drug era - 0 days persistence window	 
+ * 38000182	Drug era - 30 days persistence window	 
+ * 44777970	Randomized Drug	 
  */
 public class OmopMedicationDispense extends BaseOmopResource<MedicationDispense, DrugExposure, DrugExposureService> {
-	private static final Logger logger = LoggerFactory.getLogger(OmopMedicationDispense.class);
+	
+	private static final Logger logger = LoggerFactory.getLogger(OmopCondition.class);
 
-	private static Long MEDICATIONDISPENSE_CONCEPT_TYPE_ID = 2000000041L;
+	public static Long MEDICATIONDispense_CONCEPT_TYPE_ID = 2000000041L;
 	private static OmopMedicationDispense omopMedicationDispense = new OmopMedicationDispense();
 	private VisitOccurrenceService visitOccurrenceService;
 	private ConceptService conceptService;
@@ -105,10 +99,9 @@ public class OmopMedicationDispense extends BaseOmopResource<MedicationDispense,
 		// Get count and put it in the counts.
 		getSize();
 	}
-
+	
 	public OmopMedicationDispense() {
-		super(ContextLoaderListener.getCurrentWebApplicationContext(), DrugExposure.class, DrugExposureService.class,
-				MedicationDispenseResourceProvider.getType());
+		super(ContextLoaderListener.getCurrentWebApplicationContext(), DrugExposure.class, DrugExposureService.class, MedicationStatementResourceProvider.getType());
 		initialize(ContextLoaderListener.getCurrentWebApplicationContext());
 	}
 
@@ -116,23 +109,22 @@ public class OmopMedicationDispense extends BaseOmopResource<MedicationDispense,
 		visitOccurrenceService = context.getBean(VisitOccurrenceService.class);
 		conceptService = context.getBean(ConceptService.class);
 		providerService = context.getBean(ProviderService.class);
-		fPersonService = context.getBean(FPersonService.class);
+		fPersonService = context.getBean(FPersonService.class);		
 	}
 
 	public static OmopMedicationDispense getInstance() {
 		return OmopMedicationDispense.omopMedicationDispense;
 	}
-
+	
 	@Override
 	public Long toDbase(MedicationDispense fhirResource, IdType fhirId) throws FHIRException {
 		Long omopId = null;
+		DrugExposure drugExposure = null;
 		if (fhirId != null) {
-			// Update
-			Long fhirIdLong = fhirId.getIdPartAsLong();
-			omopId = IdMapping.getOMOPfromFHIR(fhirIdLong, MedicationDispenseResourceProvider.getType());
+			omopId = IdMapping.getOMOPfromFHIR(fhirId.getIdPartAsLong(), MedicationDispenseResourceProvider.getType());
 		}
 
-		DrugExposure drugExposure = constructOmop(omopId, fhirResource);
+		drugExposure = constructOmop(omopId, fhirResource);
 
 		Long retOmopId = null;
 		if (omopId == null) {
@@ -140,256 +132,378 @@ public class OmopMedicationDispense extends BaseOmopResource<MedicationDispense,
 		} else {
 			retOmopId = getMyOmopService().update(drugExposure).getId();
 		}
+		
+		return IdMapping.getFHIRfromOMOP(retOmopId, MedicationStatementResourceProvider.getType());
+	}
+	
+	@Override
+	public MedicationDispense constructResource(Long fhirId, DrugExposure entity, List<String> includes) {
+		MedicationDispense fhirResource = constructFHIR(fhirId, entity);
 
-		return IdMapping.getFHIRfromOMOP(retOmopId, MedicationDispenseResourceProvider.getType());
+		if (!includes.isEmpty()) {
+			if (includes.contains("MedicationDispense:medication")) {
+				Type medicationType = fhirResource.getMedication();
+				if (medicationType instanceof Reference) {
+					// We can include the medication resource as this is reference.
+					// If medication is codeable concept, we can't include medication as
+					// it does not have reference.
+					Reference medicationReference = fhirResource.getMedicationReference();
+					if (medicationReference != null && !medicationReference.isEmpty()) {
+						IIdType medicationId = medicationReference.getReferenceElement();
+						Long medicationFhirId = medicationId.getIdPartAsLong();
+						Medication medication = OmopMedication.getInstance().constructFHIR(medicationFhirId, entity.getDrugConcept());
+						medicationReference.setResource(medication);
+					}
+				}
+			}
+		}
+		
+		return fhirResource;
 	}
 
 	@Override
 	public MedicationDispense constructFHIR(Long fhirId, DrugExposure entity) {
 		MedicationDispense medicationDispense = new MedicationDispense();
 		medicationDispense.setId(new IdType(fhirId));
+		
+		// Subject from FPerson
+		//---------------------------------------------------------------------------------------------------------------------------------
+		Reference patientRef = new Reference(new IdType(PatientResourceProvider.getType(), entity.getFPerson().getId()));
+		patientRef.setDisplay(entity.getFPerson().getNameAsSingleString());
+		medicationDispense.setSubject(patientRef);		
+		
+		// Created Datetime.
+		//---------------------------------------------------------------------------------------------------------------------------------
+		Date verbatimDate = entity.getVerbatimEndDate();
+		// Date endDate = entity.getDrugExposureEndDate();
+		if (verbatimDate != null)
+			medicationDispense.setAuthoredOn(verbatimDate);
 
-		// status is required field in FHIR MedicationDispense.
-		// However, we do not have a field in OMOP.
-		// We will use stop_reason field to see if there is any data in there.
-		// If we have data there, we set the status stopped. Otherwise, active.
-		// We may need to use reasonNotTaken. But, we don't have a code for
-		// that.
-		// We will use note to put the reason if exists.
-		if (entity.getStopReason() != null) {
-			medicationDispense.setStatus(MedicationDispenseStatus.STOPPED);
-			Annotation annotation = new Annotation();
-			annotation.setText(entity.getStopReason());
-			medicationDispense.addNote(annotation);
-		} else {
-			medicationDispense.setStatus(MedicationDispenseStatus.INPROGRESS);
-		}
-
-		FPerson fPerson = entity.getFPerson();
-		if (fPerson != null) {
-			Long omopFpersonId = fPerson.getId();
-			Long fhirPatientId = IdMapping.getFHIRfromOMOP(omopFpersonId,
-					MedicationDispenseResourceProvider.getType());
-			Reference subjectReference = new Reference(new IdType(PatientResourceProvider.getType(), fhirPatientId));
-			String familyName = fPerson.getFamilyName();
-			String given1 = fPerson.getGivenName1();
-			String given2 = fPerson.getGivenName2();
-			String name = null;
-			if (familyName != null && !familyName.isEmpty()) {
-				name = familyName;
-				if (given1 != null && !given1.isEmpty()) {
-					name = name.concat(", " + given1);
-					if (given2 != null && !given2.isEmpty()) {
-						name = name.concat(" " + given2);
-					}
-				} else {
-					if (given2 != null && !given2.isEmpty()) {
-						name = name.concat(", " + given2);
-					}
-				}
-			} else {
-				if (given1 != null && !given1.isEmpty()) {
-					name = given1;
-					if (given2 != null && given2.isEmpty()) {
-						name = name.concat(" " + given2);
-					}
-				} else if (given2 != null && given2.isEmpty()) {
-					name = given2;
-				}
-
-			}
-			if (name != null)
-				subjectReference.setDisplay(name);
-			medicationDispense.setSubject(subjectReference);
-		}
-
-		// See if we have encounter associated with this medication statement.
-		VisitOccurrence visitOccurrence = entity.getVisitOccurrence();
-		if (visitOccurrence != null) {
-			Long fhirEncounterId = IdMapping.getFHIRfromOMOP(visitOccurrence.getId(),
-					EncounterResourceProvider.getType());
-			Reference reference = new Reference(new IdType(EncounterResourceProvider.getType(), fhirEncounterId));
-			medicationDispense.setContext(reference);
-		}
-
-		// Get medicationCodeableConcept
-		Concept drugConcept = entity.getDrugConcept();
-		CodeableConcept medication;
-		try {
-			medication = CodeableConceptUtil.getCodeableConceptFromOmopConcept(drugConcept);
-		} catch (FHIRException e1) {
-			e1.printStackTrace();
-			return null;
-		}
-
-		medicationDispense.setMedication(medication);
-
-		// See if we can add ingredient version of this medication.
-		// Concept ingredient = conceptService.getIngredient(drugConcept);
-		// if (ingredient != null) {
-		// CodeableConcept ingredientCodeableConcept;
-		// try {
-		// ingredientCodeableConcept =
-		// CodeableConceptUtil.getCodeableConceptFromOmopConcept(ingredient);
-		// if (!ingredientCodeableConcept.isEmpty()) {
-		// // We have ingredient information. Add this to MedicationDispense.
-		// // To do this, we need to add Medication resource to contained
-		// section.
-		// Medication medicationResource = new Medication();
-		// medicationResource.setCode(medication);
-		// MedicationIngredientComponent medIngredientComponent = new
-		// MedicationIngredientComponent();
-		// medIngredientComponent.setItem(ingredientCodeableConcept);
-		// medicationResource.addIngredient(medIngredientComponent);
-		// medicationResource.setId("med1");
-		// medicationDispense.addContained(medicationResource);
-		// medicationDispense.setMedication(new Reference("#med1"));
-		// }
-		// } catch (FHIRException e) {
-		// e.printStackTrace();
-		// return null;
-		// }
-		// } else {
-		// medicationDispense.setMedication(medication);
-		// }
-
-		// Get effectivePeriod
-		Period period = new Period();
-		Date startDate = entity.getDrugExposureStartDate();
-		if (startDate != null) {
-			period.setStart(startDate);
-		}
-
-		Date endDate = entity.getDrugExposureEndDate();
-		if (endDate != null) {
-			period.setEnd(endDate);
-		}
-
-		//if (!period.isEmpty()) {
-//			medicationDispense.setEffective(period);
-		//}
-
-		// Get drug dose
-//		Double effectiveDrugDose = entity.getEffectiveDrugDose();
-		Double omopQuantity = entity.getQuantity();
-		SimpleQuantity quantity = new SimpleQuantity();
-//		if (effectiveDrugDose != null) {
-//			quantity.setValue(effectiveDrugDose);
-		if (omopQuantity != null) {
-			quantity.setValue(omopQuantity);
-		}
-
-		String unitString = entity.getDoseUnitSourceValue();
-		if (unitString != null && !unitString.isEmpty()) {
+		
+		// Setting Medication Code & Ingredients
+		//---------------------------------------------------------------------------------------------------------------------------------
+		String medType = System.getenv("MEDICATION_TYPE");			
+		if (medType != null && !medType.isEmpty() && "local".equalsIgnoreCase(medType)) {
+			CodeableConcept medicationCodeableConcept = new CodeableConcept();
+			CodeableConcept ingredientCodeableConcept;
+			Medication medicationResource = new Medication();
 			try {
-				Concept unitConcept = CodeableConceptUtil.getOmopConceptWithOmopCode(conceptService, unitString);
-				if (unitConcept != null) {
-					String unitFhirUri = OmopCodeableConceptMapping
-							.fhirUriforOmopVocabulary(unitConcept.getVocabularyId());
-					if (!"None".equals(unitFhirUri)) {
-						String unitDisplay = unitConcept.getConceptName();
-						String unitCode = unitConcept.getConceptCode();
-						quantity.setUnit(unitDisplay);
-						quantity.setSystem(unitFhirUri);
-						quantity.setCode(unitCode);
-					}
-				} else {
-					quantity.setUnit(unitString);
+				medicationCodeableConcept = CodeableConceptUtil.getCodeableConceptFromOmopConcept(entity.getDrugConcept());
+				medicationResource.setCode(medicationCodeableConcept);
+				List<Concept> ingredients = conceptService.getIngredient(entity.getDrugConcept());
+				for (Concept ingredient: ingredients) {
+					ingredientCodeableConcept = CodeableConceptUtil.getCodeableConceptFromOmopConcept(ingredient);
+					MedicationIngredientComponent medIngredientComponent = new MedicationIngredientComponent();
+					medIngredientComponent.setItem(ingredientCodeableConcept);
+					medicationResource.addIngredient(medIngredientComponent);	
+					
 				}
 			} catch (FHIRException e) {
-				// We have null vocabulary id in the unit concept.
-				// Throw error and move on.
 				e.printStackTrace();
+				return null;
 			}
+			medicationResource.setCode(medicationCodeableConcept);
+			medicationResource.setId("med1");
+			medicationDispense.addContained(medicationResource);
+			medicationDispense.setMedication(new Reference("#med1"));			
+		} else if (medType != null && !medType.isEmpty() && "link".equalsIgnoreCase(medType)) {
+			// Get Medication in a reference. 
+			Reference medicationReference = new Reference(new IdType(MedicationResourceProvider.getType(), entity.getDrugConcept().getId()));
+			medicationDispense.setMedication(medicationReference);			
+		} else {
+			CodeableConcept medicationCodeableConcept = new CodeableConcept();
+			try {
+				if(entity.getDrugConcept().getConceptName().equals("Henry")){
+					Coding drug_coding = new Coding();
+					List<Coding> drug_codingList = new ArrayList<>();
+					
+					String drug_display = entity.get_drug_name();
+					String drug_code = entity.get_drug_other_code();
+					String drug_system = entity.get_drug_other_code_system();
+					
+					if (entity.get_drug_RxNorm_code() != null){
+						drug_code = entity.get_drug_RxNorm_code();
+						drug_system = "RxNorm Code";
+					} else{
+						if (entity.get_drug_NDC_code() != null){
+							drug_code = entity.get_drug_NDC_code();
+							drug_system = "NDC Code";
+						}
+					}
+						
+					if (drug_display != null && drug_display.length() != 0){
+						if (drug_code == null || drug_code.length() == 0){
+							drug_code = "0";
+						}
+						if (drug_system == null || drug_system.length() == 0){
+							drug_system = "local hospital code";
+						}
+						drug_coding.setDisplay(drug_display); 
+						drug_coding.setCode(drug_code);
+						drug_coding.setSystem(drug_system);
+						
+						drug_codingList.add(drug_coding);
+						medicationCodeableConcept.setCoding(drug_codingList);
+					}
+				} else {
+					medicationCodeableConcept = CodeableConceptUtil.getCodeableConceptFromOmopConcept(entity.getDrugConcept());
+				}
+			} catch (FHIRException e1) {
+				e1.printStackTrace();
+				return null;
+			}
+			medicationDispense.setMedication(medicationCodeableConcept);
 		}
+	
 
 		Dosage dosage = new Dosage();
-		if (!quantity.isEmpty()) {
-			Dosage.DosageDoseAndRateComponent tempComponent = new Dosage.DosageDoseAndRateComponent();
-			tempComponent.setDose(quantity);
-			dosage.addDoseAndRate(tempComponent);
+		Dosage.DosageDoseAndRateComponent dosageAndRate = new Dosage.DosageDoseAndRateComponent();
+
+		//Drug Signature
+		//---------------------------------------------------------------------------------------------------------------------------------
+		if (entity.get_drug_indication() != null && entity.get_drug_indication().length() != 0){
+			dosage.setText(entity.get_drug_indication());
 		}
 
-		Concept routeConcept = entity.getRouteConcept();
-		if (routeConcept != null) {
+		//Drug Dose (Try to set the Drug dose as Max and Minimum doses)
+		//---------------------------------------------------------------------------------------------------------------------------------
+		if(entity.get_drug_max_dose_unit() != null && entity.get_drug_max_dose_unit().length() != 0 && entity.get_drug_min_dose_unit() != null && entity.get_drug_min_dose_unit().length() != 0 ) {
 			try {
-				String myUri = fhirOmopVocabularyMap.getFhirSystemNameFromOmopVocabulary(routeConcept.getVocabularyId());
-				if (!"None".equals(myUri)) {
-					CodeableConcept routeCodeableConcept = new CodeableConcept();
-					Coding routeCoding = new Coding();
-					routeCoding.setSystem(myUri);
-					routeCoding.setCode(routeConcept.getConceptCode());
-					routeCoding.setDisplay(routeConcept.getConceptName());
+				Range doseRange = new Range();
+				Quantity low = new Quantity();
+				Quantity high = new Quantity();
 
-					routeCodeableConcept.addCoding(routeCoding);
-					dosage.setRoute(routeCodeableConcept);
+				high.setValue(entity.get_drug_max_dose_value());
+				high.setUnit(entity.get_drug_max_dose_unit());
+				low.setValue(entity.get_drug_min_dose_value());
+				low.setUnit(entity.get_drug_min_dose_unit());
+
+				doseRange.setHigh(high);
+				doseRange.setLow(low);
+				dosageAndRate.setDose(doseRange);
+			}
+			catch(Exception e){
+				logger.error("Error setting max and min dose value for a drug.");
+			}
+		} else {
+			//If not try to set the Drug dose as a simple dose + unit
+			//---------------------------------------------------------------------------------------------------------------------------------
+			if (entity.getDoseUnitSourceValue() != null) {
+				try {
+					SimpleQuantity simpleQuantity = new SimpleQuantity();
+					simpleQuantity.setValue(entity.getQuantity());
+					simpleQuantity.setUnit(entity.getDoseUnitSourceValue());
+					dosageAndRate.setDose(simpleQuantity);
+				} catch (Exception e) {
+					logger.error("Error setting simple dose for a drug.");
 				}
-			} catch (FHIRException e) {
-				e.printStackTrace();
 			}
 		}
 
-		String sig = entity.getSig();
-		if (sig != null && !sig.isEmpty()) {
-			dosage.setText(sig);
+		Timing dosageTiming = new Timing();
+
+		//Start and End Order time
+		//---------------------------------------------------------------------------------------------------------------------------------
+		try {
+			DateTimeType date1 = new DateTimeType();
+			DateTimeType date2 = new DateTimeType();
+			List<DateTimeType> eventDateTimeList = new ArrayList<>();
+
+			date1.setValue(entity.getDrugExposureStartDate());
+			date2.setValue(entity.getDrugExposureEndDate());
+			eventDateTimeList.add(date1);
+			eventDateTimeList.add(date2);
+
+			dosageTiming.setEvent(eventDateTimeList);
+
+		}
+		catch(Exception e){
+			logger.error("Error setting up the start and end time of the dosage");
 		}
 
-		//if (!dosage.isEmpty())
-			//medicationDispense.addDosage(dosage);
+		//Frequency
+		//---------------------------------------------------------------------------------------------------------------------------------
+		if(entity.get_drug_frequency() != null){
+			Coding freqCode = new Coding();
+			List<Coding> freqCodingList = new ArrayList<>();
 
-		// Get information source
+			freqCode.setSystem("Frequency");
+			freqCode.setDisplay(entity.get_drug_frequency());
+			freqCodingList.add(freqCode);
+
+			CodeableConcept freqCodeableConcept = new CodeableConcept();
+			freqCodeableConcept.setCoding(freqCodingList);
+
+			dosageTiming.setCode(freqCodeableConcept);
+		}
+		
+		dosage.setTiming(dosageTiming);
+
+		//Drug Route
+		//---------------------------------------------------------------------------------------------------------------------------------
+		if(entity.getRouteSourceValue()!= null){
+			CodeableConcept codeableConceptRoute = new CodeableConcept();
+			Coding routeCode = new Coding();
+			List<Coding> routeCodeList = new ArrayList<>();
+
+			routeCode.setDisplay(entity.getRouteSourceValue());
+			routeCodeList.add(routeCode);
+			codeableConceptRoute.setCoding(routeCodeList);
+			dosage.setRoute(codeableConceptRoute);
+		}
+
+		List<Dosage.DosageDoseAndRateComponent> dosageAndRateList = new ArrayList<>();
+		dosageAndRateList.add(dosageAndRate);
+		dosage.setDoseAndRate(dosageAndRateList);
+
+		List<Dosage> dosageList = new ArrayList<>();
+		dosageList.add(dosage);
+		medicationDispense.setDosageInstruction(dosageList);
+
+		//Drug Indication
+		//---------------------------------------------------------------------------------------------------------------------------------
+		if (entity.get_drug_indication() != null && entity.get_drug_indication().length() != 0) {
+			Coding reasonCode = new Coding();
+			List<Coding> reasonCodeList = new ArrayList<>();
+			CodeableConcept reasonCodeCodeableConcept = new CodeableConcept();
+			List<CodeableConcept> reasonCodeCodeableConceptList = new ArrayList<>();
+
+			reasonCode.setDisplay(entity.get_drug_indication());
+			reasonCodeList.add(reasonCode);
+			reasonCodeCodeableConcept.setCoding(reasonCodeList);
+			reasonCodeCodeableConceptList.add(reasonCodeCodeableConcept);
+
+			medicationDispense.setReasonCode(reasonCodeCodeableConceptList);
+		}
+		
+		//Drug Status
+		//---------------------------------------------------------------------------------------------------------------------------------
+		if(entity.get_drug_order_status() != null && (entity.get_drug_order_status()).equals("canceled") ){
+			medicationDispense.setStatus(MedicationDispense.MedicationDispenseStatus.CANCELLED);
+		} else {
+			medicationDispense.setStatus(MedicationDispense.MedicationDispenseStatus.COMPLETED);
+		}
+
+		// Dosage mapping
+//		Double dose = entity.getEffectiveDrugDose();
+//		SimpleQuantity doseQuantity = new SimpleQuantity();
+//		if (dose != null) {
+//			doseQuantity.setValue(dose);
+//		}
+//		
+//		Concept unitConcept = entity.getDoseUnitConcept();
+//		String unitUnit = null;
+//		String unitCode = null;
+//		String unitSystem = null;
+//		if (unitConcept != null) {
+//			String omopUnitVocab = unitConcept.getVocabulary();
+//			String omopUnitCode = unitConcept.getConceptCode();
+//			String omopUnitName = unitConcept.getName();
+//			
+//			String fhirUnitUri;
+//			try {
+//				fhirUnitUri = OmopCodeableConceptMapping.fhirUriforOmopVocabulary(omopUnitVocab);
+//				if ("None".equals(fhirUnitUri)) {
+////					fhirUnitUri = unitConcept.getVocabulary().getVocabularyReference();
+//					fhirUnitUri = "NotAvailable";
+//				}
+//
+//				unitUnit = omopUnitName;
+//				unitCode = omopUnitCode;
+//				unitSystem = fhirUnitUri; 
+//			} catch (FHIRException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//		
+//		if (!doseQuantity.isEmpty()) {
+//			doseQuantity.setUnit(unitUnit);
+//			doseQuantity.setCode(unitCode);
+//			doseQuantity.setSystem(unitSystem);
+//			
+//			Dosage dosage = new Dosage();
+//			dosage.setDose(doseQuantity);
+//			medicationDispense.addDosageInstruction(dosage);
+//		}
+
+		MedicationDispenseDispenseDispenseComponent dispenseDispense = new MedicationDispenseDispenseDispenseComponent();
+
+		// Set refills
+		//---------------------------------------------------------------------------------------------------------------------------------
+		Integer refills = entity.getRefills();
+		if (refills != null) {
+			dispenseDispense.setNumberOfRepeatsAllowed(refills);
+		}
+
+		// Dispense Ordered Quantity
+		//---------------------------------------------------------------------------------------------------------------------------------
+		String unitSystem = "";
+		String unitCode = "";
+		String unitUnit = entity.get_drug_quantity_ordered_unit();
+		if (unitUnit != null && !unitUnit.isEmpty()) {
+			Concept unitConcept = CodeableConceptUtil.getOmopConceptWithOmopCode(conceptService, unitUnit);
+			if (unitConcept != null) {
+				String vocId = unitConcept.getVocabularyId();
+				unitSystem = fhirOmopVocabularyMap.getFhirSystemNameFromOmopVocabulary(vocId);
+				unitCode = unitConcept.getConceptCode();
+				unitUnit = unitConcept.getConceptName();
+			}
+		}
+		
+		Double quantity = entity.get_drug_quantity_ordered_value();
+		if (quantity != null) {
+			SimpleQuantity simpleQty = new SimpleQuantity();
+			simpleQty.setValue(quantity);
+			simpleQty.setUnit(unitUnit);
+			simpleQty.setCode(unitCode);
+			simpleQty.setSystem(unitSystem);
+			dispenseDispense.setQuantity(simpleQty);
+		}
+		
+	//	Integer daysSupply = entity.getDaysSupply();
+	//	if (daysSupply != null) {
+	//		Duration qty = new Duration();
+	//		qty.setValue(daysSupply);
+	//		// Set the UCUM unit to day.
+	//		String fhirUri = fhirOmopVocabularyMap.getFhirSystemNameFromOmopVocabulary("UCUM");
+	//		qty.setSystem(fhirUri);
+	//		qty.setCode("d");
+	//		qty.setUnit("day");
+	//		dispenseDispense.setExpectedSupplyDuration(qty);
+	//	}
+		
+		if (!dispenseDispense.isEmpty()) {
+			medicationDispense.setDispenseDispense(dispenseDispense);
+		}
+		
+		// Recorder mapping
+		//---------------------------------------------------------------------------------------------------------------------------------
 		Provider provider = entity.getProvider();
 		if (provider != null) {
-			Long fhirPractitionerId = IdMapping.getFHIRfromOMOP(provider.getId(),
-					PractitionerResourceProvider.getType());
-			Reference infoSourceReference = new Reference(
-					new IdType(PractitionerResourceProvider.getType(), fhirPractitionerId));
-			if (provider.getProviderName() != null && !provider.getProviderName().isEmpty())
-				infoSourceReference.setDisplay(provider.getProviderName());
-			//medicationDispense.setInformationSource(infoSourceReference);
+			Reference recorderReference = 
+					new Reference(new IdType(PractitionerResourceProvider.getType(), provider.getId()));
+			recorderReference.setDisplay(provider.getProviderName());
+			medicationDispense.setRecorder(recorderReference);
 		}
-
-		// If OMOP medication type has the following prescription type, we set
-		// basedOn reference to the prescription.
-		if (entity.getDrugTypeConcept() != null) {
-			if (entity.getDrugTypeConcept().getId() == OmopMedicationRequest.MEDICATIONREQUEST_CONCEPT_TYPE_ID) {
-				IdType referenceIdType = new IdType(MedicationRequestResourceProvider.getType(),
-						IdMapping.getFHIRfromOMOP(entity.getId(), MedicationRequestResourceProvider.getType()));
-				Reference basedOnReference = new Reference(referenceIdType);
-				//medicationDispense.addBasedOn(basedOnReference);
-			} else if (entity.getDrugTypeConcept().getId() == 38000179L
-					|| entity.getDrugTypeConcept().getId() == 38000180L
-					|| entity.getDrugTypeConcept().getId() == 43542356L
-					|| entity.getDrugTypeConcept().getId() == 43542357L
-					|| entity.getDrugTypeConcept().getId() == 43542358L
-					|| entity.getDrugTypeConcept().getId() == 581373L) {
-				// This is administration related...
-				// TODO: add partOf to MedicationAdministration reference after we implement
-				// Medication Administration
-			} else if (entity.getDrugTypeConcept().getId() == 38000175L
-					|| entity.getDrugTypeConcept().getId() == 38000176L
-					|| entity.getDrugTypeConcept().getId() == 581452L) {
-				// TODO: add partOf to MedicationDispense reference.
-//				IdType referenceIdType = new IdType("MedicationDispense", IdMapping.getFHIRfromOMOP(entity.getId(), "MedicationDispense"));
-//				medicationDispense.addPartOf(new Reference(referenceIdType));
-			}
-
+		
+		// Context mapping
+		//---------------------------------------------------------------------------------------------------------------------------------
+		VisitOccurrence visitOccurrence = entity.getVisitOccurrence();
+		if (visitOccurrence != null) {
+			Reference contextReference = 
+					new Reference(new IdType(EncounterResourceProvider.getType(), visitOccurrence.getId()));
+			medicationDispense.setEncounter(contextReference);
 		}
-
-		// If OMOP medicaiton type has the administration or dispense, we set
-		// partOf reference to this.
-
+		
 		return medicationDispense;
 	}
-
+	
 	@Override
 	public List<ParameterWrapper> mapParameter(String parameter, Object value, boolean or) {
 		List<ParameterWrapper> mapList = new ArrayList<ParameterWrapper>();
 		ParameterWrapper paramWrapper = new ParameterWrapper();
-		if (or)
-			paramWrapper.setUpperRelationship("or");
-		else
-			paramWrapper.setUpperRelationship("and");
+        if (or) paramWrapper.setUpperRelationship("or");
+        else paramWrapper.setUpperRelationship("and");
 
 		switch (parameter) {
 		case MedicationDispense.SP_RES_ID:
@@ -402,112 +516,48 @@ public class OmopMedicationDispense extends BaseOmopResource<MedicationDispense,
 			mapList.add(paramWrapper);
 			break;
 		case MedicationDispense.SP_CODE:
-			TokenParam theCode = (TokenParam) value;
-			String system = theCode.getSystem();
-			String code = theCode.getValue();
-			String omopVocabulary = "None";
-
+		case "Medication:"+Medication.SP_CODE:
+			String system = ((TokenParam) value).getSystem();
+			String code = ((TokenParam) value).getValue();
+			
 			if ((system == null || system.isEmpty()) && (code == null || code.isEmpty()))
 				break;
-
-			if (theCode.getModifier() != null && theCode.getModifier().compareTo(TokenParamModifier.IN) == 0) {
-				// code has URI for the valueset search.
-				TerminologyServiceClient terminologyService = TerminologyServiceClient.getInstance();
-				Map<String, List<ConceptSetComponent>> theIncExcl = terminologyService.getValueSetByUrl(code);
-
-				List<ConceptSetComponent> includes = theIncExcl.get("include");
-				List<String> values = new ArrayList<String>();
-				for (ConceptSetComponent include : includes) {
-					// We need to loop
-					ParameterWrapper myParamWrapper = new ParameterWrapper();
-					myParamWrapper.setParameterType("Code:In");
-					myParamWrapper.setParameters(Arrays.asList("drugConcept.vocabularyId", "drugConcept.conceptCode"));
-					myParamWrapper.setOperators(Arrays.asList("=", "in"));
-
-					String valueSetSystem = include.getSystem();
-					try {
-						omopVocabulary = OmopCodeableConceptMapping.omopVocabularyforFhirUri(valueSetSystem);
-					} catch (FHIRException e) {
-						e.printStackTrace();
-					}
-					if ("None".equals(omopVocabulary)) {
-						ThrowFHIRExceptions.unprocessableEntityException(
-								"We don't understand the system, " + valueSetSystem + " in code:in valueset");
-					}
-					values.add(valueSetSystem);
-
-					List<ConceptReferenceComponent> concepts = include.getConcept();
-					for (ConceptReferenceComponent concept : concepts) {
-						String valueSetCode = concept.getCode();
-						values.add(valueSetCode);
-					}
-					myParamWrapper.setValues(values);
-					myParamWrapper.setUpperRelationship("or");
-					mapList.add(myParamWrapper);
+			
+			String omopVocabulary = "None";
+			if (system != null && !system.isEmpty()) {
+				try {
+//					omopVocabulary = OmopCodeableConceptMapping.omopVocabularyforFhirUri(system);
+					omopVocabulary = fhirOmopVocabularyMap.getOmopVocabularyFromFhirSystemName(system);
+				} catch (FHIRException e) {
+					e.printStackTrace();
+					break;
 				}
-
-				List<ConceptSetComponent> excludes = theIncExcl.get("exclude");
-				for (ConceptSetComponent exclude : excludes) {
-					// We need to loop
-					ParameterWrapper myParamWrapper = new ParameterWrapper();
-					myParamWrapper.setParameterType("Code:In");
-					myParamWrapper.setParameters(Arrays.asList("drugConcept.vocabularyId", "drugConcept.conceptCode"));
-					myParamWrapper.setOperators(Arrays.asList("=", "out"));
-
-					String valueSetSystem = exclude.getSystem();
-					try {
-						omopVocabulary = OmopCodeableConceptMapping.omopVocabularyforFhirUri(valueSetSystem);
-					} catch (FHIRException e) {
-						e.printStackTrace();
-					}
-					if ("None".equals(omopVocabulary)) {
-						ThrowFHIRExceptions.unprocessableEntityException(
-								"We don't understand the system, " + valueSetSystem + " in code:in valueset");
-					}
-					values.add(valueSetSystem);
-
-					List<ConceptReferenceComponent> concepts = exclude.getConcept();
-					for (ConceptReferenceComponent concept : concepts) {
-						String valueSetCode = concept.getCode();
-						values.add(valueSetCode);
-					}
-					myParamWrapper.setValues(values);
-					myParamWrapper.setUpperRelationship("and");
-					mapList.add(myParamWrapper);
-				}
-			} else {
-				if (system != null && !system.isEmpty()) {
-					try {
-						omopVocabulary = fhirOmopVocabularyMap.getOmopVocabularyFromFhirSystemName(system);
-					} catch (FHIRException e) {
-						e.printStackTrace();
-					}
-				}
-
-				paramWrapper.setParameterType("String");
-				if ("None".equals(omopVocabulary) && code != null && !code.isEmpty()) {
-					paramWrapper.setParameters(Arrays.asList("drugConcept.conceptCode"));
-					paramWrapper.setOperators(Arrays.asList("like"));
-					paramWrapper.setValues(Arrays.asList(code));
-				} else if (!"None".equals(omopVocabulary) && (code == null || code.isEmpty())) {
-					paramWrapper.setParameters(Arrays.asList("drugConcept.vocabularyId"));
-					paramWrapper.setOperators(Arrays.asList("like"));
-					paramWrapper.setValues(Arrays.asList(omopVocabulary));
-				} else {
-					paramWrapper.setParameters(Arrays.asList("drugConcept.vocabularyId", "drugConcept.conceptCode"));
-					paramWrapper.setOperators(Arrays.asList("like", "like"));
-					paramWrapper.setValues(Arrays.asList(omopVocabulary, code));
-				}
-				paramWrapper.setRelationship("and");
-				mapList.add(paramWrapper);
 			}
-			break;
-		case MedicationDispense.SP_CONTEXT:
-			Long fhirEncounterId = ((ReferenceParam) value).getIdPartAsLong();
-			Long omopVisitOccurrenceId = IdMapping.getOMOPfromFHIR(fhirEncounterId,
-					EncounterResourceProvider.getType());
-			// String resourceName = ((ReferenceParam) value).getResourceType();
 
+			paramWrapper.setParameterType("String");
+			if ("None".equals(omopVocabulary) && code != null && !code.isEmpty()) {
+				paramWrapper.setParameters(Arrays.asList("drugConcept.conceptCode"));
+				paramWrapper.setOperators(Arrays.asList("like"));
+				paramWrapper.setValues(Arrays.asList(code));
+				paramWrapper.setRelationship("or");
+			} else if (!"None".equals(omopVocabulary) && (code == null || code.isEmpty())) {
+				paramWrapper.setParameters(Arrays.asList("drugConcept.vocabularyId"));
+				paramWrapper.setOperators(Arrays.asList("like"));
+				paramWrapper.setValues(Arrays.asList(omopVocabulary));
+				paramWrapper.setRelationship("or");
+			} else {
+				paramWrapper.setParameters(Arrays.asList("drugConcept.vocabularyId", "drugConcept.conceptCode"));
+				paramWrapper.setOperators(Arrays.asList("like","like"));
+				paramWrapper.setValues(Arrays.asList(omopVocabulary, code));
+				paramWrapper.setRelationship("and");
+			}
+			mapList.add(paramWrapper);
+			break;
+		case MedicationDispense.SP_ENCOUNTER:
+			Long fhirEncounterId = ((ReferenceParam) value).getIdPartAsLong();
+			Long omopVisitOccurrenceId = IdMapping.getOMOPfromFHIR(fhirEncounterId, EncounterResourceProvider.getType());
+//			String resourceName = ((ReferenceParam) value).getResourceType();
+			
 			// We support Encounter so the resource type should be Encounter.
 			if (omopVisitOccurrenceId != null) {
 				paramWrapper.setParameterType("Long");
@@ -518,16 +568,28 @@ public class OmopMedicationDispense extends BaseOmopResource<MedicationDispense,
 				mapList.add(paramWrapper);
 			}
 			break;
-        /*
-		case MedicationDispense.SP_EFFECTIVE:
-			DateRangeParam effectiveDateParam = ((DateRangeParam) value);
- 			paramWrapper.setUpperRelationship("or"); // or these two maps
- 			DateUtil.constructParameterWrapper(effectiveDateParam, "drugExposureStartDate", paramWrapper, mapList);
+		case MedicationDispense.SP_AUTHOREDON:
+			DateRangeParam authoredOnDataParam = ((DateRangeParam) value);
+ 			DateUtil.constructParameterWrapper(authoredOnDataParam, "drugExposureStartDate", paramWrapper, mapList);
  			ParameterWrapper paramWrapper1 = new ParameterWrapper();
  			paramWrapper1.setUpperRelationship("or");
- 			DateUtil.constructParameterWrapper(effectiveDateParam, "drugExposureEndDate", paramWrapper1, mapList);
+ 			DateUtil.constructParameterWrapper(authoredOnDataParam, "drugExposureEndDate", paramWrapper1, mapList);
 			break;
-        */
+//		case MedicationDispense.SP_PATIENT:
+//		case MedicationDispense.SP_SUBJECT:
+//			ReferenceParam patientReference = ((ReferenceParam) value);
+//			Long fhirPatientId = patientReference.getIdPartAsLong();
+//			Long omopPersonId = IdMapping.getOMOPfromFHIR(fhirPatientId, PatientResourceProvider.getType());
+//
+//			String omopPersonIdString = String.valueOf(omopPersonId);
+//			
+//			paramWrapper.setParameterType("Long");
+//			paramWrapper.setParameters(Arrays.asList("fPerson.id"));
+//			paramWrapper.setOperators(Arrays.asList("="));
+//			paramWrapper.setValues(Arrays.asList(omopPersonIdString));
+//			paramWrapper.setRelationship("or");
+//			mapList.add(paramWrapper);
+//			break;
 		case "Patient:" + Patient.SP_RES_ID:
 			addParamlistForPatientIDName(parameter, (String) value, paramWrapper, mapList);
 			break;
@@ -537,90 +599,77 @@ public class OmopMedicationDispense extends BaseOmopResource<MedicationDispense,
 		case "Patient:" + Patient.SP_IDENTIFIER:
 			addParamlistForPatientIDName(parameter, (String) value, paramWrapper, mapList);
 			break;
-//		case MedicationDispense.SP_PATIENT:
-//			ReferenceParam patientReference = ((ReferenceParam) value);
-//			Long fhirPatientId = patientReference.getIdPartAsLong();
-//			Long omopPersonId = IdMapping.getOMOPfromFHIR(fhirPatientId, PatientResourceProvider.getType());
-//
-//			String omopPersonIdString = String.valueOf(omopPersonId);
-//
-//			paramWrapper.setParameterType("Long");
-//			paramWrapper.setParameters(Arrays.asList("fPerson.id"));
-//			paramWrapper.setOperators(Arrays.asList("="));
-//			paramWrapper.setValues(Arrays.asList(omopPersonIdString));
-//			paramWrapper.setRelationship("or");
-//			mapList.add(paramWrapper);
-//			break;
-                
-        /*
-		case MedicationDispense.SP_SOURCE:
-			ReferenceParam sourceReference = ((ReferenceParam) value);
-			String sourceReferenceId = String.valueOf(sourceReference.getIdPartAsLong());
-
+		case "Medication:"+Medication.SP_RES_ID:
+			String pId = (String) value;
 			paramWrapper.setParameterType("Long");
-			paramWrapper.setParameters(Arrays.asList("provider.id"));
+			paramWrapper.setParameters(Arrays.asList("drugConcept.id"));
 			paramWrapper.setOperators(Arrays.asList("="));
-			paramWrapper.setValues(Arrays.asList(sourceReferenceId));
+			paramWrapper.setValues(Arrays.asList(pId));
 			paramWrapper.setRelationship("or");
 			mapList.add(paramWrapper);
 			break;
-        */
 		default:
 			mapList = null;
 		}
-
+		
 		return mapList;
 	}
+	
+final ParameterWrapper filterParam = new ParameterWrapper(
+		"Long",
+		Arrays.asList("drugSourceConcept.id"), //drug_source_concept_id
+		Arrays.asList("="),
+		Arrays.asList(String.valueOf(OmopMedicationDispense.MEDICATIONDispense_CONCEPT_TYPE_ID)),
+		"or"
+		);
 
-	final ParameterWrapper filterParam = new ParameterWrapper("Long", Arrays.asList("drugSourceConcept.id"),
-			Arrays.asList("="), Arrays.asList(String.valueOf(MEDICATIONDISPENSE_CONCEPT_TYPE_ID)), "or");
+@Override
+public Long getSize() {
+	List<ParameterWrapper> paramList = new ArrayList<ParameterWrapper> ();
+	// call getSize with empty parameter list. The getSize will add filter parameter.
 
-	@Override
-	public Long getSize() {
-		List<ParameterWrapper> mapList = new ArrayList<ParameterWrapper>();
-		return getMyOmopService().getSize(mapList);
-	}
+	Long size = getSize(paramList);
+	ExtensionUtil.addResourceCount(MedicationDispenseResourceProvider.getType(), size);
+	
+	return size;
+}
 
-	@Override
-	public Long getSize(List<ParameterWrapper> mapList) {
-		List<ParameterWrapper> exceptions = new ArrayList<ParameterWrapper>();
-		exceptions.add(filterParam);
-		map.put(MAP_EXCEPTION_FILTER, exceptions);
+@Override
+public Long getSize(List<ParameterWrapper> paramList) {
+	paramList.add(filterParam);
 
-		return getMyOmopService().getSize(mapList);
-	}
+	return getMyOmopService().getSize(paramList);
+}
 
-	@Override
-	public void searchWithoutParams(int fromIndex, int toIndex, List<IBaseResource> listResources, List<String> includes) {
+@Override
+public void searchWithoutParams(int fromIndex, int toIndex, List<IBaseResource> listResources,
+		List<String> includes, String sort) {
 
-		// This is read all. But, since we will add an exception conditions to
-		// add filter.
-		// we will call the search with params method.
-		List<ParameterWrapper> mapList = new ArrayList<ParameterWrapper> ();
-		searchWithParams(fromIndex, toIndex, mapList, listResources, includes);
-	}
+	// This is read all. But, since we will add an exception conditions to add filter.
+	// we will call the search with params method.
+	List<ParameterWrapper> paramList = new ArrayList<ParameterWrapper> ();
+	searchWithParams (fromIndex, toIndex, paramList, listResources, includes, sort);
+}
 
-	@Override
-	public void searchWithParams(int fromIndex, int toIndex, List<ParameterWrapper> mapList,
-			List<IBaseResource> listResources, List<String> includes) {
-		List<ParameterWrapper> exceptions = new ArrayList<ParameterWrapper>();
-		exceptions.add(filterParam);
-		map.put(MAP_EXCEPTION_FILTER, exceptions);
+@Override
+public void searchWithParams(int fromIndex, int toIndex, List<ParameterWrapper> mapList,
+		List<IBaseResource> listResources, List<String> includes, String sort) {
+	mapList.add(filterParam);
 
-		List<DrugExposure> entities = getMyOmopService().searchWithParams(fromIndex, toIndex, mapList);
+	List<DrugExposure> entities = getMyOmopService().searchWithParams(fromIndex, toIndex, mapList, sort);
 
-		for (DrugExposure entity : entities) {
-			Long omopId = entity.getIdAsLong();
-			Long fhirId = IdMapping.getFHIRfromOMOP(omopId, getMyFhirResourceType());
-			MedicationDispense fhirResource = constructResource(fhirId, entity, includes);
-			if (fhirResource != null) {
-				listResources.add(fhirResource);
-				// Do the rev_include and add the resource to the list.
-				addRevIncludes(omopId, includes, listResources);
-			}
-
+	for (DrugExposure entity : entities) {
+		Long omopId = entity.getIdAsLong();
+		Long fhirId = IdMapping.getFHIRfromOMOP(omopId, getMyFhirResourceType());
+		MedicationDispense fhirResource = constructResource(fhirId, entity, includes);
+		if (fhirResource != null) {
+			listResources.add(fhirResource);			
+			// Do the rev_include and add the resource to the list.
+			addRevIncludes(omopId, includes, listResources);
 		}
+
 	}
+}
 
 	@Override
 	public DrugExposure constructOmop(Long omopId, MedicationDispense fhirResource) {
@@ -628,25 +677,27 @@ public class OmopMedicationDispense extends BaseOmopResource<MedicationDispense,
 		if (omopId != null) {
 			// Update
 			drugExposure = getMyOmopService().findById(omopId);
-			if (drugExposure == null) {
-				throw new FHIRException(fhirResource.getId() + " does not exist");
+			if (drugExposure == null) { 
+				try {
+					throw new FHIRException(fhirResource.getId()+" does not exist");
+				} catch (FHIRException e) {
+					e.printStackTrace();
+				}
 			}
 		} else {
 			// Create
 			List<Identifier> identifiers = fhirResource.getIdentifier();
-			for (Identifier identifier : identifiers) {
-				if (!identifier.isEmpty()) {
-					String identifierValue = identifier.getValue();
-					List<DrugExposure> results = getMyOmopService().searchByColumnString("drugSourceValue",
-							identifierValue);
-					if (!results.isEmpty()) {
-						drugExposure = results.get(0);
-						// omopId = drugExposure.getId();
-						break;
-					}
+			for (Identifier identifier: identifiers) {
+				if (identifier.isEmpty()) continue;
+				String identifierValue = identifier.getValue();
+				List<DrugExposure> results = getMyOmopService().searchByColumnString("drugSourceValue", identifierValue);
+				if (results.size() > 0) {
+					drugExposure = results.get(0);
+					omopId = drugExposure.getId();
+					break;
 				}
 			}
-
+			
 			if (drugExposure == null) {
 				drugExposure = new DrugExposure();
 				// Add the source column.
@@ -656,75 +707,35 @@ public class OmopMedicationDispense extends BaseOmopResource<MedicationDispense,
 				}
 			}
 		}
+				
+		// Set patient.
+		 Reference patientReference = fhirResource.getSubject();
+		if (patientReference == null)
+			try {
+				throw new FHIRException("Patient must exist.");
+			} catch (FHIRException e) {
+				e.printStackTrace();
+			} 
+		
+		Long patientFhirId = patientReference.getReferenceElement().getIdPartAsLong();
+		Long omopFPersonId = IdMapping.getOMOPfromFHIR(patientFhirId, PatientResourceProvider.getType());
 
-		// context.
-		Reference contextReference = fhirResource.getContext();
-		if (contextReference != null && !contextReference.isEmpty()) {
-			if (EncounterResourceProvider.getType().equals(contextReference.getReferenceElement().getResourceType())) {
-				Long encounterFhirIdLong = contextReference.getReferenceElement().getIdPartAsLong();
-				if (encounterFhirIdLong != null) {
-					Long visitOccurrenceId = IdMapping.getOMOPfromFHIR(encounterFhirIdLong,
-							EncounterResourceProvider.getType());
-					// find the visit occurrence from OMOP database.
-					VisitOccurrence newVisitOccurrence = visitOccurrenceService.findById(visitOccurrenceId);
-					if (newVisitOccurrence != null) {
-						drugExposure.setVisitOccurrence(newVisitOccurrence);
-					} else {
-						throw new FHIRException("Context Reference (Encounter/" + encounterFhirIdLong
-								+ ") couldn't be found in our local database");
-					}
-				}
+		FPerson fPerson = fPersonService.findById(omopFPersonId);
+		if (fPerson == null)
+			try {
+				throw new FHIRException("Patient/"+patientFhirId+" is not valid");
+			} catch (FHIRException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		}
-
-		MedicationDispenseStatus status = fhirResource.getStatus();
-		if (status != null && status.equals(MedicationDispenseStatus.STOPPED)) {
-			// This medication is stopped. See if we have a reason stopped.
-            /*
-            
-            TODO getStatusReason retorna Type. Ajustar
-            
-            
-			List<CodeableConcept> reasonNotTakens = fhirResource.getStatusReason();
-//			TODO we may need to adjust this code block since we're no longer sure that this is only the reason not taken
-			String reasonsForStopped = "";
-			for (CodeableConcept reasonNotTaken : reasonNotTakens) {
-				List<Coding> rNTCodings = reasonNotTaken.getCoding();
-				for (Coding rNTCoding : rNTCodings) {
-					String rNTCodingDisplay = rNTCoding.getDisplay();
-					if (rNTCodingDisplay == null || rNTCodingDisplay.isEmpty()) {
-						Concept rNTOmopConcept;
-						try {
-							rNTOmopConcept = CodeableConceptUtil.getOmopConceptWithFhirConcept(conceptService,
-									rNTCoding);
-							if (rNTOmopConcept != null) {
-								reasonsForStopped = reasonsForStopped.concat(" " + rNTOmopConcept.getConceptName());
-							}
-						} catch (FHIRException e) {
-							e.printStackTrace();
-						}
-					} else {
-						reasonsForStopped = reasonsForStopped.concat(" " + rNTCodingDisplay);
-					}
-				}
-			}
-
-			// See if we have any reasons found. If so, put them in the stop
-			// reason field.
-			if (!"".equals(reasonsForStopped)) {
-				reasonsForStopped = reasonsForStopped.trim().substring(0, 20);
-				drugExposure.setStopReason(reasonsForStopped);
-			}
-            */
-		}
+		
+		drugExposure.setFPerson(fPerson);
 
 		// Get medication[x]
 		Type medicationType = fhirResource.getMedication();
 		Concept omopConcept = null;
 		CodeableConcept medicationCodeableConcept = null;
-    
-
-        if (medicationType instanceof Reference) {
+		if (medicationType instanceof Reference) {
 			// We may have reference.
 			Reference medicationReference;
 			try {
@@ -736,11 +747,11 @@ public class OmopMedicationDispense extends BaseOmopResource<MedicationDispense,
 					String medicationReferenceId = medicationReference.getReferenceElement().getIdPart();
 					if (medicationReference.getReferenceElement().isLocal()) {
 						List<Resource> contains = fhirResource.getContained();
-						for (Resource resource : contains) {
-							if (!resource.isEmpty()
-									&& resource.getIdElement().getIdPart().equals(medicationReferenceId)) {
+						for (Resource resource: contains) {
+							if (!resource.isEmpty() &&
+								resource.getIdElement().getIdPart().equals(medicationReferenceId)) {
 
-								// This must medication resource.
+								// This must medication resource. 
 								Medication medicationResource = (Medication) resource;
 								medicationCodeableConcept = medicationResource.getCode();
 								break;
@@ -749,10 +760,11 @@ public class OmopMedicationDispense extends BaseOmopResource<MedicationDispense,
 					} else {
 						throw new FHIRException("Medication Reference must have the medication in the contained");
 					}
-				}
+				}			
 			} catch (FHIRException e) {
 				e.printStackTrace();
 			}
+
 		} else {
 			try {
 				medicationCodeableConcept = fhirResource.getMedicationCodeableConcept();
@@ -760,200 +772,89 @@ public class OmopMedicationDispense extends BaseOmopResource<MedicationDispense,
 				e.printStackTrace();
 			}
 		}
-        
-
-		if (medicationCodeableConcept == null || medicationCodeableConcept.isEmpty()) {
+		
+		if (medicationCodeableConcept == null || medicationCodeableConcept.isEmpty()) { 		
 			throw new FHIRException("Medication[CodeableConcept or Reference] could not be mapped");
 		}
 
-		omopConcept = CodeableConceptUtil.searchConcept(conceptService, medicationCodeableConcept);
-		if (omopConcept == null) {
-			throw new FHIRException("Medication[CodeableConcept or Reference] could not be found");
-		} else {
-			drugExposure.setDrugConcept(omopConcept);
+		try {
+			omopConcept = CodeableConceptUtil.searchConcept(conceptService, medicationCodeableConcept);
+			if (omopConcept == null) {
+				throw new FHIRException("Medication[CodeableConcept or Reference] could not be found");
+			} else {
+				drugExposure.setDrugConcept(omopConcept);
+			}
+		} catch (FHIRException e) {
+			e.printStackTrace();
 		}
 
-		// Effective Time.
-		Type effective = fhirResource.getEffective();
-		if (effective != null && !effective.isEmpty()) {
-			if (effective instanceof DateTimeType) {
-				// In OMOP on FHIR, we do Period. But,
-				// if DateTime is provided, we set start time.
-				Date date = ((DateTimeType) effective).getValue();
-				drugExposure.setDrugExposureStartDate(date);
-			} else if (effective instanceof Period) {
-				Date startDate = ((Period) effective).getStart();
-				Date endDate = ((Period) effective).getEnd();
-				if (startDate == null) {
-					throw new FHIRException("Effective start time cannot be empty");
-				} else {
-					drugExposure.setDrugExposureStartDate(startDate);
-					drugExposure.setDrugExposureStartDateTime(startDate);
-				}
+		// Set drug exposure type
+		Concept drugExposureType = new Concept();
+		drugExposureType.setId(MEDICATIONDispense_CONCEPT_TYPE_ID);
+		drugExposure.setDrugTypeConcept(drugExposureType);
+				
+		// Set start date from authored on date 
+		Date authoredDate = fhirResource.getAuthoredOn();
+		drugExposure.setDrugExposureStartDate(authoredDate);
 
-				if (endDate != null) {
-					drugExposure.setDrugExposureEndDate(endDate);
-					drugExposure.setDrugExposureEndDateTime(endDate);
+		// Set VisitOccurrence 
+		Reference encounterReference = fhirResource.getEncounter();
+		if (encounterReference != null && !encounterReference.isEmpty()) {
+			if (EncounterResourceProvider.getType()
+					.equals(encounterReference.getReferenceElement().getResourceType())) {
+				// Get fhirIDLong.
+				Long fhirEncounterIdLong = encounterReference.getReferenceElement().getIdPartAsLong();
+				Long omopEncounterId = IdMapping.getOMOPfromFHIR(fhirEncounterIdLong, EncounterResourceProvider.getType());
+				if (omopEncounterId != null) {
+					VisitOccurrence visitOccurrence = visitOccurrenceService.findById(omopEncounterId);
+					if (visitOccurrence != null)
+						drugExposure.setVisitOccurrence(visitOccurrence);
 				} else {
-					drugExposure.setDrugExposureStartDate(startDate);
-					drugExposure.setDrugExposureStartDateTime(startDate);
+					throw new FHIRException("Encounter/"+fhirEncounterIdLong+" is not valid.");
 				}
 			}
-		}
-
-		// Information Source.
-		Reference infoSourceReference = fhirResource.getInformationSource();
-		if (infoSourceReference != null && !infoSourceReference.isEmpty()) {
-			if (PractitionerResourceProvider.getType()
-					.equals(infoSourceReference.getReferenceElement().getResourceType())) {
-				Long practitionerIdLong = infoSourceReference.getReferenceElement().getIdPartAsLong();
-				if (practitionerIdLong != null) {
-					Long providerId = IdMapping.getOMOPfromFHIR(practitionerIdLong,
-							PractitionerResourceProvider.getType());
-					if (providerId != null) {
-						Provider provider = providerService.findById(providerId);
-						if (provider == null) {
-							try {
-								throw new FHIRException(
-										"Information Source (Practitioner/" + practitionerIdLong + ") does not exist");
-							} catch (FHIRException e) {
-								e.printStackTrace();
-							}
-						} else {
-							drugExposure.setProvider(provider);
-						}
-					}
-				}
+		}		
+		
+		// dispense Dispense 
+		MedicationDispenseDispenseDispenseComponent dispenseDispense = fhirResource.getDispenseDispense();
+		if (dispenseDispense != null && !dispenseDispense.isEmpty()) {
+			Integer refills = dispenseDispense.getNumberOfRepeatsAllowed();
+			if (refills != null) {
+				drugExposure.setRefills(refills);
 			}
-		}
 
-		// Subject
-		Reference subjectReference = fhirResource.getSubject();
-		if (!subjectReference.isEmpty()) {
-			if (PatientResourceProvider.getType()
-					.equals(subjectReference.getReferenceElement().getResourceType())) {
-				Long patientIdLong = subjectReference.getReferenceElement().getIdPartAsLong();
-				if (patientIdLong != null) {
-					Long fPersonId = IdMapping.getOMOPfromFHIR(patientIdLong, PatientResourceProvider.getType());
-					if (fPersonId != null) {
-						FPerson fPerson = fPersonService.findById(fPersonId);
-						if (fPerson != null) {
-							drugExposure.setFPerson(fPerson);
-						} else {
-							throw new FHIRException("Subject (Patient/" + patientIdLong + ") does not exist");
-						}
+			Quantity qty = dispenseDispense.getQuantity();
+			if (qty != null) {
+				drugExposure.setQuantity(qty.getValue().doubleValue());
+				String doseCode = qty.getCode();
+				String doseSystem = qty.getSystem();
+				String vocabId;
+				try {
+					vocabId = fhirOmopVocabularyMap.getOmopVocabularyFromFhirSystemName(doseSystem);
+					Concept unitConcept = 
+							CodeableConceptUtil.getOmopConceptWithOmopVacabIdAndCode(conceptService, vocabId, doseCode);
+					if (unitConcept != null) {
+						drugExposure.setDoseUnitSourceValue(unitConcept.getConceptCode());
 					} else {
-						throw new FHIRException("Subject (Patient/" + patientIdLong + ") does not have ID mapping");
+						drugExposure.setDoseUnitSourceValue(doseCode);
 					}
-				} else {
-					throw new FHIRException(
-							"Subject (Patient/" + patientIdLong + ") does not have Long part of ID");
+				} catch (FHIRException e) {
+					e.printStackTrace();
 				}
 			}
 		}
-
-		// Dosage.
-		List<Dosage> dosages = fhirResource.getDosage();
-		Concept unitConcept = null;
-		Concept routeConcept = null;
-		for (Dosage dosage : dosages) {
-			// We need quantity.
-			Quantity qty=null;
-			try {
-				List<Dosage.DosageDoseAndRateComponent> dosesAndRates = dosage.getDoseAndRate();
-				for(Dosage.DosageDoseAndRateComponent doseAndRate : dosesAndRates){
-					if(doseAndRate.hasDoseQuantity()){
-						qty=doseAndRate.getDoseQuantity();
-					}
-				}
-				if (qty!=null && !qty.isEmpty()) {
-					// get value
-					BigDecimal value = qty.getValue();
-					if (value != null) {
-						drugExposure.setQuantity(value.doubleValue());
-					}
-
-					// get unit
-					String system = qty.getSystem();
-					String unit = qty.getUnit();
-					String code = qty.getCode();
-					if (unit != null && !unit.isEmpty())
-						drugExposure.setDoseUnitSourceValue(unit);
-
-					CodeableConcept routeFhirConcept = dosage.getRoute();
-					routeConcept = CodeableConceptUtil.searchConcept(conceptService, routeFhirConcept);
-					if (routeConcept != null) {
-						drugExposure.setRouteConcept(routeConcept);
-					}
-
-					if (system != null && !system.isEmpty() && code != null && !code.isEmpty()) {
-						String omopVocabularyId = fhirOmopVocabularyMap.getOmopVocabularyFromFhirSystemName(system);
-						unitConcept = CodeableConceptUtil.getOmopConceptWithOmopVacabIdAndCode(conceptService,
-								omopVocabularyId, code);
-						if (unitConcept != null) {
-							drugExposure.setDoseUnitSourceValue(unitConcept.getConceptCode());
-							break;
-						}
-					}
-				}
-			} catch (FHIRException e) {
-				e.printStackTrace();
-			}
+		
+		Reference practitionerRef = fhirResource.getRecorder();
+		if (practitionerRef != null && !practitionerRef.isEmpty()) {
+			Long fhirPractitionerIdLong = 
+					practitionerRef.getReferenceElement().getIdPartAsLong();
+			Long omopProviderId = IdMapping.getOMOPfromFHIR(fhirPractitionerIdLong, PractitionerResourceProvider.getType());
+			Provider provider = providerService.findById(omopProviderId);
+			if (provider != null) {
+				drugExposure.setProvider(provider);
+			}			
 		}
-
-		// Drug type concept should be hard-coded to MedicationDispense
-		Concept drugTypeConcept = null;
-		for (Reference basedOnReference : fhirResource.getBasedOn()) {
-			if (basedOnReference.getReferenceElement().getResourceType()
-					.equals(MedicationRequestResourceProvider.getType())) {
-				drugTypeConcept = new Concept();
-				drugTypeConcept.setId(OmopMedicationRequest.MEDICATIONREQUEST_CONCEPT_TYPE_ID);
-			}
-		}
-
-		if (drugTypeConcept == null) {
-			for (Reference partOfReference : fhirResource.getPartOf()) {
-				if (partOfReference.getReferenceElement().getResourceType().equals("MedicationAdministration")) {
-					drugTypeConcept = new Concept();
-					drugTypeConcept.setId(38000179L);
-				} else if (partOfReference.getReferenceElement().getResourceType().equals("MedicationDispense")) {
-					drugTypeConcept = new Concept();
-					drugTypeConcept.setId(38000175L);
-				}
-			}
-		}
-
-		if (drugTypeConcept == null) {
-			drugTypeConcept = new Concept();
-			drugTypeConcept.setId(MEDICATIONDISPENSE_CONCEPT_TYPE_ID);
-		}
-		drugExposure.setDrugTypeConcept(drugTypeConcept);
-
-		// Follows are default settings for OMOP's not null requirement
-		if (drugExposure.getDrugConcept() == null) {
-			drugExposure.setDrugConcept(new Concept(0L));
-		}
-
-		if (drugExposure.getDrugExposureStartDateTime() == null) {
-			drugExposure.setDrugExposureStartDateTime(new Date());
-		}
-
-		if (drugExposure.getDrugExposureEndDateTime() == null) {
-			drugExposure.setDrugExposureEndDateTime(new Date());
-		}
-
-		if (drugExposure.getDrugTypeConcept() == null) {
-			drugExposure.setDrugTypeConcept(new Concept(0L));
-		}
-
-		if (drugExposure.getDrugSourceConcept() == null) {
-			drugExposure.setDrugSourceConcpet(new Concept(0L));
-		}
-
-		if (drugExposure.getRouteConcept() == null) {
-			drugExposure.setRouteConcept(new Concept(0L));
-		}
-
+		
 		return drugExposure;
 	}
 }
