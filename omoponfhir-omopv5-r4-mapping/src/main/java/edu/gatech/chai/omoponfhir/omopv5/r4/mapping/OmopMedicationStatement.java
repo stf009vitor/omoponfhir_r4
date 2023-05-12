@@ -209,6 +209,7 @@ public class OmopMedicationStatement extends BaseOmopResource<MedicationStatemen
 		}
 
 		// Set Medication Code
+		//---------------------------------------------------------------------------------------------------------------------------------
 		CodeableConcept medicationCodeableConcept = new CodeableConcept();
 		try {
 			if(entity.getDrugConcept().getConceptName().equals("Henry")){
@@ -246,7 +247,7 @@ public class OmopMedicationStatement extends BaseOmopResource<MedicationStatemen
 			} else {
 				medicationCodeableConcept = CodeableConceptUtil.getCodeableConceptFromOmopConcept(entity.getDrugConcept());
 			}
-		} catch (FHIRException e1) {
+		} catch (Exception e1) {
 			e1.printStackTrace();
 			return null;
 		}
@@ -282,6 +283,7 @@ public class OmopMedicationStatement extends BaseOmopResource<MedicationStatemen
 		// }
 
 		// Get effectivePeriod
+		//---------------------------------------------------------------------------------------------------------------------------------
 		Period period = new Period();
 		Date startDate = entity.getDrugExposureStartDate();
 		if (startDate != null) {
@@ -289,6 +291,10 @@ public class OmopMedicationStatement extends BaseOmopResource<MedicationStatemen
 		}
 
 		Date endDate = entity.getDrugExposureEndDate();
+		if (endDate == null){
+			endDate = startDate;
+		}
+		
 		if (endDate != null) {
 			period.setEnd(endDate);
 		}
@@ -298,48 +304,34 @@ public class OmopMedicationStatement extends BaseOmopResource<MedicationStatemen
 		}
 
 		// Get drug dose
-//		Double effectiveDrugDose = entity.getEffectiveDrugDose();
-		Double omopQuantity = entity.getQuantity();
+		//---------------------------------------------------------------------------------------------------------------------------------
 		SimpleQuantity quantity = new SimpleQuantity();
-//		if (effectiveDrugDose != null) {
-//			quantity.setValue(effectiveDrugDose);
-		if (omopQuantity != null) {
-			quantity.setValue(omopQuantity);
-		}
-
-		String unitString = entity.getDoseUnitSourceValue();
-		if (unitString != null && !unitString.isEmpty()) {
-			try {
-				Concept unitConcept = CodeableConceptUtil.getOmopConceptWithOmopCode(conceptService, unitString);
-				if (unitConcept != null) {
-					String unitFhirUri = OmopCodeableConceptMapping
-							.fhirUriforOmopVocabulary(unitConcept.getVocabularyId());
-					if (!"None".equals(unitFhirUri)) {
-						String unitDisplay = unitConcept.getConceptName();
-						String unitCode = unitConcept.getConceptCode();
-						quantity.setUnit(unitDisplay);
-						quantity.setSystem(unitFhirUri);
-						quantity.setCode(unitCode);
-					}
-				} else {
-					quantity.setUnit(unitString);
-				}
-			} catch (FHIRException e) {
-				// We have null vocabulary id in the unit concept.
-				// Throw error and move on.
-				e.printStackTrace();
-			}
-		}
-
 		Dosage dosage = new Dosage();
-		if (!quantity.isEmpty()) {
+
+		if (entity.get_rate() != null) {
+			try{
+				quantity.setValue(Double.parseDouble(entity.get_rate()));
+				quantity.setUnit(entity.getDoseUnitSourceValue());
+
+				Dosage.DosageDoseAndRateComponent tempComponent = new Dosage.DosageDoseAndRateComponent();
+				tempComponent.setRate(quantity);
+				dosage.addDoseAndRate(tempComponent);
+			} catch(Exception e){
+				logger.error("Error setting up drug rate");
+			}
+		} else {
+			quantity.setValue(entity.getQuantity());
+			quantity.setUnit(entity.getDoseUnitSourceValue());
+
 			Dosage.DosageDoseAndRateComponent tempComponent = new Dosage.DosageDoseAndRateComponent();
 			tempComponent.setDose(quantity);
 			dosage.addDoseAndRate(tempComponent);
 		}
-
+		
+		//Drug Route
+		//---------------------------------------------------------------------------------------------------------------------------------
 		Concept routeConcept = entity.getRouteConcept();
-		if (routeConcept != null) {
+		if (routeConcept != null && !routeConcept.getConceptName().equals("Henry")) {
 			try {
 				String myUri = fhirOmopVocabularyMap.getFhirSystemNameFromOmopVocabulary(routeConcept.getVocabularyId());
 				if (!"None".equals(myUri)) {
@@ -354,6 +346,19 @@ public class OmopMedicationStatement extends BaseOmopResource<MedicationStatemen
 				}
 			} catch (FHIRException e) {
 				e.printStackTrace();
+			}
+		} else {
+			if(entity.getRouteSourceValue()!= null){
+				CodeableConcept codeableConceptRoute = new CodeableConcept();
+				Coding routeCode = new Coding();
+				List<Coding> routeCodeList = new ArrayList<>();
+
+				routeCode.setSystem("Local Hospital Code");
+				routeCode.setCode("0");
+				routeCode.setDisplay(entity.getRouteSourceValue());
+				routeCodeList.add(routeCode);
+				codeableConceptRoute.setCoding(routeCodeList);
+				dosage.setRoute(codeableConceptRoute);
 			}
 		}
 

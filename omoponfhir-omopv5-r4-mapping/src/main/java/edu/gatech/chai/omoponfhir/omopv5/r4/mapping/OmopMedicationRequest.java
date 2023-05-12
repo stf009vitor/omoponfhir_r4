@@ -341,15 +341,34 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 
 		//Drug Route
 		//---------------------------------------------------------------------------------------------------------------------------------
-		if(entity.getRouteSourceValue()!= null){
-			CodeableConcept codeableConceptRoute = new CodeableConcept();
-			Coding routeCode = new Coding();
-			List<Coding> routeCodeList = new ArrayList<>();
+		Concept routeConcept = entity.getRouteConcept();
+		if (routeConcept != null && !routeConcept.getConceptName().equals("Henry")) {
+			try {
+				String myUri = fhirOmopVocabularyMap.getFhirSystemNameFromOmopVocabulary(routeConcept.getVocabularyId());
+				if (!"None".equals(myUri)) {
+					CodeableConcept routeCodeableConcept = new CodeableConcept();
+					Coding routeCoding = new Coding();
+					routeCoding.setSystem(myUri);
+					routeCoding.setCode(routeConcept.getConceptCode());
+					routeCoding.setDisplay(routeConcept.getConceptName());
 
-			routeCode.setDisplay(entity.getRouteSourceValue());
-			routeCodeList.add(routeCode);
-			codeableConceptRoute.setCoding(routeCodeList);
-			dosage.setRoute(codeableConceptRoute);
+					routeCodeableConcept.addCoding(routeCoding);
+					dosage.setRoute(routeCodeableConcept);
+				}
+			} catch (FHIRException e) {
+				e.printStackTrace();
+			}
+		} else {
+			if(entity.getRouteSourceValue()!= null){
+				CodeableConcept codeableConceptRoute = new CodeableConcept();
+				Coding routeCode = new Coding();
+				List<Coding> routeCodeList = new ArrayList<>();
+
+				routeCode.setDisplay(entity.getRouteSourceValue());
+				routeCodeList.add(routeCode);
+				codeableConceptRoute.setCoding(routeCodeList);
+				dosage.setRoute(codeableConceptRoute);
+			}
 		}
 
 		List<Dosage.DosageDoseAndRateComponent> dosageAndRateList = new ArrayList<>();
