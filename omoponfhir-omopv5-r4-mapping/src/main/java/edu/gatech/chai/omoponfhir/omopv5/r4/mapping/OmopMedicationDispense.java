@@ -270,6 +270,20 @@ public class OmopMedicationDispense extends BaseOmopResource<MedicationDispense,
 			}
 		}
 
+		//Quantity Dispensed
+		if(entity.get_drug_quantity_dispensed_value() != null && entity.get_drug_quantity_dispensed_unit() !=){
+			try {
+				SimpleQuantity dispensedQuantity = new SimpleQuantity();
+				dispensedQuantity.setValue(entity.get_drug_quantity_dispensed_value() );
+				dispensedQuantity.setUnit(entity.get_drug_quantity_dispensed_unit());
+
+				medicationDispense.setQuantity(dispensedQuantity);
+			}catch(Exception e){
+				logger.error("Error setting up quantity dispensed");
+				e.printStackTrace();
+			}
+		}
+
 		//Dispensed Days Supply
 		//---------------------------------------------------------------------------------------------------------------------------------
 		if(entity.getDaysSupply() != null){
