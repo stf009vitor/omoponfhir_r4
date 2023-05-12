@@ -622,7 +622,7 @@ public class OmopObservation extends BaseOmopResource<Observation, FObservationV
 			resultQuantity.setUnit(examUnit);
 
 			try{
-				examValueAsNumber = Double.parseDouble(examValue);
+				examValueAsNumber = Double.parseDouble(examValueAsString);
 				resultQuantity.setValue(examValueAsNumber);
 			}catch(Exception e){
 				resultQuantity.setCode(examValueAsString);
