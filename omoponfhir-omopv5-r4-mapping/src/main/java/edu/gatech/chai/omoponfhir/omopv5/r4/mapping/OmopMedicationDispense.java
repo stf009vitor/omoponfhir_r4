@@ -30,6 +30,7 @@ import org.hl7.fhir.r4.model.MedicationDispense.MedicationDispenseStatus;
 import org.hl7.fhir.r4.model.ValueSet.ConceptReferenceComponent;
 import org.hl7.fhir.r4.model.ValueSet.ConceptSetComponent;
 import org.hl7.fhir.exceptions.FHIRException;
+import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.context.ContextLoaderListener;
@@ -590,8 +591,7 @@ public class OmopMedicationDispense extends BaseOmopResource<MedicationDispense,
 	}
 
 	@Override
-	public void searchWithoutParams(int fromIndex, int toIndex, List<IBaseResource> listResources,
-			List<String> includes) {
+	public void searchWithoutParams(int fromIndex, int toIndex, List<IBaseResource> listResources, List<String> includes) {
 
 		// This is read all. But, since we will add an exception conditions to
 		// add filter.
@@ -723,7 +723,7 @@ public class OmopMedicationDispense extends BaseOmopResource<MedicationDispense,
 		Concept omopConcept = null;
 		CodeableConcept medicationCodeableConcept = null;
     
-    /*
+
         if (medicationType instanceof Reference) {
 			// We may have reference.
 			Reference medicationReference;
@@ -953,7 +953,7 @@ public class OmopMedicationDispense extends BaseOmopResource<MedicationDispense,
 		if (drugExposure.getRouteConcept() == null) {
 			drugExposure.setRouteConcept(new Concept(0L));
 		}
-	*/	
+
 		return drugExposure;
 	}
 }
