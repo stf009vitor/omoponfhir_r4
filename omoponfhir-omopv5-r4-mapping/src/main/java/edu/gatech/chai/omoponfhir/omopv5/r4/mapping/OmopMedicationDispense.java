@@ -284,6 +284,7 @@ public class OmopMedicationDispense extends BaseOmopResource<MedicationDispense,
 		//Frequency
 		//---------------------------------------------------------------------------------------------------------------------------------
 		if(entity.get_drug_frequency() != null){
+			Timing dosageTiming = new Timing();
 			Coding freqCode = new Coding();
 			List<Coding> freqCodingList = new ArrayList<>();
 
@@ -295,10 +296,9 @@ public class OmopMedicationDispense extends BaseOmopResource<MedicationDispense,
 			freqCodeableConcept.setCoding(freqCodingList);
 
 			dosageTiming.setCode(freqCodeableConcept);
+			dosage.setTiming(dosageTiming);
 		}
 		
-		dosage.setTiming(dosageTiming);
-
 		//Drug Route
 		//---------------------------------------------------------------------------------------------------------------------------------
 		Concept routeConcept = entity.getRouteConcept();
