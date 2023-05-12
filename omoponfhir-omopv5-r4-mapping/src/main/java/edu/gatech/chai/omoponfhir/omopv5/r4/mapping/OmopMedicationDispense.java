@@ -259,13 +259,13 @@ public class OmopMedicationDispense extends BaseOmopResource<MedicationDispense,
 
 		medicationDispense.setMedication(medicationCodeableConcept);
 		
-		dispenseDosage dispenseDosage = new dispenseDosage();
-		dispenseDosage.DosageDoseAndRateComponent dosageAndRate = new dispenseDosage.DosageDoseAndRateComponent();
+		Dosage dosage = new Dosage();
+		Dosage.DosageDoseAndRateComponent dosageAndRate = new Dosage.DosageDoseAndRateComponent();
 
 		//Drug Signature
 		//---------------------------------------------------------------------------------------------------------------------------------
 		if (entity.get_drug_indication() != null && entity.get_drug_indication().length() != 0){
-			dispenseDosage.setText(entity.get_drug_indication());
+			dosage.setText(entity.get_drug_indication());
 		}
 		
 		//Drug Dose
@@ -296,24 +296,24 @@ public class OmopMedicationDispense extends BaseOmopResource<MedicationDispense,
 			freqCodeableConcept.setCoding(freqCodingList);
 
 			dosageTiming.setCode(freqCodeableConcept);
-			dispenseDosage.setTiming(dosageTiming);
+			dosage.setTiming(dosageTiming);
 		}
 		
 		//Drug Route
 		//---------------------------------------------------------------------------------------------------------------------------------
-		Concept dispenseRouteConcept = entity.getdispenseRouteConcept();
-		if (dispenseRouteConcept != null && !dispenseRouteConcept.getConceptName().equals("Henry")) {
+		Concept routeConcept = entity.getRouteConcept();
+		if (routeConcept != null && !routeConcept.getConceptName().equals("Henry")) {
 			try {
-				String myUri = fhirOmopVocabularyMap.getFhirSystemNameFromOmopVocabulary(dispenseRouteConcept.getVocabularyId());
+				String myUri = fhirOmopVocabularyMap.getFhirSystemNameFromOmopVocabulary(routeConcept.getVocabularyId());
 				if (!"None".equals(myUri)) {
 					CodeableConcept routeCodeableConcept = new CodeableConcept();
 					Coding routeCoding = new Coding();
 					routeCoding.setSystem(myUri);
-					routeCoding.setCode(dispenseRouteConcept.getConceptCode());
-					routeCoding.setDisplay(dispenseRouteConcept.getConceptName());
+					routeCoding.setCode(routeConcept.getConceptCode());
+					routeCoding.setDisplay(routeConcept.getConceptName());
 
 					routeCodeableConcept.addCoding(routeCoding);
-					dispenseDosage.setRoute(routeCodeableConcept);
+					dosage.setRoute(routeCodeableConcept);
 				}
 			} catch (FHIRException e) {
 				e.printStackTrace();
@@ -327,131 +327,21 @@ public class OmopMedicationDispense extends BaseOmopResource<MedicationDispense,
 				routeCode.setDisplay(entity.getRouteSourceValue());
 				routeCodeList.add(routeCode);
 				codeableConceptRoute.setCoding(routeCodeList);
-				dispenseDosage.setRoute(codeableConceptRoute);
+				dosage.setRoute(codeableConceptRoute);
 			}
 		}
 
-		List<dispenseDosage.DosageDoseAndRateComponent> dosageAndRateList = new ArrayList<>();
+		List<Dosage.DosageDoseAndRateComponent> dosageAndRateList = new ArrayList<>();
 		dosageAndRateList.add(dosageAndRate);
-		dispenseDosage.setDoseAndRate(dosageAndRateList);
+		dosage.setDoseAndRate(dosageAndRateList);
 
-		List<dispenseDosage> dosageList = new ArrayList<>();
-		dosageList.add(dispenseDosage);
+		List<Dosage> dosageList = new ArrayList<>();
+		dosageList.add(dosage);
 		medicationDispense.setDosageInstruction(dosageList);
 			
 
-		// See if we can add ingredient version of this medication.
-		// Concept ingredient = conceptService.getIngredient(drugConcept);
-		// if (ingredient != null) {
-		// CodeableConcept ingredientCodeableConcept;
-		// try {
-		// ingredientCodeableConcept =
-		// CodeableConceptUtil.getCodeableConceptFromOmopConcept(ingredient);
-		// if (!ingredientCodeableConcept.isEmpty()) {
-		// // We have ingredient information. Add this to MedicationDispense.
-		// // To do this, we need to add Medication resource to contained
-		// section.
-		// Medication medicationResource = new Medication();
-		// medicationResource.setCode(medication);
-		// MedicationIngredientComponent medIngredientComponent = new
-		// MedicationIngredientComponent();
-		// medIngredientComponent.setItem(ingredientCodeableConcept);
-		// medicationResource.addIngredient(medIngredientComponent);
-		// medicationResource.setId("med1");
-		// medicationDispense.addContained(medicationResource);
-		// medicationDispense.setMedication(new Reference("#med1"));
-		// }
-		// } catch (FHIRException e) {
-		// e.printStackTrace();
-		// return null;
-		// }
-		// } else {
-		// medicationDispense.setMedication(medication);
-		// }
-
-		// Get effectivePeriod
-		Period period = new Period();
-		Date startDate = entity.getDrugExposureStartDate();
-		if (startDate != null) {
-			period.setStart(startDate);
-		}
-
-		Date endDate = entity.getDrugExposureEndDate();
-		if (endDate != null) {
-			period.setEnd(endDate);
-		}
-
-		//if (!period.isEmpty()) {
-//			medicationDispense.setEffective(period);
-		//}
-
-		// Get drug dose
-//		Double effectiveDrugDose = entity.getEffectiveDrugDose();
-		Double omopQuantity = entity.getQuantity();
-		SimpleQuantity quantity = new SimpleQuantity();
-//		if (effectiveDrugDose != null) {
-//			quantity.setValue(effectiveDrugDose);
-		if (omopQuantity != null) {
-			quantity.setValue(omopQuantity);
-		}
-
-		String unitString = entity.getDoseUnitSourceValue();
-		if (unitString != null && !unitString.isEmpty()) {
-			try {
-				Concept unitConcept = CodeableConceptUtil.getOmopConceptWithOmopCode(conceptService, unitString);
-				if (unitConcept != null) {
-					String unitFhirUri = OmopCodeableConceptMapping
-							.fhirUriforOmopVocabulary(unitConcept.getVocabularyId());
-					if (!"None".equals(unitFhirUri)) {
-						String unitDisplay = unitConcept.getConceptName();
-						String unitCode = unitConcept.getConceptCode();
-						quantity.setUnit(unitDisplay);
-						quantity.setSystem(unitFhirUri);
-						quantity.setCode(unitCode);
-					}
-				} else {
-					quantity.setUnit(unitString);
-				}
-			} catch (FHIRException e) {
-				// We have null vocabulary id in the unit concept.
-				// Throw error and move on.
-				e.printStackTrace();
-			}
-		}
-
-		Dosage dispenseDosage = new Dosage();
-		if (!quantity.isEmpty()) {
-			dispenseDosage.DosageDoseAndRateComponent tempComponent = new dispenseDosage.DosageDoseAndRateComponent();
-			tempComponent.setDose(quantity);
-			dispenseDosage.addDoseAndRate(tempComponent);
-		}
-
-		Concept dispenseRouteConcept = entity.getdispenseRouteConcept();
-		if (dispenseRouteConcept != null) {
-			try {
-				String myUri = fhirOmopVocabularyMap.getFhirSystemNameFromOmopVocabulary(dispenseRouteConcept.getVocabularyId());
-				if (!"None".equals(myUri)) {
-					CodeableConcept routeCodeableConcept = new CodeableConcept();
-					Coding routeCoding = new Coding();
-					routeCoding.setSystem(myUri);
-					routeCoding.setCode(dispenseRouteConcept.getConceptCode());
-					routeCoding.setDisplay(dispenseRouteConcept.getConceptName());
-
-					routeCodeableConcept.addCoding(routeCoding);
-					dispenseDosage.setRoute(routeCodeableConcept);
-				}
-			} catch (FHIRException e) {
-				e.printStackTrace();
-			}
-		}
-
-		String sig = entity.getSig();
-		if (sig != null && !sig.isEmpty()) {
-			dispenseDosage.setText(sig);
-		}
-
-		//if (!dispenseDosage.isEmpty())
-			//medicationDispense.addDosage(dispenseDosage);
+		//if (!dosage.isEmpty())
+			//medicationDispense.addDosage(dosage);
 
 		// Get information source
 		Provider provider = entity.getProvider();
@@ -975,16 +865,16 @@ public void searchWithParams(int fromIndex, int toIndex, List<ParameterWrapper> 
 			}
 		}
 
-		// dispenseDosage.
-		List<dispenseDosage> dosages = fhirResource.getDosage();
+		// Dosage.
+		List<Dosage> dosages = fhirResource.getDosage();
 		Concept unitConcept = null;
-		Concept dispenseRouteConcept = null;
-		for (dispenseDosage dispenseDosage : dosages) {
+		Concept routeConcept = null;
+		for (Dosage dosage : dosages) {
 			// We need quantity.
 			Quantity qty=null;
 			try {
-				List<dispenseDosage.DosageDoseAndRateComponent> dosesAndRates = dispenseDosage.getDoseAndRate();
-				for(dispenseDosage.DosageDoseAndRateComponent doseAndRate : dosesAndRates){
+				List<Dosage.DosageDoseAndRateComponent> dosesAndRates = dosage.getDoseAndRate();
+				for(Dosage.DosageDoseAndRateComponent doseAndRate : dosesAndRates){
 					if(doseAndRate.hasDoseQuantity()){
 						qty=doseAndRate.getDoseQuantity();
 					}
@@ -1003,10 +893,10 @@ public void searchWithParams(int fromIndex, int toIndex, List<ParameterWrapper> 
 					if (unit != null && !unit.isEmpty())
 						drugExposure.setDoseUnitSourceValue(unit);
 
-					CodeableConcept routeFhirConcept = dispenseDosage.getRoute();
-					dispenseRouteConcept = CodeableConceptUtil.searchConcept(conceptService, routeFhirConcept);
-					if (dispenseRouteConcept != null) {
-						drugExposure.setdispenseRouteConcept(dispenseRouteConcept);
+					CodeableConcept routeFhirConcept = dosage.getRoute();
+					routeConcept = CodeableConceptUtil.searchConcept(conceptService, routeFhirConcept);
+					if (routeConcept != null) {
+						drugExposure.setRouteConcept(routeConcept);
 					}
 
 					if (system != null && !system.isEmpty() && code != null && !code.isEmpty()) {
@@ -1073,8 +963,8 @@ public void searchWithParams(int fromIndex, int toIndex, List<ParameterWrapper> 
 			drugExposure.setDrugSourceConcpet(new Concept(0L));
 		}
 
-		if (drugExposure.getdispenseRouteConcept() == null) {
-			drugExposure.setdispenseRouteConcept(new Concept(0L));
+		if (drugExposure.getRouteConcept() == null) {
+			drugExposure.setRouteConcept(new Concept(0L));
 		}
 	*/	
 		return drugExposure;
