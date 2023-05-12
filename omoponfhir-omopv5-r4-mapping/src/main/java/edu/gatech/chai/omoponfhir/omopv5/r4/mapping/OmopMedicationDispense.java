@@ -263,7 +263,7 @@ public class OmopMedicationDispense extends BaseOmopResource<MedicationDispense,
 		//---------------------------------------------------------------------------------------------------------------------------------
 		if(entity.getVerbatimEndDate() != null){
 			try {
-				medicationDispense.getWhenHandedOver(entity.getVerbatimEndDate());
+				medicationDispense.setWhenHandedOver(entity.getVerbatimEndDate());
 			} catch(Exception e){
 				logger.error("Error setting up dispense time");
 				e.printStackTrace();
