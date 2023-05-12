@@ -271,13 +271,14 @@ public class OmopMedicationDispense extends BaseOmopResource<MedicationDispense,
 		//Drug Dose
 		//---------------------------------------------------------------------------------------------------------------------------------		
 		if (entity.getDoseUnitSourceValue() != null) {
-		try {
-			SimpleQuantity simpleQuantity = new SimpleQuantity();
-			simpleQuantity.setValue(entity.getQuantity());
-			simpleQuantity.setUnit(entity.getDoseUnitSourceValue());
-			dosageAndRate.setDose(simpleQuantity);
-		} catch (Exception e) {
-			logger.error("Error setting simple dose for a drug.");
+			try {
+				SimpleQuantity simpleQuantity = new SimpleQuantity();
+				simpleQuantity.setValue(entity.getQuantity());
+				simpleQuantity.setUnit(entity.getDoseUnitSourceValue());
+				dosageAndRate.setDose(simpleQuantity);
+			} catch (Exception e) {
+				logger.error("Error setting simple dose for a drug.");
+			}
 		}
 		
 		//Frequency
