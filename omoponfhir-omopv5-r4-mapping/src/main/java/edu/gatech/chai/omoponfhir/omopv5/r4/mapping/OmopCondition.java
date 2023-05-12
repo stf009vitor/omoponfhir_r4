@@ -110,6 +110,9 @@ public class OmopCondition extends BaseOmopResource<Condition, ConditionOccurren
 		// clinicalStatus => condition_occurrence.condition_status_source_value
 		// lidar com valores nulos para este campo
 
+		logger.debug("STATUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUS");
+		logger.debug(conditionOccurrence.getConditionStatusSourceValue());
+
 		Concept conditionSourceConcept = conditionOccurrence.getConditionSourceConcept();
 		if ( conditionSourceConcept != null && conditionSourceConcept.getConceptName() != null && !conditionSourceConcept.getConceptName().equals("Henry")) {
 			String conditionStatusConceptName = conditionSourceConcept.getConceptName();
@@ -128,6 +131,9 @@ public class OmopCondition extends BaseOmopResource<Condition, ConditionOccurren
 		}
 		
 //------------NEW--------------------------------------------------------------------------------------------------------------------------
+		logger.debug("SEVERITYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY");
+		logger.debug(conditionOccurrence.get_condition_severity());
+		
 		// Set Severity
 		if (conditionOccurrence.get_condition_severity() != null){
 			CodeableConcept conditionSeverityCodeableConcept = new CodeableConcept();
