@@ -208,17 +208,49 @@ public class OmopMedicationStatement extends BaseOmopResource<MedicationStatemen
 			medicationStatement.setContext(reference);
 		}
 
-		// Get medicationCodeableConcept
-		Concept drugConcept = entity.getDrugConcept();
-		CodeableConcept medication;
+		// Set Medication Code
+		CodeableConcept medicationCodeableConcept = new CodeableConcept();
 		try {
-			medication = CodeableConceptUtil.getCodeableConceptFromOmopConcept(drugConcept);
+			if(entity.getDrugConcept().getConceptName().equals("Henry")){
+				Coding drug_coding = new Coding();
+				List<Coding> drug_codingList = new ArrayList<>();
+				
+				String drug_display = entity.get_drug_name();
+				String drug_code = entity.get_drug_other_code();
+				String drug_system = entity.get_drug_other_code_system();
+				
+				if (entity.get_drug_RxNorm_code() != null){
+					drug_code = entity.get_drug_RxNorm_code();
+					drug_system = "RxNorm Code";
+				} else{
+					if (entity.get_drug_NDC_code() != null){
+						drug_code = entity.get_drug_NDC_code();
+						drug_system = "NDC Code";
+					}
+				}
+					
+				if (drug_display != null && drug_display.length() != 0){
+					if (drug_code == null || drug_code.length() == 0){
+						drug_code = "0";
+					}
+					if (drug_system == null || drug_system.length() == 0){
+						drug_system = "local hospital code";
+					}
+					drug_coding.setDisplay(drug_display); 
+					drug_coding.setCode(drug_code);
+					drug_coding.setSystem(drug_system);
+					
+					drug_codingList.add(drug_coding);
+					medicationCodeableConcept.setCoding(drug_codingList);
+				}
+			} else {
+				medicationCodeableConcept = CodeableConceptUtil.getCodeableConceptFromOmopConcept(entity.getDrugConcept());
+			}
 		} catch (FHIRException e1) {
 			e1.printStackTrace();
 			return null;
 		}
-
-		medicationStatement.setMedication(medication);
+		medicationStatement.setMedication(medicationCodeableConcept);
 
 		// See if we can add ingredient version of this medication.
 		// Concept ingredient = conceptService.getIngredient(drugConcept);
