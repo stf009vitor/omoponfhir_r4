@@ -308,10 +308,10 @@ public class OmopMedicationStatement extends BaseOmopResource<MedicationStatemen
 		SimpleQuantity quantity = new SimpleQuantity();
 		Dosage dosage = new Dosage();
 
-		if (entity.get_rate() != null) {
+		if (entity.get_rate() != null && !entity.get_rate().equals("0")) {
 			try{
 				quantity.setValue(Double.parseDouble(entity.get_rate()));
-				quantity.setUnit(entity.getDoseUnitSourceValue());
+				quantity.setUnit(entity.get_rate_unit());
 
 				Dosage.DosageDoseAndRateComponent tempComponent = new Dosage.DosageDoseAndRateComponent();
 				tempComponent.setRate(quantity);
@@ -320,12 +320,14 @@ public class OmopMedicationStatement extends BaseOmopResource<MedicationStatemen
 				logger.error("Error setting up drug rate");
 			}
 		} else {
-			quantity.setValue(entity.getQuantity());
-			quantity.setUnit(entity.getDoseUnitSourceValue());
+			if(entity.entity.getQuantity() != null && !entitygetQuantity().equals("0")) {
+				quantity.setValue(entity.getQuantity());
+				quantity.setUnit(entity.getDoseUnitSourceValue());
 
-			Dosage.DosageDoseAndRateComponent tempComponent = new Dosage.DosageDoseAndRateComponent();
-			tempComponent.setDose(quantity);
-			dosage.addDoseAndRate(tempComponent);
+				Dosage.DosageDoseAndRateComponent tempComponent = new Dosage.DosageDoseAndRateComponent();
+				tempComponent.setDose(quantity);
+				dosage.addDoseAndRate(tempComponent);
+			}
 		}
 		
 		//Drug Route

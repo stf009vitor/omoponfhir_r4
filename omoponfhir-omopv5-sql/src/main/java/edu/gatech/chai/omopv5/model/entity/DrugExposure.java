@@ -92,7 +92,10 @@ public class DrugExposure extends BaseEntity {
 	private String drug_quantity_dispensed_unit;	
 
 	@Column(name="rate", nullable=false)
-	private String rate;		
+	private String rate;
+
+	@Column(name="rate_unit", nullable=false)
+	private String rate_unit;		
 //----------------------------------------------------------------------------------------------------------------------------------------	
 	
 	@Column(name="drug_exposure_start_date", nullable=false)
@@ -302,6 +305,14 @@ public class DrugExposure extends BaseEntity {
 	}
 	public String get_rate() {
 		return rate;
+	}
+	
+	//Rate Unit
+	public void set_rate_unit(String rate_unit) {
+		this.rate_unit = rate_unit;
+	}
+	public String get_rate_unit() {
+		return rate_unit;
 	}
 //----------------------------------------------------------------------------------------------------------------------------------------	
 

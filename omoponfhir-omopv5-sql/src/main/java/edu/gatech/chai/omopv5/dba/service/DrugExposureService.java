@@ -107,7 +107,9 @@ public interface DrugExposureService extends IService<DrugExposure> {
 				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_quantity_dispensed_unit")) {
 					drugExposure.set_drug_quantity_dispensed_unit(rs.getString(columnInfo));
 				} else if (columnInfo.equalsIgnoreCase(alias + "_rate")) {
-					drugExposure.set_rate(rs.getString(columnInfo));					
+					drugExposure.set_rate(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_rate_unit")) {
+					visitOccurrence.set_rate_unit(rs.getString(columnInfo));									
 //----------------------------------------------------------------------------------------------------------------------------------------					
 				} else if (columnInfo.equalsIgnoreCase(alias + "_refills")) {
 					drugExposure.setRefills(rs.getInt(columnInfo));
@@ -237,7 +239,9 @@ public interface DrugExposureService extends IService<DrugExposure> {
 				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_quantity_dispensed_unit")) {
 					drugExposure.set_drug_quantity_dispensed_unit(rowResult.get(columnInfo).getStringValue());
 				} else if (columnInfo.equalsIgnoreCase(alias + "_rate")) {
-					drugExposure.set_rate(rowResult.get(columnInfo).getStringValue());				
+					drugExposure.set_rate(rowResult.get(columnInfo).getStringValue());	
+				} else if (columnInfo.equalsIgnoreCase(alias + "_rate_unit")) {
+					visitOccurrence.set_rate_unit(rowResult.get(columnInfo).getStringValue());						
 //----------------------------------------------------------------------------------------------------------------------------------------	
 				} else if (columnInfo.equalsIgnoreCase(alias + "_refills")) {
 					drugExposure.setRefills((int) rowResult.get(columnInfo).getLongValue());
