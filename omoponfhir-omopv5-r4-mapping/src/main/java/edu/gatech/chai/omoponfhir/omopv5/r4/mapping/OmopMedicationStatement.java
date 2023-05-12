@@ -562,56 +562,61 @@ public class OmopMedicationStatement extends BaseOmopResource<MedicationStatemen
 		return mapList;
 	}
 
-	final ParameterWrapper filterParam = new ParameterWrapper("Long", Arrays.asList("drugSourceConcept.id"),
-			Arrays.asList("="), Arrays.asList(String.valueOf(MEDICATIONSTATEMENT_CONCEPT_TYPE_ID)), "or");
+final ParameterWrapper filterParam = new ParameterWrapper(
+		"Long",
+		Arrays.asList("drugSourceConcept.id"), //drug_source_concept_id
+		Arrays.asList("="),
+		Arrays.asList(String.valueOf(OmopMedicationStatement.MEDICATIONSTATEMENT_CONCEPT_TYPE_ID)),
+		"or"
+		);
 
-	@Override
-	public Long getSize() {
-		List<ParameterWrapper> mapList = new ArrayList<ParameterWrapper>();
-		return getMyOmopService().getSize(mapList);
-	}
+@Override
+public Long getSize() {
+	List<ParameterWrapper> paramList = new ArrayList<ParameterWrapper> ();
+	// call getSize with empty parameter list. The getSize will add filter parameter.
 
-	@Override
-	public Long getSize(List<ParameterWrapper> mapList) {
-//		List<ParameterWrapper> exceptions = new ArrayList<ParameterWrapper>();
-//		exceptions.add(filterParam);
-//		map.put(MAP_EXCEPTION_FILTER, exceptions);
+	Long size = getSize(paramList);
+	ExtensionUtil.addResourceCount(MedicationStatementResourceProvider.getType(), size);
+	
+	return size;
+}
 
-		return getMyOmopService().getSize(mapList);
-	}
+@Override
+public Long getSize(List<ParameterWrapper> paramList) {
+	paramList.add(filterParam);
 
-	@Override
-	public void searchWithoutParams(int fromIndex, int toIndex, List<IBaseResource> listResources,
-			List<String> includes) {
+	return getMyOmopService().getSize(paramList);
+}
 
-		// This is read all. But, since we will add an exception conditions to
-		// add filter.
-		// we will call the search with params method.
-		List<ParameterWrapper> mapList = new ArrayList<ParameterWrapper> ();
-		searchWithParams(fromIndex, toIndex, mapList, listResources, includes);
-	}
+@Override
+public void searchWithoutParams(int fromIndex, int toIndex, List<IBaseResource> listResources,
+		List<String> includes, String sort) {
 
-	@Override
-	public void searchWithParams(int fromIndex, int toIndex, List<ParameterWrapper> mapList,
-		List<IBaseResource> listResources, List<String> includes) {
-		List<ParameterWrapper> exceptions = new ArrayList<ParameterWrapper>();
-		exceptions.add(filterParam);
-		map.put(MAP_EXCEPTION_FILTER, exceptions);
+	// This is read all. But, since we will add an exception conditions to add filter.
+	// we will call the search with params method.
+	List<ParameterWrapper> paramList = new ArrayList<ParameterWrapper> ();
+	searchWithParams (fromIndex, toIndex, paramList, listResources, includes, sort);
+}
 
-		List<DrugExposure> entities = getMyOmopService().searchWithParams(fromIndex, toIndex, mapList);
+@Override
+public void searchWithParams(int fromIndex, int toIndex, List<ParameterWrapper> mapList,
+		List<IBaseResource> listResources, List<String> includes, String sort) {
+	mapList.add(filterParam);
 
-		for (DrugExposure entity : entities) {
-			Long omopId = entity.getIdAsLong();
-			Long fhirId = IdMapping.getFHIRfromOMOP(omopId, getMyFhirResourceType());
-			MedicationStatement fhirResource = constructResource(fhirId, entity, includes);
-			if (fhirResource != null) {
-				listResources.add(fhirResource);
-				// Do the rev_include and add the resource to the list.
-				addRevIncludes(omopId, includes, listResources);
-			}
+	List<DrugExposure> entities = getMyOmopService().searchWithParams(fromIndex, toIndex, mapList, sort);
 
+	for (DrugExposure entity : entities) {
+		Long omopId = entity.getIdAsLong();
+		Long fhirId = IdMapping.getFHIRfromOMOP(omopId, getMyFhirResourceType());
+		MedicationStatement fhirResource = constructResource(fhirId, entity, includes);
+		if (fhirResource != null) {
+			listResources.add(fhirResource);			
+			// Do the rev_include and add the resource to the list.
+			addRevIncludes(omopId, includes, listResources);
 		}
+
 	}
+}
 
 	@Override
 	public DrugExposure constructOmop(Long omopId, MedicationStatement fhirResource) {
