@@ -320,7 +320,7 @@ public class OmopMedicationStatement extends BaseOmopResource<MedicationStatemen
 				logger.error("Error setting up drug rate");
 			}
 		} else {
-			if(entity.entity.getQuantity() != null && !entitygetQuantity().equals("0")) {
+			if(entity.getQuantity() != null && !entity.getQuantity().equals("0")) {
 				quantity.setValue(entity.getQuantity());
 				quantity.setUnit(entity.getDoseUnitSourceValue());
 
