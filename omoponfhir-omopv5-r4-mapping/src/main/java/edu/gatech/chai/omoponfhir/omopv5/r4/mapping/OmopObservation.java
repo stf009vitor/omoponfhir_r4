@@ -612,7 +612,7 @@ public class OmopObservation extends BaseOmopResource<Observation, FObservationV
 			}
 		}
 
-		//Results
+		//Results Value
 		if(fObservationView.getValueAsString() != null){
 			Double examValueAsNumber = 0.0;
 			String examValueAsString = fObservationView.getValueAsString();
@@ -629,6 +629,43 @@ public class OmopObservation extends BaseOmopResource<Observation, FObservationV
 			}
 
 			observation.setValue(resultQuantity);
+		}
+
+		//Reference Range for the Results
+		if(fObservationView.get_lab_rslt_lln_num() != null && fObservationView.get_lab_rslt_uln_num() != null ){
+			Double upperValueDouble = 0.0;
+			Double lowerValueDouble = 0.0;
+			String upperValueString = fObservationView.get_lab_rslt_uln_num();
+			String lowerValueString = fObservationView.get_lab_rslt_lln_num();
+			String upperValueUnit = fObservationView.get_lab_rslt_uln_unit();
+			String lowerValueUnit = fObservationView.get_lab_rslt_lln_unit();
+
+			Quantity upperQuantity = new Quantity();
+			upperQuantity.setUnit(upperValueUnit);
+			Quantity lowerQuantity = new Quantity();
+			lowerQuantity.setUnit(lowerValueUnit);
+
+			try{
+				upperValueDouble = Double.parseDouble(upperValueString);
+				upperQuantity.setValue(upperValueDouble);
+			}catch(Exception e){
+				upperQuantity.setCode(upperValueString);
+			}
+
+			try{
+				lowerValueDouble = Double.parseDouble(lowerValueString);
+				lowerQuantity.setValue(lowerValueDouble);
+			}catch(Exception e){
+				lowerQuantity.setCode(lowerValueString);
+			}
+
+			ObservationReferenceRangeComponent referenceRange = new ObservationReferenceRangeComponent();
+			List<ObservationReferenceRangeComponent> referenceRangeList = new ArrayList<>();
+			referenceRange.setHigh(upperQuantity);
+			referenceRange.setLow(lowerQuantity);
+
+			referenceRangeList.add(referenceRange);
+			observation.setReferenceRange(referenceRangeList);
 		}
 
 
