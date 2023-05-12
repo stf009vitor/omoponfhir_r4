@@ -612,6 +612,25 @@ public class OmopObservation extends BaseOmopResource<Observation, FObservationV
 			}
 		}
 
+		//Results
+		if(fObservationView.getValueAsString() != null){
+			Double examValueAsNumber = 0.0;
+			String examValueAsString = fObservationView.getValueAsString();
+			String examUnit = fObservationView.getUnitSourceValue();
+
+			Quantity resultQuantity = new Quantity();
+			resultQuantity.setUnit(examUnit);
+
+			try{
+				examValueAsNumber = Double.parseDouble(examValue);
+				resultQuantity.setValue(examValueAsNumber);
+			}catch(Exception e){
+				resultQuantity.setCode(examValueAsString);
+			}
+
+			observation.setValue(resultQuantity);
+		}
+
 
 		return observation;
 	}
