@@ -61,7 +61,6 @@ public interface FPersonService extends IService<FPerson> {
 	 */
 	public static FPerson _construct(ResultSet rs, FPerson fPerson, String alias) {
 		
-		
 		if (fPerson == null)
 			fPerson = new FPerson();
 
