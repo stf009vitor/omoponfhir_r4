@@ -39,7 +39,7 @@ import edu.gatech.chai.omopv5.model.entity.Provider;
  * The Interface FPersonService.
  */
 public interface FPersonService extends IService<FPerson> {
-
+	private static final Logger logger = LoggerFactory.getLogger(OmopPatient.class);
 	/**
 	 * Search by name and location.
 	 *
@@ -50,7 +50,7 @@ public interface FPersonService extends IService<FPerson> {
 	 * @return the f person
 	 */
 	public FPerson searchByNameAndLocation(String familyName, String given1Name, String given2Name, Location location);
-	private static final Logger logger = LoggerFactory.getLogger(OmopPatient.class);
+	
 	/**
 	 * ResultSet based Entity Construction
 	 * 
