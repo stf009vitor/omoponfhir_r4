@@ -72,6 +72,7 @@ public interface FPersonService extends IService<FPerson> {
 			int totalColumnSize = metaData.getColumnCount();
 			for (int i = 1; i <= totalColumnSize; i++) {
 				String columnInfo = metaData.getColumnName(i);
+				logger.error("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
 
 				// f_table content
 				if (columnInfo.equalsIgnoreCase(alias + "_person_id")) {
@@ -176,6 +177,8 @@ public interface FPersonService extends IService<FPerson> {
 
 		for (String columnInfo : columns) {
 			// f_table content
+			logger.error("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+			
 			if (rowResult.get(columnInfo).isNull()) continue;
 			
 			if (columnInfo.equalsIgnoreCase(alias + "_person_id")) {
