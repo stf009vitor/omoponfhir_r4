@@ -39,7 +39,7 @@ import edu.gatech.chai.omopv5.model.entity.Provider;
  * The Interface FPersonService.
  */
 public interface FPersonService extends IService<FPerson> {
-	private static final Logger logger = LoggerFactory.getLogger(OmopPatient.class);
+	private static final Logger logger = LoggerFactory.getLogger(FPersonService.class);
 	/**
 	 * Search by name and location.
 	 *
