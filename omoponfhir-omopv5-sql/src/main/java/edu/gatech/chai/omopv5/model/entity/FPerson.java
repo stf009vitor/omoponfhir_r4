@@ -35,7 +35,7 @@ public class FPerson extends Person {
 	private Long id;
 	
 	@Column(name="Xfamily_name")
-	private String familyName;
+	private String XfamilyName;
 	
 	@Column(name="family_name")
 	private String familyName;
