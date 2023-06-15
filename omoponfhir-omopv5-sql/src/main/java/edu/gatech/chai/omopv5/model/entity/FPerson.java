@@ -34,6 +34,9 @@ public class FPerson extends Person {
 	@JoinColumn(name="person_id", table="person:person", nullable=false)
 	private Long id;
 	
+	@Column(name="Xfamily_name")
+	private String familyName;
+	
 	@Column(name="family_name")
 	private String familyName;
 	
