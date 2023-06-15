@@ -185,6 +185,9 @@ public class OmopPatient extends BaseOmopResource<USCorePatient, FPerson, FPerso
 	public USCorePatient constructFHIR(Long fhirId, FPerson fPerson) {
 		USCorePatient patient = new USCorePatient();
 		patient.setId(new IdType(fhirId));
+		
+		logger.error("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+		logger.error(Long.toString(fhirId));
 
 		// if source column is not empty, add it to identifier.
 		String personSourceValue = fPerson.getPersonSourceValue();
