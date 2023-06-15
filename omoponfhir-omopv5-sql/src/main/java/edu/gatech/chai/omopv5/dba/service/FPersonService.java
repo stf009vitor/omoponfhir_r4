@@ -50,7 +50,7 @@ public interface FPersonService extends IService<FPerson> {
 	 * @return the f person
 	 */
 	public FPerson searchByNameAndLocation(String familyName, String given1Name, String given2Name, Location location);
-
+	private static final Logger logger = LoggerFactory.getLogger(OmopPatient.class);
 	/**
 	 * ResultSet based Entity Construction
 	 * 
@@ -60,7 +60,7 @@ public interface FPersonService extends IService<FPerson> {
 	 * @return
 	 */
 	public static FPerson _construct(ResultSet rs, FPerson fPerson, String alias) {
-		public static final Logger logger = LoggerFactory.getLogger(OmopPatient.class);
+		
 		
 		if (fPerson == null)
 			fPerson = new FPerson();
