@@ -29,6 +29,8 @@ import org.slf4j.LoggerFactory;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.springframework.web.context.WebApplicationContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import ca.uhn.fhir.rest.api.SortSpec;
 import edu.gatech.chai.omoponfhir.local.dao.FhirOmopCodeMapImpl;
@@ -166,6 +168,8 @@ public abstract class BaseOmopResource<v extends Resource, t extends BaseEntity,
 		// FHIR Patient resources to be included in the bundle.
 		for (t entity : entities) {
 			Long omopId = entity.getIdAsLong();
+			logger.error("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+			logger.error(Long.toString(omopId));
 			Long fhirId = IdMapping.getFHIRfromOMOP(omopId, getMyFhirResourceType());
 			v fhirResource = constructResource(fhirId, entity, includes);
 			if (fhirResource != null) {
@@ -181,6 +185,8 @@ public abstract class BaseOmopResource<v extends Resource, t extends BaseEntity,
 
 		for (t entity : entities) {
 			Long omopId = entity.getIdAsLong();
+			logger.error("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+			logger.error(Long.toString(omopId));
 			Long fhirId = IdMapping.getFHIRfromOMOP(omopId, getMyFhirResourceType());
 			v fhirResource = constructResource(fhirId, entity, includes);
 			if (fhirResource != null) {
@@ -196,6 +202,8 @@ public abstract class BaseOmopResource<v extends Resource, t extends BaseEntity,
 
 		for (t entity : entities) {
 			Long omopId = entity.getIdAsLong();
+			logger.error("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+			logger.error(Long.toString(omopId));
 			Long fhirId = IdMapping.getFHIRfromOMOP(omopId, getMyFhirResourceType());
 			v fhirResource = constructResource(fhirId, entity, null);
 			if (fhirResource != null) {
