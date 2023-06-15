@@ -60,6 +60,8 @@ public interface FPersonService extends IService<FPerson> {
 	 * @return
 	 */
 	public static FPerson _construct(ResultSet rs, FPerson fPerson, String alias) {
+		private static final Logger logger = LoggerFactory.getLogger(OmopPatient.class);
+		
 		if (fPerson == null)
 			fPerson = new FPerson();
 
