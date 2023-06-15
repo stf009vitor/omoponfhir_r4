@@ -23,6 +23,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.cloud.bigquery.FieldValueList;
 
@@ -73,6 +75,10 @@ public interface FPersonService extends IService<FPerson> {
 				// f_table content
 				if (columnInfo.equalsIgnoreCase(alias + "_person_id")) {
 					fPerson.setId(rs.getLong(columnInfo));
+					logger.error("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW1");
+					logger.error(Long.toString(rs.getLong(columnInfo)));
+					
+					
 					if (rs.wasNull()) return null;
 				} else if (columnInfo.equalsIgnoreCase(alias + "_family_name")) {
 					fPerson.setFamilyName(rs.getString(columnInfo));
@@ -173,6 +179,9 @@ public interface FPersonService extends IService<FPerson> {
 			
 			if (columnInfo.equalsIgnoreCase(alias + "_person_id")) {
 				fPerson.setId(rowResult.get(columnInfo).getLongValue());
+				logger.error("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW2");
+				logger.error(Long.toString(rowResult.get(columnInfo).getLongValue()));
+					
 			} else if (columnInfo.equalsIgnoreCase(alias + "_family_name")) {
 				fPerson.setFamilyName(rowResult.get(columnInfo).getStringValue());
 			} else if (columnInfo.equalsIgnoreCase(alias + "_given1_name")) {
