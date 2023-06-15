@@ -14,6 +14,8 @@
  * limitations under the License.
  *******************************************************************************/
 package edu.gatech.chai.omoponfhir.omopv5.r4.mapping;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * ID Mapping Class to manage the IDs between FHIR and OMOP.
