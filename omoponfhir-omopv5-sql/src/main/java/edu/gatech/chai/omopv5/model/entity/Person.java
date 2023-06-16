@@ -42,7 +42,7 @@ public class Person extends BaseEntity {
 	private Integer yearOfBirth;
 	
 	@Column(name = "Xyear_of_birth", nullable = false)
-	private Integer yearOfBirth;
+	private Integer XyearOfBirth;
 
 	@Column(name = "month_of_birth")
 	private Integer monthOfBirth;
