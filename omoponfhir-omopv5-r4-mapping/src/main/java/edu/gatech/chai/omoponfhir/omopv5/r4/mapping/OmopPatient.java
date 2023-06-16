@@ -188,9 +188,6 @@ public class OmopPatient extends BaseOmopResource<USCorePatient, FPerson, FPerso
 	public USCorePatient constructFHIR(Long fhirId, FPerson fPerson) {
 		USCorePatient patient = new USCorePatient();
 		patient.setId(new IdType(fhirId));
-		
-		logger.error("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-		logger.error(Long.toString(fhirId));
 
 		// if source column is not empty, add it to identifier.
 		String personSourceValue = fPerson.getPersonSourceValue();
@@ -483,8 +480,6 @@ public class OmopPatient extends BaseOmopResource<USCorePatient, FPerson, FPerso
 	@Override
 	public Long toDbase(USCorePatient patient, IdType fhirId) throws FHIRException {
 		Long omopId = null, fhirIdLong = null;
-		logger.error("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-		logger.error(Long.toString(omopId));
 
 		if (fhirId != null) {
 			// update
@@ -499,9 +494,6 @@ public class OmopPatient extends BaseOmopResource<USCorePatient, FPerson, FPerso
 		}
 
 		FPerson fperson = constructOmop(omopId, patient);
-		logger.error("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-		logger.error(Long.toString(omopId));
-
 		Long omopRecordId = null;
 		if (fperson.getId() != null) {
 			omopRecordId = getMyOmopService().update(fperson).getId();

@@ -40,6 +40,9 @@ public class Person extends BaseEntity {
 
 	@Column(name = "year_of_birth", nullable = false)
 	private Integer yearOfBirth;
+	
+	@Column(name = "Xyear_of_birth", nullable = false)
+	private Integer yearOfBirth;
 
 	@Column(name = "month_of_birth")
 	private Integer monthOfBirth;
