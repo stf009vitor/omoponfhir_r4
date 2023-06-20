@@ -332,11 +332,6 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 			
 		}
 
-		//Set care_site
-		Reference careSiteReference = new Reference(
-				new IdType(OrganizationResourceProvider.getType(), visitOccurrence.getCareSite().getId()));
-		encounter.setServiceProvider(careSiteReference);
-
 		return encounter;
 	}
 
