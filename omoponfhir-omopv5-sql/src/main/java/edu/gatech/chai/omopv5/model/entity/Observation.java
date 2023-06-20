@@ -43,9 +43,6 @@ public class Observation extends BaseEntity {
 	@Column(name="observation_date", nullable=false)
 	private Date observationDate;
 	
-	@Column(name="Xobservation_datetime")
-	private Date XobservationDateTime;
-	
 	@Column(name="observation_datetime")
 	private Date observationDateTime;
 	
