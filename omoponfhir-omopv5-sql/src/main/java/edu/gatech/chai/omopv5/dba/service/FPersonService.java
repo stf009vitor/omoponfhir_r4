@@ -76,8 +76,6 @@ public interface FPersonService extends IService<FPerson> {
 				// f_table content
 				if (columnInfo.equalsIgnoreCase(alias + "_person_id")) {
 					fPerson.setId(rs.getLong(columnInfo));
-					logger.error("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW1");
-					logger.error(Long.toString(rs.getLong(columnInfo)));
 					
 					
 					if (rs.wasNull()) return null;
@@ -176,14 +174,10 @@ public interface FPersonService extends IService<FPerson> {
 
 		for (String columnInfo : columns) {
 			// f_table content
-			logger.error("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
-			
 			if (rowResult.get(columnInfo).isNull()) continue;
 			
 			if (columnInfo.equalsIgnoreCase(alias + "_person_id")) {
 				fPerson.setId(rowResult.get(columnInfo).getLongValue());
-				logger.error("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW2");
-				logger.error(Long.toString(rowResult.get(columnInfo).getLongValue()));
 					
 			} else if (columnInfo.equalsIgnoreCase(alias + "_family_name")) {
 				fPerson.setFamilyName(rowResult.get(columnInfo).getStringValue());

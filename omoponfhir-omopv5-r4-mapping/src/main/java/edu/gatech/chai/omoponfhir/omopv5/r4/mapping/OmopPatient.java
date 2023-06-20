@@ -124,9 +124,6 @@ public class OmopPatient extends BaseOmopResource<USCorePatient, FPerson, FPerso
 	public USCorePatient constructResource(Long fhirId, FPerson entity, List<String> includes) {
 		USCorePatient patient = constructFHIR(fhirId, entity);
 		Long omopId = entity.getId();
-		
-		logger.error("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-		logger.error(Long.toString(omopId));
 
 		if (!includes.isEmpty()) {
 			if (includes.contains("Patient:general-practitioner")) {
