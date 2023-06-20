@@ -80,9 +80,6 @@ public class OmopOrganization extends BaseOmopResource<Organization, CareSite, C
 	@Override
 	public Organization constructFHIR(Long fhirId, CareSite careSite) {
 		Organization organization = new Organization();
-		
-		logger.error("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-		logger.error(Long.toString(fhirId));
 
 		organization.setId(new IdType(fhirId));
 
@@ -101,14 +98,14 @@ public class OmopOrganization extends BaseOmopResource<Organization, CareSite, C
 			//organization.addType(typeCodeableConcept);
 		//}
 
-		if (careSite.getLocation() != null) {
+		//if (careSite.getLocation() != null) {
 			// WARNING check if mapping for lines are correct
-			organization.addAddress().setUse(AddressUse.HOME).addLine(careSite.getLocation().getAddress1())
-					.addLine(careSite.getLocation().getAddress2())
-					.setCity(careSite.getLocation().getCity()).setPostalCode(careSite.getLocation().getZip())
-					.setState(careSite.getLocation().getState());
+			//organization.addAddress().setUse(AddressUse.HOME).addLine(careSite.getLocation().getAddress1())
+					//.addLine(careSite.getLocation().getAddress2())
+					//.setCity(careSite.getLocation().getCity()).setPostalCode(careSite.getLocation().getZip())
+					//.setState(careSite.getLocation().getState());
 			// .setPeriod(period);
-		}
+		//}
 
 		return organization;
 	}

@@ -37,9 +37,6 @@ public class CareSite extends BaseEntity {
 	@Column(name="care_site_name")
 	private String careSiteName;
 	
-	@Column(name="Xcare_site_name")
-	private String XcareSiteName;
-	
 	@JoinColumn(name="place_of_service_concept_id", referencedColumnName="concept_id", table="concept")
 	private Concept placeOfServiceConcept;
 	

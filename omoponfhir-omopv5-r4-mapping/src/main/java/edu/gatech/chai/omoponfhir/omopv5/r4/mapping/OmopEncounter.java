@@ -37,6 +37,7 @@ import edu.gatech.chai.omoponfhir.omopv5.r4.provider.ConditionResourceProvider;
 import edu.gatech.chai.omoponfhir.omopv5.r4.provider.EncounterResourceProvider;
 import edu.gatech.chai.omoponfhir.omopv5.r4.provider.OrganizationResourceProvider;
 import edu.gatech.chai.omoponfhir.omopv5.r4.provider.PatientResourceProvider;
+import edu.gatech.chai.omoponfhir.omopv5.r4.provider.OrganizationResourceProvider;
 import edu.gatech.chai.omoponfhir.omopv5.r4.provider.PractitionerResourceProvider;
 import edu.gatech.chai.omoponfhir.omopv5.r4.utilities.DateUtil;
 import edu.gatech.chai.omopv5.dba.service.CareSiteService;
@@ -331,7 +332,10 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 			
 		}
 
-
+		//Set care_site
+		Reference careSiteReference = new Reference(
+				new IdType(OrganizationResourceProvider.getType(), visitOccurrence.getCareSite().getId()));
+		encounter.setServiceProvider(careSiteReference);
 
 		return encounter;
 	}

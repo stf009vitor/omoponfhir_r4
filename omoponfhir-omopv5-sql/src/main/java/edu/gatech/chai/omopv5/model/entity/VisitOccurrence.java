@@ -26,7 +26,6 @@ import edu.gatech.chai.omopv5.model.entity.custom.GenerationType;
 import edu.gatech.chai.omopv5.model.entity.custom.Id;
 import edu.gatech.chai.omopv5.model.entity.custom.JoinColumn;
 import edu.gatech.chai.omopv5.model.entity.custom.Table;
-import edu.gatech.chai.omopv5.model.entity.Observation;
 
 @Table(name = "fhir_visit_occurrence")
 public class VisitOccurrence extends BaseEntity {
