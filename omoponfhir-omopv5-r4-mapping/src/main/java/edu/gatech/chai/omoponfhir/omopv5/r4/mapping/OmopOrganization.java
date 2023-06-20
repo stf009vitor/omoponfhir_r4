@@ -32,6 +32,9 @@ import org.hl7.fhir.r4.model.Address.AddressUse;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.WebApplicationContext;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import edu.gatech.chai.omoponfhir.omopv5.r4.provider.OrganizationResourceProvider;
@@ -77,6 +80,9 @@ public class OmopOrganization extends BaseOmopResource<Organization, CareSite, C
 	@Override
 	public Organization constructFHIR(Long fhirId, CareSite careSite) {
 		Organization organization = new Organization();
+		
+		logger.error("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+		logger.error(Long.toString(fhirId));
 
 		organization.setId(new IdType(fhirId));
 
