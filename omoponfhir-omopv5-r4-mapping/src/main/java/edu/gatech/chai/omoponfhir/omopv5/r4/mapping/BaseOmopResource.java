@@ -198,8 +198,6 @@ public abstract class BaseOmopResource<v extends Resource, t extends BaseEntity,
 
 		for (t entity : entities) {
 			Long omopId = entity.getIdAsLong();
-			logger.error("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-			logger.error(Long.toString(omopId));
 			Long fhirId = IdMapping.getFHIRfromOMOP(omopId, getMyFhirResourceType());
 			v fhirResource = constructResource(fhirId, entity, null);
 			if (fhirResource != null) {

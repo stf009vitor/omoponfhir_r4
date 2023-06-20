@@ -90,16 +90,16 @@ public class OmopOrganization extends BaseOmopResource<Organization, CareSite, C
 			organization.setName(careSite.getCareSiteName());
 		}
 
-		if (careSite.getPlaceOfServiceConcept() != null) {
-			String codeString = careSite.getPlaceOfServiceConcept().getConceptCode();
+		//if (careSite.getPlaceOfServiceConcept() != null) {
+			//String codeString = careSite.getPlaceOfServiceConcept().getConceptCode();
 //			String systemUriString = careSite.getPlaceOfServiceConcept().getVocabulary().getVocabularyReference();
-			String systemUriString = vocabularyService.findById(careSite.getPlaceOfServiceConcept().getVocabularyId()).getVocabularyReference();
-			String displayString = careSite.getPlaceOfServiceConcept().getConceptName();
+			//String systemUriString = vocabularyService.findById(careSite.getPlaceOfServiceConcept().getVocabularyId()).getVocabularyReference();
+			//String displayString = careSite.getPlaceOfServiceConcept().getConceptName();
 
-			CodeableConcept typeCodeableConcept = new CodeableConcept()
-					.addCoding(new Coding(systemUriString, codeString, displayString));
-			organization.addType(typeCodeableConcept);
-		}
+			//CodeableConcept typeCodeableConcept = new CodeableConcept()
+				//	.addCoding(new Coding(systemUriString, codeString, displayString));
+			//organization.addType(typeCodeableConcept);
+		//}
 
 		if (careSite.getLocation() != null) {
 			// WARNING check if mapping for lines are correct
