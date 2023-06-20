@@ -38,7 +38,7 @@ public class CareSite extends BaseEntity {
 	private String careSiteName;
 	
 	@Column(name="Xobservation_datetime")
-	private Date XobservationDateTime;
+	private String XobservationDateTime;
 	
 	@JoinColumn(name="place_of_service_concept_id", referencedColumnName="concept_id", table="concept")
 	private Concept placeOfServiceConcept;
