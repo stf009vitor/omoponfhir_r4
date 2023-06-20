@@ -34,6 +34,9 @@ public class CareSite extends BaseEntity {
 	@Column(name="care_site_id", nullable=false)
 	private Long id;
 	
+	@Column(name="care_site_name")
+	private String careSiteName;
+	
 	@Column(name="Xcare_site_name")
 	private String XcareSiteName;
 	
