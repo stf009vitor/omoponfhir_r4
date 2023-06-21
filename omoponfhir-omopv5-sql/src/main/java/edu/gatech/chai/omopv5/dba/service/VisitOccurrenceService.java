@@ -77,6 +77,8 @@ public interface VisitOccurrenceService extends IService<VisitOccurrence> {
 					visitOccurrence.set_encounter_type(rs.getString(columnInfo));
 				} else if (columnInfo.equalsIgnoreCase(alias + "_encounter_service_type")) {
 					visitOccurrence.set_encounter_service_type(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_care_site_id_cpy")) {
+					visitOccurrence.set_care_site_id_cpy(rs.getLong(columnInfo));
 //-----------------------------------------------------------------------------------------------------------------------------------------					
 				} else if (columnInfo.equalsIgnoreCase(alias + "_visit_start_datetime")) {
 					visitOccurrence.setVisitStartDateTime(rs.getDate(columnInfo));
@@ -192,6 +194,8 @@ public interface VisitOccurrenceService extends IService<VisitOccurrence> {
 				visitOccurrence.set_encounter_type(rowResult.get(columnInfo).getStringValue());
 			} else if (columnInfo.equalsIgnoreCase(alias + "_encounter_service_type")) {
 				visitOccurrence.set_encounter_service_type(rowResult.get(columnInfo).getStringValue());
+			} else if (columnInfo.equalsIgnoreCase(alias + "_care_site_id_cpy")) {
+				visitOccurrence.set_care_site_id_cpy(rowResult.get(columnInfo).getLongValue());
 //-----------------------------------------------------------------------------------------------------------------------------------------				
 			} else if (columnInfo.equalsIgnoreCase(alias + "_visit_source_value")) {
 				visitOccurrence.setVisitSourceValue(rowResult.get(columnInfo).getStringValue());
