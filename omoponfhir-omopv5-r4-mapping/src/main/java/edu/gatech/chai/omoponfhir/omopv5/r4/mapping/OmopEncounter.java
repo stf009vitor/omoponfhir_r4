@@ -97,7 +97,7 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 		CodeableConcept ReasonVisit_CodeableConcept = new CodeableConcept();
 		List<CodeableConcept> reason_codeList = new ArrayList<>();
 		List<Coding> reason_codingList = new ArrayList<>();
-
+		
 		String reason_visit_text = visitOccurrence.get_encounter_reason_visit_text();
 		String reason_visit_code = visitOccurrence.get_encounter_reason_visit_code();
 		String reason_visit_system = visitOccurrence.get_encounter_reason_visit_system();
@@ -256,13 +256,11 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 //		}
 
 		encounter.setPeriod(visitPeriod);
-		logger.error("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-		
-		if (visitOccurrence.get_encounter_careSiteId() != null) {
-			logger.error("XAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
+
+		if (visitOccurrence.getCareSite() != null) {
 			Reference serviceProviderReference = new Reference(
 				new IdType(OrganizationResourceProvider.getType(), 
-					IdMapping.getFHIRfromOMOP(visitOccurrence.get_encounter_careSiteId(), OrganizationResourceProvider.getType())));
+					IdMapping.getFHIRfromOMOP(visitOccurrence.getCareSite().getId(), OrganizationResourceProvider.getType())));
 			serviceProviderReference.setDisplay(visitOccurrence.getCareSite().getCareSiteName());
 			encounter.setServiceProvider(serviceProviderReference);
 		}
