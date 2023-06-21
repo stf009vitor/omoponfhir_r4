@@ -70,6 +70,9 @@ public class VisitOccurrence extends BaseEntity {
 	
 	@Column(name="visit_start_datetime")
 	private Date visitStartDateTime;
+
+	@Column(name="Xvisit_start_datetime")
+	private Date XvisitStartDateTime;
 	
 	@Column(name="visit_end_date", nullable=false)
 	private Date visitEndDate;
@@ -80,17 +83,11 @@ public class VisitOccurrence extends BaseEntity {
 	@JoinColumn(name="visit_type_concept_id", referencedColumnName="concept_id", nullable=false)
 	private Concept visitTypeConcept;
 
-	@JoinColumn(name="Xprovider_id")
-	private Provider Xprovider;
-
 	@JoinColumn(name="provider_id")
 	private Provider provider;
 	
 	@JoinColumn(name="care_site_id")
 	private CareSite careSite;
-
-	@Column(name="care_site_id")
-	private Long careSiteId;
 	
 	@Column(name="visit_source_value")
 	private String visitSourceValue;
@@ -114,14 +111,6 @@ public class VisitOccurrence extends BaseEntity {
 	private VisitOccurrence precedingVisitOccurrence;
 	
 //New Get/Set Functions -----------------------------------------------------------------
-	//Care Site ID
-	public void set_encounter_careSiteId(Long careSiteId) {
-		this.careSiteId = careSiteId;
-	}
-	public Long get_encounter_careSiteId() {
-		return careSiteId;
-	}
-
 	//Class Text
 	public void set_encounter_class_text(String encounter_class_text) {
 		this.encounter_class_text = encounter_class_text;
