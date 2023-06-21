@@ -73,9 +73,6 @@ public class VisitOccurrence extends BaseEntity {
 	
 	@Column(name="visit_start_datetime")
 	private Date visitStartDateTime;
-
-	@Column(name="Xvisit_start_datetime")
-	private Date XvisitStartDateTime;
 	
 	@Column(name="visit_end_date", nullable=false)
 	private Date visitEndDate;
