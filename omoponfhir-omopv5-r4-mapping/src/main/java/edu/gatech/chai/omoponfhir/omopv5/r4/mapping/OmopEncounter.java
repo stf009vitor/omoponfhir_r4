@@ -258,7 +258,7 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 		encounter.setPeriod(visitPeriod);
 
 		logger.error("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-		logger.error(Long.toString(visitOccurrence.getCareSite().getId()));
+
 
 
 			Reference serviceProviderReference = new Reference(
