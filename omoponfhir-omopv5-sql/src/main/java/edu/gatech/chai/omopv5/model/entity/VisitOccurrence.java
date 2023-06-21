@@ -63,6 +63,9 @@ public class VisitOccurrence extends BaseEntity {
 
 	@Column(name="encounter_type", nullable=false)
 	private String encounter_type;	
+
+	@Column(name="care_site_id_cpy", nullable=false)
+	private Long care_site_id_cpy;
 	//---------------------------------------------------------------------------------------
 
 	@Column(name="visit_start_date", nullable=false)
@@ -111,6 +114,14 @@ public class VisitOccurrence extends BaseEntity {
 	private VisitOccurrence precedingVisitOccurrence;
 	
 //New Get/Set Functions -----------------------------------------------------------------
+	//Care Site Id
+	public void set_care_site_id_cpy(Long care_site_id_cpy) {
+		this.care_site_id_cpy = care_site_id_cpy;
+	}
+	public Long get_care_site_id_cpy() {
+		return care_site_id_cpy;
+	}
+
 	//Class Text
 	public void set_encounter_class_text(String encounter_class_text) {
 		this.encounter_class_text = encounter_class_text;
