@@ -258,7 +258,7 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 		encounter.setPeriod(visitPeriod);
 
 
-		if (visitOccurrence.get_encounter_careSiteId != null) {
+		if (visitOccurrence.get_encounter_careSiteId() != null) {
 			Reference serviceProviderReference = new Reference(
 				new IdType(OrganizationResourceProvider.getType(), 
 					IdMapping.getFHIRfromOMOP(visitOccurrence.get_encounter_careSiteId(), OrganizationResourceProvider.getType())));
