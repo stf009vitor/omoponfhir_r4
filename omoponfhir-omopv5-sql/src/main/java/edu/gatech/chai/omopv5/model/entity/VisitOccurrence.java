@@ -80,6 +80,9 @@ public class VisitOccurrence extends BaseEntity {
 	@JoinColumn(name="visit_type_concept_id", referencedColumnName="concept_id", nullable=false)
 	private Concept visitTypeConcept;
 
+	@JoinColumn(name="Xprovider_id")
+	private Provider Xprovider;
+
 	@JoinColumn(name="provider_id")
 	private Provider provider;
 	
