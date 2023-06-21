@@ -89,7 +89,7 @@ public class VisitOccurrence extends BaseEntity {
 	@JoinColumn(name="care_site_id")
 	private CareSite careSite;
 
-	@JoinColumn(name="care_site_id")
+	@Column(name="care_site_id")
 	private Long careSiteId;
 	
 	@Column(name="visit_source_value")
