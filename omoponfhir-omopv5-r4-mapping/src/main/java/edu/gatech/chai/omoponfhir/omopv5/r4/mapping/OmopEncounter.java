@@ -256,12 +256,12 @@ public class OmopEncounter extends BaseOmopResource<Encounter, VisitOccurrence, 
 //		}
 
 		encounter.setPeriod(visitPeriod);
-		logger.error("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
-		if (visitOccurrence.getCareSite() != null) {
-			logger.error("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
+
+		if (visitOccurrence.get_encounter_careSiteId != null) {
 			Reference serviceProviderReference = new Reference(
 				new IdType(OrganizationResourceProvider.getType(), 
-					IdMapping.getFHIRfromOMOP(visitOccurrence.getCareSite().getId(), OrganizationResourceProvider.getType())));
+					IdMapping.getFHIRfromOMOP(visitOccurrence.get_encounter_careSiteId(), OrganizationResourceProvider.getType())));
 			serviceProviderReference.setDisplay(visitOccurrence.getCareSite().getCareSiteName());
 			encounter.setServiceProvider(serviceProviderReference);
 		}

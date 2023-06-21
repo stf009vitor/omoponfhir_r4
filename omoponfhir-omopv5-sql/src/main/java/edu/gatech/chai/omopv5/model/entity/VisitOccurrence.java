@@ -85,6 +85,9 @@ public class VisitOccurrence extends BaseEntity {
 	
 	@JoinColumn(name="care_site_id")
 	private CareSite careSite;
+
+	@JoinColumn(name="care_site_id")
+	private Long careSiteId;
 	
 	@Column(name="visit_source_value")
 	private String visitSourceValue;
@@ -108,6 +111,14 @@ public class VisitOccurrence extends BaseEntity {
 	private VisitOccurrence precedingVisitOccurrence;
 	
 //New Get/Set Functions -----------------------------------------------------------------
+	//Care Site ID
+	public void set_encounter_careSiteId(Long careSiteId) {
+		this.careSiteId = careSiteId;
+	}
+	public Long get_encounter_careSiteId() {
+		return careSiteId;
+	}
+
 	//Class Text
 	public void set_encounter_class_text(String encounter_class_text) {
 		this.encounter_class_text = encounter_class_text;
