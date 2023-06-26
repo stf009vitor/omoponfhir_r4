@@ -297,8 +297,8 @@ public class OmopMedicationDispense extends BaseOmopResource<MedicationDispense,
 
 		//Drug Signature
 		//---------------------------------------------------------------------------------------------------------------------------------
-		if (entity.get_drug_indication() != null && entity.get_drug_indication().length() != 0){
-			dosage.setText(entity.get_drug_indication());
+		if (entity.getSig() != null && entity.getSig().length() != 0){
+			dosage.setText(entity.getSig());
 		}
 		
 		//Drug Dose

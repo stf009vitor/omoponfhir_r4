@@ -211,7 +211,7 @@ public class DrugExposure extends BaseEntity {
 		return drug_other_code_system;
 	}
 	
-	// Drug Signature
+	// Drug Indication
 	public void set_drug_indication(String drug_indication) {
 		this.drug_indication = drug_indication;
 	}
