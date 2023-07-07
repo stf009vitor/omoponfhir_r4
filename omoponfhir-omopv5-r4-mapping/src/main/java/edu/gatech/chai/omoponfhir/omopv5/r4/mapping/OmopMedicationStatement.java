@@ -322,7 +322,7 @@ public class OmopMedicationStatement extends BaseOmopResource<MedicationStatemen
 		Dosage.DosageDoseAndRateComponent tempComponent = new Dosage.DosageDoseAndRateComponent();
 		Dosage dosage = new Dosage();
 
-		if(entity.getQuantity() != null && !entity.getQuantity().equals("0")) {
+		if(entity.getQuantity() != null && entity.getQuantity() != 0) {
 			quantity.setValue(entity.getQuantity());
 			quantity.setUnit(entity.getDoseUnitSourceValue());
 
@@ -344,14 +344,12 @@ public class OmopMedicationStatement extends BaseOmopResource<MedicationStatemen
 			rate_denominator_quantity.setUnit(entity.get_rate_denum_unit());
 
 			Ratio ratio_obj = new Ratio();
-			
-
 			ratio_obj.setNumerator(rate_numerator_quantity);
 			ratio_obj.setDenominator(rate_denominator_quantity);
-			tempComponent.setRate(ratio_obj);
-		}
 
-		dosage.addDoseAndRate(tempComponent);
+			tempComponent.setRate(ratio_obj);
+			dosage.addDoseAndRate(tempComponent);
+		}
 
 		
 		//Drug Route
