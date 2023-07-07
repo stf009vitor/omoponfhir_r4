@@ -319,30 +319,40 @@ public class OmopMedicationStatement extends BaseOmopResource<MedicationStatemen
 		// Get drug dose
 		//---------------------------------------------------------------------------------------------------------------------------------
 		SimpleQuantity quantity = new SimpleQuantity();
-		SimpleQuantity rate_quantity = new SimpleQuantity();
+		Dosage.DosageDoseAndRateComponent tempComponent = new Dosage.DosageDoseAndRateComponent();
 		Dosage dosage = new Dosage();
 
-		if (entity.get_rate() != null && !entity.get_rate().equals("0")) {
-			try{
-				quantity.setValue(Double.parseDouble(entity.get_rate()));
-				quantity.setUnit(entity.get_rate_unit());
+		if(entity.getQuantity() != null && !entity.getQuantity().equals("0")) {
+			quantity.setValue(entity.getQuantity());
+			quantity.setUnit(entity.getDoseUnitSourceValue());
 
-				Dosage.DosageDoseAndRateComponent tempComponent = new Dosage.DosageDoseAndRateComponent();
-				tempComponent.setRate(quantity);
-				dosage.addDoseAndRate(tempComponent);
-			} catch(Exception e){
-				logger.error("Error setting up drug rate");
-			}
-		} else {
-			if(entity.getQuantity() != null && !entity.getQuantity().equals("0")) {
-				quantity.setValue(entity.getQuantity());
-				quantity.setUnit(entity.getDoseUnitSourceValue());
-
-				Dosage.DosageDoseAndRateComponent tempComponent = new Dosage.DosageDoseAndRateComponent();
-				tempComponent.setDose(quantity);
-				dosage.addDoseAndRate(tempComponent);
-			}
+			tempComponent.setDose(quantity);
+			dosage.addDoseAndRate(tempComponent);
 		}
+
+
+		// Get drug rate
+		//---------------------------------------------------------------------------------------------------------------------------------
+		SimpleQuantity rate_numerator_quantity = new SimpleQuantity();
+		SimpleQuantity rate_denominator_quantity = new SimpleQuantity();
+
+		if(entity.get_rate_denum_unit() != null & entity.get_rate_num_unit() != null){
+			rate_numerator_quantity.setValue(entity.get_rate_num_value());
+			rate_numerator_quantity.setUnit(entity.get_rate_num_unit());
+
+			rate_denominator_quantity.setValue(entity.get_rate_denum_value());
+			rate_denominator_quantity.setUnit(entity.get_rate_denum_unit());
+
+			Ratio ratio_obj = new Ratio();
+			
+
+			ratio_obj.setNumerator(rate_numerator_quantity);
+			ratio_obj.setDenominator(rate_denominator_quantity);
+			tempComponent.setRate(ratio_obj);
+		}
+
+		dosage.addDoseAndRate(tempComponent);
+
 		
 		//Drug Route
 		//---------------------------------------------------------------------------------------------------------------------------------
