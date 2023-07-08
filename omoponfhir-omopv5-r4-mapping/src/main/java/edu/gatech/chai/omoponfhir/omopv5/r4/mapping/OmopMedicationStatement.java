@@ -335,7 +335,7 @@ public class OmopMedicationStatement extends BaseOmopResource<MedicationStatemen
 		SimpleQuantity rate_numerator_quantity = new SimpleQuantity();
 		SimpleQuantity rate_denominator_quantity = new SimpleQuantity();
 
-		if(entity.get_rate_denum_unit() != null & entity.get_rate_num_unit() != null && entity.get_rate_denum_value() != null && entity.get_rate_denum_unit() != null){
+		if(entity.get_rate_denum_unit() != null && entity.get_rate_num_unit() != null){
 			rate_numerator_quantity.setValue(entity.get_rate_num_value());
 			rate_numerator_quantity.setUnit(entity.get_rate_num_unit());
 
