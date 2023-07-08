@@ -330,12 +330,6 @@ public class OmopMedicationStatement extends BaseOmopResource<MedicationStatemen
 			dosage.addDoseAndRate(tempComponent);
 		}
 
-		if(entity.get_rate_num_value() != null){ logger.info("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");}
-		if(entity.get_rate_num_unit() != null){ logger.info("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");}
-		if(entity.get_rate_denum_value() != null){ logger.info("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");}
-		if(entity.get_rate_denum_unit() != null){ logger.info("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");}
-
-
 		// Get drug rate
 		//---------------------------------------------------------------------------------------------------------------------------------
 		SimpleQuantity rate_numerator_quantity = new SimpleQuantity();
@@ -352,11 +346,14 @@ public class OmopMedicationStatement extends BaseOmopResource<MedicationStatemen
 			ratio_obj.setNumerator(rate_numerator_quantity);
 			ratio_obj.setDenominator(rate_denominator_quantity);
 
+			logger.info("YAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+
 			tempComponent.setRate(ratio_obj);
 			dosage.addDoseAndRate(tempComponent);
 		}
 
-		
+		logger.info(entity.getRouteConcept().getConceptName());
+
 		//Drug Route
 		//---------------------------------------------------------------------------------------------------------------------------------
 		Concept routeConcept = entity.getRouteConcept();
