@@ -109,7 +109,7 @@ public interface DrugExposureService extends IService<DrugExposure> {
 					drugExposure.set_rate_num_value(rs.getDouble(columnInfo));
 				} else if (columnInfo.equalsIgnoreCase(alias + "_rate_denum_value")) {
 					drugExposure.set_rate_denum_value(rs.getDouble(columnInfo));
-				} else if (columnInfo.equalsIgnoreCase(alias + "_rate_denum_unit")) {
+				} else if (columnInfo.equalsIgnoreCase(alias + "_rate_num_unit")) {
 					drugExposure.set_rate_num_unit(rs.getString(columnInfo));
 				} else if (columnInfo.equalsIgnoreCase(alias + "_rate_denum_unit")) {
 					drugExposure.set_rate_denum_unit(rs.getString(columnInfo));										
