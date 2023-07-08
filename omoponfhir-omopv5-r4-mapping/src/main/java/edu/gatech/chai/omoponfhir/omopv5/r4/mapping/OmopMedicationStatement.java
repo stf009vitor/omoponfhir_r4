@@ -346,7 +346,7 @@ public class OmopMedicationStatement extends BaseOmopResource<MedicationStatemen
 			ratio_obj.setNumerator(rate_numerator_quantity);
 			ratio_obj.setDenominator(rate_denominator_quantity);
 
-			logger.info("YAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+			logger.info("YAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
 			tempComponent.setRate(ratio_obj);
 			dosage.addDoseAndRate(tempComponent);
