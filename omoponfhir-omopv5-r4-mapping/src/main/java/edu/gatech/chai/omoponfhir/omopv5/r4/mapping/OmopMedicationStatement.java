@@ -330,6 +330,11 @@ public class OmopMedicationStatement extends BaseOmopResource<MedicationStatemen
 			dosage.addDoseAndRate(tempComponent);
 		}
 
+		if(entity.get_rate_denum_unit() != null){ logger.info("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");}
+		if(entity.get_rate_num_unit() != null){ logger.info("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");}
+		if(entity.get_rate_denum_value() != null){ logger.info("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");}
+		if(entity.get_rate_denum_unit() != null){ logger.info("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");}
+
 
 		// Get drug rate
 		//---------------------------------------------------------------------------------------------------------------------------------
