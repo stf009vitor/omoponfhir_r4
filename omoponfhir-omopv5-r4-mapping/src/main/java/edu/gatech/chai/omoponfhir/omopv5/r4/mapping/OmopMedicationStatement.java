@@ -325,9 +325,7 @@ public class OmopMedicationStatement extends BaseOmopResource<MedicationStatemen
 		if(entity.getQuantity() != null && entity.getQuantity() != 0) {
 			quantity.setValue(entity.getQuantity());
 			quantity.setUnit(entity.getDoseUnitSourceValue());
-
 			tempComponent.setDose(quantity);
-			dosage.addDoseAndRate(tempComponent);
 		}
 
 		// Get drug rate
@@ -349,9 +347,10 @@ public class OmopMedicationStatement extends BaseOmopResource<MedicationStatemen
 			logger.info("YAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
 			tempComponent.setRate(ratio_obj);
-			dosage.addDoseAndRate(tempComponent);
+			
 		}
 
+		dosage.addDoseAndRate(tempComponent);
 		logger.info(entity.getRouteConcept().getConceptName());
 
 		//Drug Route
@@ -359,6 +358,8 @@ public class OmopMedicationStatement extends BaseOmopResource<MedicationStatemen
 		Concept routeConcept = entity.getRouteConcept();
 		if (routeConcept != null && !routeConcept.getConceptName().equals("No matching concept")) {
 			try {
+				logger.info("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+
 				String myUri = fhirOmopVocabularyMap.getFhirSystemNameFromOmopVocabulary(routeConcept.getVocabularyId());
 				if (!"None".equals(myUri)) {
 					CodeableConcept routeCodeableConcept = new CodeableConcept();
