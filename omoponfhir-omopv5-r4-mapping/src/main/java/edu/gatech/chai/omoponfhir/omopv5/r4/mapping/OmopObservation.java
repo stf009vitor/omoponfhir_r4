@@ -481,6 +481,7 @@ public class OmopObservation extends BaseOmopResource<Observation, FObservationV
 	//---------------------------------------------------------------------------------------------------------------------------------------
 	//---------------------------------------------------------------------------------------------------------------------------------------
 		if(fObservationView.getObservationConcept().getConceptCode().equals("61")){
+			logger.info("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
 			//Image Study Method
 			if(fObservationView.get_img_mod_txt() != null){
@@ -574,12 +575,12 @@ public class OmopObservation extends BaseOmopResource<Observation, FObservationV
 			}
 
 		}
-
+		
 	//60 is the code for Lab Exams
 	//---------------------------------------------------------------------------------------------------------------------------------------
 	//---------------------------------------------------------------------------------------------------------------------------------------
 		if(fObservationView.getObservationConcept().getConceptCode().equals("60")){
-
+			logger.info("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 			//Lab Exam Code
 			if(fObservationView.get_lab_txt() != null){
 				Coding examCoding = new Coding();
