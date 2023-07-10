@@ -613,19 +613,13 @@ public class OmopObservation extends BaseOmopResource<Observation, FObservationV
 
 			//Results Value
 			if(fObservationView.getValueAsString() != null){
-				Double examValueAsNumber = 0.0;
-				String examValueAsString = fObservationView.getValueAsString();
-				String examUnit = fObservationView.getUnitSourceValue();
+
+				Double examValue = fObservationView.get_lab_rslt_num();
+				String examUnit = fObservationView.get_lab_rslt_unit();
 
 				Quantity resultQuantity = new Quantity();
 				resultQuantity.setUnit(examUnit);
-
-				try{
-					examValueAsNumber = Double.parseDouble(examValueAsString);
-					resultQuantity.setValue(examValueAsNumber);
-				}catch(Exception e){
-					resultQuantity.setCode(examValueAsString);
-				}
+				resultQuantity.setValue(examValue);
 
 				observation.setValue(resultQuantity);
 			}

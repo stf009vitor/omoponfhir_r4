@@ -333,7 +333,7 @@ public class OmopMedicationStatement extends BaseOmopResource<MedicationStatemen
 		SimpleQuantity rate_numerator_quantity = new SimpleQuantity();
 		SimpleQuantity rate_denominator_quantity = new SimpleQuantity();
 
-		if(entity.get_rate_denum_unit() != null && entity.get_rate_num_unit() != null){
+		if(entity.get_rate_denum_unit() != null && !entity.get_rate_denum_unit().equals("") && entity.get_rate_num_unit() != null && !entity.get_rate_num_unit().equals("")){
 			rate_numerator_quantity.setValue(entity.get_rate_num_value());
 			rate_numerator_quantity.setUnit(entity.get_rate_num_unit());
 
@@ -343,8 +343,6 @@ public class OmopMedicationStatement extends BaseOmopResource<MedicationStatemen
 			Ratio ratio_obj = new Ratio();
 			ratio_obj.setNumerator(rate_numerator_quantity);
 			ratio_obj.setDenominator(rate_denominator_quantity);
-
-			logger.info("YAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
 			tempComponent.setRate(ratio_obj);
 			
@@ -358,8 +356,6 @@ public class OmopMedicationStatement extends BaseOmopResource<MedicationStatemen
 		Concept routeConcept = entity.getRouteConcept();
 		if (routeConcept != null && !routeConcept.getConceptName().equals("No matching concept")) {
 			try {
-				logger.info("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-
 				String myUri = fhirOmopVocabularyMap.getFhirSystemNameFromOmopVocabulary(routeConcept.getVocabularyId());
 				if (!"None".equals(myUri)) {
 					CodeableConcept routeCodeableConcept = new CodeableConcept();
