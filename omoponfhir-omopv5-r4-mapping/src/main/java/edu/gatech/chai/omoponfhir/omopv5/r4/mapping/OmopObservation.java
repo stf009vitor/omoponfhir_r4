@@ -139,6 +139,9 @@ public class OmopObservation extends BaseOmopResource<Observation, FObservationV
 		Observation observation = new Observation();
 		observation.setId(new IdType(fhirId));
 
+		logger.info("WTFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
+		logger.info(fObservationView.getObservationConcept().getConceptCode());
+
 		String omopVocabulary = fObservationView.getObservationConcept().getVocabularyId();
 		String systemUriString = fhirOmopVocabularyMap.getFhirSystemNameFromOmopVocabulary(omopVocabulary);
 		if ("None".equals(systemUriString)) {
