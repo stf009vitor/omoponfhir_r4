@@ -349,7 +349,6 @@ public class OmopMedicationStatement extends BaseOmopResource<MedicationStatemen
 		}
 
 		dosage.addDoseAndRate(tempComponent);
-		logger.info(entity.getRouteConcept().getConceptName());
 
 		//Drug Route
 		//---------------------------------------------------------------------------------------------------------------------------------
