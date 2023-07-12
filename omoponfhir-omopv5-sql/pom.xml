@@ -35,7 +35,7 @@
 		<repository>
 			<id>ohdsi</id>
 			<name>repo.ohdsi.org</name>
-			<url>https://repo.ohdsi.org:8085/nexus/content/repositories/releases</url>
+			<url>http://repo.ohdsi.org:8085/nexus/content/repositories/releases</url>
 		</repository>
 		<repository>
 			<id>ohdsi.snapshots</id>
@@ -159,4 +159,16 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>nexus</id>
+			<repositories>
+				<repository>
+					<id>edge-nexus</id>
+					<url>http://172.29.4.152:8081/repository/maven-releases/</url>
+				</repository>
+			</repositories>
+    	</profile>
+  	</profiles>
 </project>
