@@ -82,6 +82,8 @@ public interface DrugExposureService extends IService<DrugExposure> {
 					drugExposure.set_drug_other_code(rs.getString(columnInfo));
 				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_other_code_system")) {
 					drugExposure.set_drug_other_code_system(rs.getString(columnInfo));	
+				} else if (columnInfo.equalsIgnoreCase(alias + "_rate")) {
+					drugExposure.set_rate(rs.getString(columnInfo));
 				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_indication")) {
 					drugExposure.set_drug_indication(rs.getString(columnInfo));
 				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_min_dose_value")) {
@@ -104,15 +106,10 @@ public interface DrugExposureService extends IService<DrugExposure> {
 					drugExposure.set_drug_quantity_dispensed_value(rs.getLong(columnInfo));
 				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_quantity_dispensed_unit")) {
 					drugExposure.set_drug_quantity_dispensed_unit(rs.getString(columnInfo));
-
-				} else if (columnInfo.equalsIgnoreCase(alias + "_rate_num_value")) {
-					drugExposure.set_rate_num_value(rs.getDouble(columnInfo));
-				} else if (columnInfo.equalsIgnoreCase(alias + "_rate_denum_value")) {
-					drugExposure.set_rate_denum_value(rs.getDouble(columnInfo));
-				} else if (columnInfo.equalsIgnoreCase(alias + "_rate_num_unit")) {
-					drugExposure.set_rate_num_unit(rs.getString(columnInfo));
-				} else if (columnInfo.equalsIgnoreCase(alias + "_rate_denum_unit")) {
-					drugExposure.set_rate_denum_unit(rs.getString(columnInfo));										
+				} else if (columnInfo.equalsIgnoreCase(alias + "_rate")) {
+					drugExposure.set_rate(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_rate_unit")) {
+					drugExposure.set_rate_unit(rs.getString(columnInfo));									
 //----------------------------------------------------------------------------------------------------------------------------------------					
 				} else if (columnInfo.equalsIgnoreCase(alias + "_refills")) {
 					drugExposure.setRefills(rs.getInt(columnInfo));
@@ -217,6 +214,8 @@ public interface DrugExposureService extends IService<DrugExposure> {
 					drugExposure.set_drug_other_code(rowResult.get(columnInfo).getStringValue());
 				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_other_code_system")) {
 					drugExposure.set_drug_other_code_system(rowResult.get(columnInfo).getStringValue());	
+				} else if (columnInfo.equalsIgnoreCase(alias + "_rate")) {
+					drugExposure.set_rate(rowResult.get(columnInfo).getStringValue());
 				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_indication")) {
 					drugExposure.set_drug_indication(rowResult.get(columnInfo).getStringValue());
 				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_min_dose_value")) {
@@ -239,16 +238,10 @@ public interface DrugExposureService extends IService<DrugExposure> {
 					drugExposure.set_drug_quantity_dispensed_value(rowResult.get(columnInfo).getLongValue());
 				} else if (columnInfo.equalsIgnoreCase(alias + "_drug_quantity_dispensed_unit")) {
 					drugExposure.set_drug_quantity_dispensed_unit(rowResult.get(columnInfo).getStringValue());
-
-
-				} else if (columnInfo.equalsIgnoreCase(alias + "_rate_num_value")) {
-					drugExposure.set_rate_num_value(rowResult.get(columnInfo).getDoubleValue());	
-				} else if (columnInfo.equalsIgnoreCase(alias + "_rate_denum_value")) {
-					drugExposure.set_rate_denum_value(rowResult.get(columnInfo).getDoubleValue());	
-				} else if (columnInfo.equalsIgnoreCase(alias + "_rate_num_unit")) {
-					drugExposure.set_rate_num_unit(rowResult.get(columnInfo).getStringValue());	
-				} else if (columnInfo.equalsIgnoreCase(alias + "_rate_denum_unit")) {
-					drugExposure.set_rate_denum_unit(rowResult.get(columnInfo).getStringValue());	
+				} else if (columnInfo.equalsIgnoreCase(alias + "_rate")) {
+					drugExposure.set_rate(rowResult.get(columnInfo).getStringValue());	
+				} else if (columnInfo.equalsIgnoreCase(alias + "_rate_unit")) {
+					drugExposure.set_rate_unit(rowResult.get(columnInfo).getStringValue());						
 //----------------------------------------------------------------------------------------------------------------------------------------	
 				} else if (columnInfo.equalsIgnoreCase(alias + "_refills")) {
 					drugExposure.setRefills((int) rowResult.get(columnInfo).getLongValue());

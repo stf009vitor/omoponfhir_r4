@@ -217,59 +217,45 @@ public class OmopMedicationDispense extends BaseOmopResource<MedicationDispense,
 		//---------------------------------------------------------------------------------------------------------------------------------
 		CodeableConcept medicationCodeableConcept = new CodeableConcept();
 		try {
-			Coding drug_coding = new Coding();
-			Coding drug_rx_coding = new Coding();
-			Coding drug_ndc_coding = new Coding();
-			List<Coding> drug_codingList = new ArrayList<>();
-			
-			String drug_display = entity.get_drug_name();
-			String drug_code = entity.get_drug_other_code();
-			String drug_system = entity.get_drug_other_code_system();
-
-			String drug_rx_code = "";
-			String drug_rx_system = "";
-			String drug_ndc_code = "";
-			String drug_ndc_system = "";
-			
-			if (entity.get_drug_RxNorm_code() != null){
-				drug_rx_code = entity.get_drug_RxNorm_code();
-				drug_rx_system = "RxNorm Code";
-
-				drug_rx_coding.setDisplay(drug_display); 
-				drug_rx_coding.setCode(drug_rx_code);
-				drug_rx_coding.setSystem(drug_rx_system);
-			}
-			if (entity.get_drug_NDC_code() != null){
-				drug_ndc_code = entity.get_drug_NDC_code();
-				drug_ndc_system = "NDC Code";
-
-				drug_ndc_coding.setDisplay(drug_display); 
-				drug_ndc_coding.setCode(drug_ndc_code);
-				drug_ndc_coding.setSystem(drug_ndc_system);
-			}
-			
-			if (drug_display != null && drug_display.length() != 0){
-				if (drug_code == null || drug_code.length() == 0){
-					drug_code = "0";
-				}
-				if (drug_system == null || drug_system.length() == 0){
-					drug_system = "local hospital code";
-				}
-				drug_coding.setDisplay(drug_display); 
-				drug_coding.setCode(drug_code);
-				drug_coding.setSystem(drug_system);
+			if(entity.getDrugConcept().getConceptName().equals("Henry")){
+				Coding drug_coding = new Coding();
+				List<Coding> drug_codingList = new ArrayList<>();
 				
-				drug_codingList.add(drug_coding);
-				drug_codingList.add(drug_rx_coding);
-				drug_codingList.add(drug_ndc_coding);
-
-				medicationCodeableConcept.setCoding(drug_codingList);
+				String drug_display = entity.get_drug_name();
+				String drug_code = entity.get_drug_other_code();
+				String drug_system = entity.get_drug_other_code_system();
+				
+				if (entity.get_drug_RxNorm_code() != null){
+					drug_code = entity.get_drug_RxNorm_code();
+					drug_system = "RxNorm Code";
+				} else{
+					if (entity.get_drug_NDC_code() != null){
+						drug_code = entity.get_drug_NDC_code();
+						drug_system = "NDC Code";
+					}
+				}
+					
+				if (drug_display != null && drug_display.length() != 0){
+					if (drug_code == null || drug_code.length() == 0){
+						drug_code = "0";
+					}
+					if (drug_system == null || drug_system.length() == 0){
+						drug_system = "local hospital code";
+					}
+					drug_coding.setDisplay(drug_display); 
+					drug_coding.setCode(drug_code);
+					drug_coding.setSystem(drug_system);
+					
+					drug_codingList.add(drug_coding);
+					medicationCodeableConcept.setCoding(drug_codingList);
+				}
+			} else {
+				medicationCodeableConcept = CodeableConceptUtil.getCodeableConceptFromOmopConcept(entity.getDrugConcept());
 			}
-		} catch (FHIRException e1) {
+		} catch (Exception e1) {
 			e1.printStackTrace();
 			return null;
 		}
-		
 
 		medicationDispense.setMedication(medicationCodeableConcept);
 
@@ -345,6 +331,38 @@ public class OmopMedicationDispense extends BaseOmopResource<MedicationDispense,
 
 			dosageTiming.setCode(freqCodeableConcept);
 			dosage.setTiming(dosageTiming);
+		}
+		
+		//Drug Route
+		//---------------------------------------------------------------------------------------------------------------------------------
+		Concept routeConcept = entity.getRouteConcept();
+		if (routeConcept != null && !routeConcept.getConceptName().equals("Henry")) {
+			try {
+				String myUri = fhirOmopVocabularyMap.getFhirSystemNameFromOmopVocabulary(routeConcept.getVocabularyId());
+				if (!"None".equals(myUri)) {
+					CodeableConcept routeCodeableConcept = new CodeableConcept();
+					Coding routeCoding = new Coding();
+					routeCoding.setSystem(myUri);
+					routeCoding.setCode(routeConcept.getConceptCode());
+					routeCoding.setDisplay(routeConcept.getConceptName());
+
+					routeCodeableConcept.addCoding(routeCoding);
+					dosage.setRoute(routeCodeableConcept);
+				}
+			} catch (FHIRException e) {
+				e.printStackTrace();
+			}
+		} else {
+			if(entity.getRouteSourceValue()!= null){
+				CodeableConcept codeableConceptRoute = new CodeableConcept();
+				Coding routeCode = new Coding();
+				List<Coding> routeCodeList = new ArrayList<>();
+
+				routeCode.setDisplay(entity.getRouteSourceValue());
+				routeCodeList.add(routeCode);
+				codeableConceptRoute.setCoding(routeCodeList);
+				dosage.setRoute(codeableConceptRoute);
+			}
 		}
 
 		List<Dosage.DosageDoseAndRateComponent> dosageAndRateList = new ArrayList<>();

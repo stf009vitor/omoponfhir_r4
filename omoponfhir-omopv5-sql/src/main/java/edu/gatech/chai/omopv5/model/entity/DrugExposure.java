@@ -91,18 +91,11 @@ public class DrugExposure extends BaseEntity {
 	@Column(name="drug_quantity_dispensed_unit", nullable=false)
 	private String drug_quantity_dispensed_unit;	
 
-	@Column(name="rate_num_value", nullable=false)
-	private Double rate_num_value;
+	@Column(name="rate", nullable=false)
+	private String rate;
 
-	@Column(name="rate_denum_value", nullable=false)
-	private Double rate_denum_value;
-
-	@Column(name="rate_num_unit", nullable=false)
-	private String rate_num_unit;		
-
-	@Column(name="rate_denum_unit", nullable=false)
-	private String rate_denum_unit;
-
+	@Column(name="rate_unit", nullable=false)
+	private String rate_unit;		
 //----------------------------------------------------------------------------------------------------------------------------------------	
 	
 	@Column(name="drug_exposure_start_date", nullable=false)
@@ -307,32 +300,19 @@ public class DrugExposure extends BaseEntity {
 	}
 	
 	//Rate
-	public void set_rate_num_value(Double rate_num_value) {
-		this.rate_num_value = rate_num_value;
+	public void set_rate(String rate) {
+		this.rate = rate;
 	}
-	public Double get_rate_num_value() {
-		return rate_num_value;
+	public String get_rate() {
+		return rate;
 	}
-
-	public void set_rate_denum_value(Double rate_denum_value) {
-		this.rate_denum_value = rate_denum_value;
+	
+	//Rate Unit
+	public void set_rate_unit(String rate_unit) {
+		this.rate_unit = rate_unit;
 	}
-	public Double get_rate_denum_value() {
-		return rate_denum_value;
-	}
-
-	public void set_rate_num_unit(String rate_num_unit) {
-		this.rate_num_unit = rate_num_unit;
-	}
-	public String get_rate_num_unit() {
-		return rate_num_unit;
-	}
-
-	public void set_rate_denum_unit(String rate_denum_unit) {
-		this.rate_denum_unit = rate_denum_unit;
-	}
-	public String get_rate_denum_unit() {
-		return rate_denum_unit;
+	public String get_rate_unit() {
+		return rate_unit;
 	}
 //----------------------------------------------------------------------------------------------------------------------------------------	
 

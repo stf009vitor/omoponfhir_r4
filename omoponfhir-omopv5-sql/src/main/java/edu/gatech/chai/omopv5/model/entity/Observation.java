@@ -87,17 +87,7 @@ public class Observation extends BaseEntity {
 	private String img_dscrp_txt;	
 
 	@Column(name="img_status_txt", nullable=false)
-	private String img_status_txt;	
-
-	@Column(name="lab_rslt_num", nullable=false)
-	private Double lab_rslt_num;	
-
-	@Column(name="lab_rslt_unit", nullable=false)
-	private String lab_rslt_unit;	
-
-	@Column(name="lab_time", nullable=false)
-	private String lab_time;	
-	
+	private String img_status_txt;		
 //----------------------------------------------------------------------------------------------------------------------------------------
 	@Column(name="value_as_string")
 	private String valueAsString;
@@ -211,26 +201,6 @@ public class Observation extends BaseEntity {
 	public String get_lab_rslt_uln_unit() {
 		return lab_rslt_uln_unit;
 	}
-
-	//Lab Exams
-	public void set_lab_rslt_num(Double lab_rslt_num) {
-		this.lab_rslt_num = lab_rslt_num;
-	}
-	public Double get_lab_rslt_num() {
-		return lab_rslt_num;
-	}
-	public void set_lab_rslt_unit(String lab_rslt_unit) {
-		this.lab_rslt_unit = lab_rslt_unit;
-	}
-	public String get_lab_rslt_unit() {
-		return lab_rslt_unit;
-	}
-	public void set_lab_time(String lab_time) {
-		this.lab_time = lab_time;
-	}
-	public String get_lab_time() {
-		return lab_time;
-	}	
 	
 	//Image Exam Modality
 	public void set_img_mod_txt(String img_mod_txt) {

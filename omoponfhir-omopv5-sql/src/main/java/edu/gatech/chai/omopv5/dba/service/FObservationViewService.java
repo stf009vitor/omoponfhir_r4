@@ -102,15 +102,6 @@ public interface FObservationViewService extends IService<FObservationView> {
 				fObservationView.set_img_dscrp_txt(rs.getString(columnInfo));
 				} else if (columnInfo.equalsIgnoreCase(alias + "_img_status_txt")) {
 				fObservationView.set_img_status_txt(rs.getString(columnInfo));
-
-
-				} else if (columnInfo.equalsIgnoreCase(alias + "_lab_rslt_num")) {
-					fObservationView.set_lab_rslt_num(rs.getDouble(columnInfo));
-				} else if (columnInfo.equalsIgnoreCase(alias + "_lab_rslt_unit")) {
-					fObservationView.set_lab_rslt_unit(rs.getString(columnInfo));
-				} else if (columnInfo.equalsIgnoreCase(alias + "_lab_time")) {
-					fObservationView.set_lab_time(rs.getString(columnInfo));
-
 //----------------------------------------------------------------------------------------------------------------------------------------
 					
 				} else if (columnInfo.equalsIgnoreCase(alias + "_value_as_string")) {
@@ -230,13 +221,6 @@ public interface FObservationViewService extends IService<FObservationView> {
 			fObservationView.set_img_dscrp_txt(rowResult.get(columnInfo).getStringValue());
 			} else if (columnInfo.equalsIgnoreCase(alias + "_img_status_txt")) {
 			fObservationView.set_img_status_txt(rowResult.get(columnInfo).getStringValue());	
-
-			} else if (columnInfo.equalsIgnoreCase(alias + "_lab_rslt_num")) {
-				fObservationView.set_lab_rslt_num(rowResult.get(columnInfo).getDoubleValue());	
-			} else if (columnInfo.equalsIgnoreCase(alias + "_lab_rslt_unit")) {
-				fObservationView.set_lab_rslt_unit(rowResult.get(columnInfo).getStringValue());	
-			} else if (columnInfo.equalsIgnoreCase(alias + "_lab_time")) {
-				fObservationView.set_lab_time(rowResult.get(columnInfo).getStringValue());				
 //----------------------------------------------------------------------------------------------------------------------------------------
 				
 			} else if (columnInfo.equalsIgnoreCase(alias + "_value_as_number")) {

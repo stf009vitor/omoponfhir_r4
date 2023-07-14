@@ -574,7 +574,7 @@ public class OmopObservation extends BaseOmopResource<Observation, FObservationV
 			}
 
 		}
-		
+
 	//60 is the code for Lab Exams
 	//---------------------------------------------------------------------------------------------------------------------------------------
 	//---------------------------------------------------------------------------------------------------------------------------------------
@@ -613,13 +613,19 @@ public class OmopObservation extends BaseOmopResource<Observation, FObservationV
 
 			//Results Value
 			if(fObservationView.getValueAsString() != null){
-
-				Double examValue = fObservationView.get_lab_rslt_num();
-				String examUnit = fObservationView.get_lab_rslt_unit();
+				Double examValueAsNumber = 0.0;
+				String examValueAsString = fObservationView.getValueAsString();
+				String examUnit = fObservationView.getUnitSourceValue();
 
 				Quantity resultQuantity = new Quantity();
 				resultQuantity.setUnit(examUnit);
-				resultQuantity.setValue(examValue);
+
+				try{
+					examValueAsNumber = Double.parseDouble(examValueAsString);
+					resultQuantity.setValue(examValueAsNumber);
+				}catch(Exception e){
+					resultQuantity.setCode(examValueAsString);
+				}
 
 				observation.setValue(resultQuantity);
 			}
