@@ -265,8 +265,6 @@ public class OmopMedicationStatement extends BaseOmopResource<MedicationStatemen
 			return null;
 		}
 		
-		medicationStatement.setMedication(medicationCodeableConcept);
-
 
 		// See if we can add ingredient version of this medication.
 		// Concept ingredient = conceptService.getIngredient(drugConcept);
@@ -321,14 +319,41 @@ public class OmopMedicationStatement extends BaseOmopResource<MedicationStatemen
 		// Get drug dose
 		//---------------------------------------------------------------------------------------------------------------------------------
 		SimpleQuantity quantity = new SimpleQuantity();
+		Dosage.DosageDoseAndRateComponent tempComponent = new Dosage.DosageDoseAndRateComponent();
 		Dosage dosage = new Dosage();
 
+		if(entity.getQuantity() != null && entity.getQuantity() != 0) {
+			quantity.setValue(entity.getQuantity());
+			quantity.setUnit(entity.getDoseUnitSourceValue());
+			tempComponent.setDose(quantity);
+		}
 
-		
+		// Get drug rate
+		//---------------------------------------------------------------------------------------------------------------------------------
+		SimpleQuantity rate_numerator_quantity = new SimpleQuantity();
+		SimpleQuantity rate_denominator_quantity = new SimpleQuantity();
+
+		if(entity.get_rate_denum_unit() != null && !entity.get_rate_denum_unit().equals("") && entity.get_rate_num_unit() != null && !entity.get_rate_num_unit().equals("")){
+			rate_numerator_quantity.setValue(entity.get_rate_num_value());
+			rate_numerator_quantity.setUnit(entity.get_rate_num_unit());
+
+			rate_denominator_quantity.setValue(entity.get_rate_denum_value());
+			rate_denominator_quantity.setUnit(entity.get_rate_denum_unit());
+
+			Ratio ratio_obj = new Ratio();
+			ratio_obj.setNumerator(rate_numerator_quantity);
+			ratio_obj.setDenominator(rate_denominator_quantity);
+
+			tempComponent.setRate(ratio_obj);
+			
+		}
+
+		dosage.addDoseAndRate(tempComponent);
+
 		//Drug Route
 		//---------------------------------------------------------------------------------------------------------------------------------
 		Concept routeConcept = entity.getRouteConcept();
-		if (routeConcept != null && !routeConcept.getConceptName().equals("Henry")) {
+		if (routeConcept != null && !routeConcept.getConceptName().equals("No matching concept")) {
 			try {
 				String myUri = fhirOmopVocabularyMap.getFhirSystemNameFromOmopVocabulary(routeConcept.getVocabularyId());
 				if (!"None".equals(myUri)) {

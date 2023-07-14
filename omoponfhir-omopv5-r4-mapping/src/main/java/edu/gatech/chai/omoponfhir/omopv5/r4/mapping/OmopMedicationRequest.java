@@ -180,63 +180,93 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 			medicationRequest.setAuthoredOn(verbatimDate);
 
 		
-		// Set Medication Code
+		// Setting Medication Code & Ingredients
 		//---------------------------------------------------------------------------------------------------------------------------------
-		CodeableConcept medicationCodeableConcept = new CodeableConcept();
-		try {
-			Coding drug_coding = new Coding();
-			Coding drug_rx_coding = new Coding();
-			Coding drug_ndc_coding = new Coding();
-			List<Coding> drug_codingList = new ArrayList<>();
-			
-			String drug_display = entity.get_drug_name();
-			String drug_code = entity.get_drug_other_code();
-			String drug_system = entity.get_drug_other_code_system();
-
-			String drug_rx_code = "";
-			String drug_rx_system = "";
-			String drug_ndc_code = "";
-			String drug_ndc_system = "";
-			
-			if (entity.get_drug_RxNorm_code() != null){
-				drug_rx_code = entity.get_drug_RxNorm_code();
-				drug_rx_system = "RxNorm Code";
-
-				drug_rx_coding.setDisplay(drug_display); 
-				drug_rx_coding.setCode(drug_rx_code);
-				drug_rx_coding.setSystem(drug_rx_system);
-			}
-			if (entity.get_drug_NDC_code() != null){
-				drug_ndc_code = entity.get_drug_NDC_code();
-				drug_ndc_system = "NDC Code";
-
-				drug_ndc_coding.setDisplay(drug_display); 
-				drug_ndc_coding.setCode(drug_ndc_code);
-				drug_ndc_coding.setSystem(drug_ndc_system);
-			}
-			
-			if (drug_display != null && drug_display.length() != 0){
-				if (drug_code == null || drug_code.length() == 0){
-					drug_code = "0";
+		String medType = System.getenv("MEDICATION_TYPE");			
+		if (medType != null && !medType.isEmpty() && "local".equalsIgnoreCase(medType)) {
+			CodeableConcept medicationCodeableConcept = new CodeableConcept();
+			CodeableConcept ingredientCodeableConcept;
+			Medication medicationResource = new Medication();
+			try {
+				medicationCodeableConcept = CodeableConceptUtil.getCodeableConceptFromOmopConcept(entity.getDrugConcept());
+				medicationResource.setCode(medicationCodeableConcept);
+				List<Concept> ingredients = conceptService.getIngredient(entity.getDrugConcept());
+				for (Concept ingredient: ingredients) {
+					ingredientCodeableConcept = CodeableConceptUtil.getCodeableConceptFromOmopConcept(ingredient);
+					MedicationIngredientComponent medIngredientComponent = new MedicationIngredientComponent();
+					medIngredientComponent.setItem(ingredientCodeableConcept);
+					medicationResource.addIngredient(medIngredientComponent);	
+					
 				}
-				if (drug_system == null || drug_system.length() == 0){
-					drug_system = "local hospital code";
-				}
-				drug_coding.setDisplay(drug_display); 
-				drug_coding.setCode(drug_code);
-				drug_coding.setSystem(drug_system);
+			} catch (FHIRException e) {
+				e.printStackTrace();
+				return null;
+			}
+			medicationResource.setCode(medicationCodeableConcept);
+			medicationResource.setId("med1");
+			medicationRequest.addContained(medicationResource);
+			medicationRequest.setMedication(new Reference("#med1"));			
+		} else if (medType != null && !medType.isEmpty() && "link".equalsIgnoreCase(medType)) {
+			// Get Medication in a reference. 
+			Reference medicationReference = new Reference(new IdType(MedicationResourceProvider.getType(), entity.getDrugConcept().getId()));
+			medicationRequest.setMedication(medicationReference);			
+		} else {
+			CodeableConcept medicationCodeableConcept = new CodeableConcept();
+			try {
+				Coding drug_coding = new Coding();
+				Coding drug_rx_coding = new Coding();
+				Coding drug_ndc_coding = new Coding();
+				List<Coding> drug_codingList = new ArrayList<>();
 				
-				drug_codingList.add(drug_coding);
-				drug_codingList.add(drug_rx_coding);
-				drug_codingList.add(drug_ndc_coding);
+				String drug_display = entity.get_drug_name();
+				String drug_code = entity.get_drug_other_code();
+				String drug_system = entity.get_drug_other_code_system();
 
-				medicationCodeableConcept.setCoding(drug_codingList);
+				String drug_rx_code = "";
+				String drug_rx_system = "";
+				String drug_ndc_code = "";
+				String drug_ndc_system = "";
+				
+				if (entity.get_drug_RxNorm_code() != null){
+					drug_rx_code = entity.get_drug_RxNorm_code();
+					drug_rx_system = "RxNorm Code";
+
+					drug_rx_coding.setDisplay(drug_display); 
+					drug_rx_coding.setCode(drug_rx_code);
+					drug_rx_coding.setSystem(drug_rx_system);
+				}
+				if (entity.get_drug_NDC_code() != null){
+					drug_ndc_code = entity.get_drug_NDC_code();
+					drug_ndc_system = "NDC Code";
+
+					drug_ndc_coding.setDisplay(drug_display); 
+					drug_ndc_coding.setCode(drug_ndc_code);
+					drug_ndc_coding.setSystem(drug_ndc_system);
+				}
+				
+				if (drug_display != null && drug_display.length() != 0){
+					if (drug_code == null || drug_code.length() == 0){
+						drug_code = "0";
+					}
+					if (drug_system == null || drug_system.length() == 0){
+						drug_system = "local hospital code";
+					}
+					drug_coding.setDisplay(drug_display); 
+					drug_coding.setCode(drug_code);
+					drug_coding.setSystem(drug_system);
+					
+					drug_codingList.add(drug_coding);
+					drug_codingList.add(drug_rx_coding);
+					drug_codingList.add(drug_ndc_coding);
+
+					medicationCodeableConcept.setCoding(drug_codingList);
+				}
+			} catch (FHIRException e1) {
+				e1.printStackTrace();
+				return null;
 			}
-		} catch (FHIRException e1) {
-			e1.printStackTrace();
-			return null;
+			medicationRequest.setMedication(medicationCodeableConcept);
 		}
-		medicationRequest.setMedication(medicationCodeableConcept);
 	
 
 		Dosage dosage = new Dosage();
@@ -325,7 +355,7 @@ public class OmopMedicationRequest extends BaseOmopResource<MedicationRequest, D
 		//Drug Route
 		//---------------------------------------------------------------------------------------------------------------------------------
 		Concept routeConcept = entity.getRouteConcept();
-		if (routeConcept != null && !routeConcept.getConceptName().equals("Henry")) {
+		if (routeConcept != null && !routeConcept.getConceptName().equals("No matching concept")) {
 			try {
 				String myUri = fhirOmopVocabularyMap.getFhirSystemNameFromOmopVocabulary(routeConcept.getVocabularyId());
 				if (!"None".equals(myUri)) {
