@@ -92,6 +92,13 @@ public interface ObservationService extends IService<Observation> {
 				observation.set_img_dscrp_txt(rs.getString(columnInfo));
 				} else if (columnInfo.equalsIgnoreCase(alias + "_img_status_txt")) {
 				observation.set_img_status_txt(rs.getString(columnInfo));
+
+				} else if (columnInfo.equalsIgnoreCase(alias + "_lab_rslt_num")) {
+					observation.set_lab_rslt_num(rs.getDouble(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_lab_rslt_unit")) {
+					observation.set_lab_rslt_unit(rs.getString(columnInfo));
+				} else if (columnInfo.equalsIgnoreCase(alias + "_lab_time")) {
+					observation.set_lab_time(rs.getString(columnInfo));	
 //----------------------------------------------------------------------------------------------------------------------------------------
 				} else if (columnInfo.equalsIgnoreCase("valueAsConcept_concept_id")) {
 					Concept valueAsConcept = ConceptService._construct(rs, null, "valueAsConcept");
@@ -191,6 +198,13 @@ public interface ObservationService extends IService<Observation> {
 			observation.set_img_dscrp_txt(rowResult.get(columnInfo).getStringValue());
 			} else if (columnInfo.equalsIgnoreCase(alias + "_img_status_txt")) {
 			observation.set_img_status_txt(rowResult.get(columnInfo).getStringValue());	
+
+			} else if (columnInfo.equalsIgnoreCase(alias + "_lab_rslt_num")) {
+				observation.set_lab_rslt_num(rowResult.get(columnInfo).getDoubleValue());	
+			} else if (columnInfo.equalsIgnoreCase(alias + "_lab_rslt_unit")) {
+				observation.set_lab_rslt_unit(rowResult.get(columnInfo).getStringValue());	
+			} else if (columnInfo.equalsIgnoreCase(alias + "_lab_time")) {
+				observation.set_lab_time(rowResult.get(columnInfo).getStringValue());	
 //----------------------------------------------------------------------------------------------------------------------------------------
 			} else if (columnInfo.equalsIgnoreCase("valueAsConcept_concept_id")) {
 				Concept valueAsConcept = ConceptService._construct(rowResult, null, "valueAsConcept", columns);
