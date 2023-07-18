@@ -438,8 +438,8 @@ public class OmopMedicationStatement extends BaseOmopResource<MedicationStatemen
 		// If OMOP medicaiton type has the administration or dispense, we set
 		// partOf reference to this.
 
-		//return medicationStatement;
-		return null;
+		return medicationStatement;
+		
 	}
 
 	@Override
