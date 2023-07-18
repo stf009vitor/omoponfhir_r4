@@ -144,7 +144,7 @@ public class OmopMedicationStatement extends BaseOmopResource<MedicationStatemen
 	public MedicationStatement constructFHIR(Long fhirId, DrugExposure entity) {
 		MedicationStatement medicationStatement = new MedicationStatement();
 		medicationStatement.setId(new IdType(fhirId));
-		return medicationStatement;
+
 
 		// status is required field in FHIR MedicationStatement.
 		// However, we do not have a field in OMOP.
@@ -438,7 +438,8 @@ public class OmopMedicationStatement extends BaseOmopResource<MedicationStatemen
 		// If OMOP medicaiton type has the administration or dispense, we set
 		// partOf reference to this.
 
-		return medicationStatement;
+		//return medicationStatement;
+		return null;
 	}
 
 	@Override
