@@ -268,6 +268,7 @@ public class OmopMedicationStatement extends BaseOmopResource<MedicationStatemen
 		}
 		
 		medicationStatement.setMedication(medicationCodeableConcept);
+		
 		// See if we can add ingredient version of this medication.
 		// Concept ingredient = conceptService.getIngredient(drugConcept);
 		// if (ingredient != null) {
