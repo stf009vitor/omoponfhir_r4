@@ -211,12 +211,13 @@ public class OmopMedicationStatement extends BaseOmopResource<MedicationStatemen
 		// Set Medication Code
 		//---------------------------------------------------------------------------------------------------------------------------------
 		CodeableConcept medicationCodeableConcept = new CodeableConcept();
+		Coding drug_coding = new Coding();
+		Coding drug_rx_coding = new Coding();
+		Coding drug_ndc_coding = new Coding();
+		List<Coding> drug_codingList = new ArrayList<>();
+
 		try {
-			Coding drug_coding = new Coding();
-			Coding drug_rx_coding = new Coding();
-			Coding drug_ndc_coding = new Coding();
-			List<Coding> drug_codingList = new ArrayList<>();
-			
+	
 			String drug_display = entity.get_drug_name();
 			String drug_code = entity.get_drug_other_code();
 			String drug_system = entity.get_drug_other_code_system();
@@ -258,14 +259,15 @@ public class OmopMedicationStatement extends BaseOmopResource<MedicationStatemen
 				drug_codingList.add(drug_rx_coding);
 				drug_codingList.add(drug_ndc_coding);
 
-				medicationCodeableConcept.setCoding(drug_codingList);
+				medicationCodeableConcept.setCoding(drug_codingList);	
 			}
+			
 		} catch (FHIRException e1) {
 			e1.printStackTrace();
 			return null;
 		}
 		
-
+		medicationStatement.setMedication(medicationCodeableConcept);
 		// See if we can add ingredient version of this medication.
 		// Concept ingredient = conceptService.getIngredient(drugConcept);
 		// if (ingredient != null) {
